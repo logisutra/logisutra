@@ -17,8 +17,9 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        h1 { color: #2c3e50; }
+        h1, h2 { color: #2c3e50; }
         .checklist-item {
             margin: 15px 0;
             display: flex;
@@ -30,34 +31,108 @@
             height: 18px;
         }
         label { font-size: 16px; color: #34495e; }
+        
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background-color: #2980b9; }
+        .invoice-preview {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed #bdc3c7;
+            background: #fdfefe;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Section 1: Checklist -->
     <div class="card">
         <h1>Export Business Setup</h1>
         <p>Complete these initial steps to make your business export-ready:</p>
         
-        <div class="checklist-item">
-            <input type="checkbox" id="step1">
-            <label for="step1">Register your Business/Company legally</label>
-        </div>
-
-        <div class="checklist-item">
-            <input type="checkbox" id="step2">
-            <label for="step2">Open a Bank Account dedicated to business</label>
-        </div>
-
-        <div class="checklist-item">
-            <input type="checkbox" id="step3">
-            <label for="step3">Obtain an Export License / Tax ID Number</label>
-        </div>
-
-        <div class="checklist-item">
-            <input type="checkbox" id="step4">
-            <label for="step4">Find your product's HS Code (Harmonized System)</label>
-        </div>
+        <div class="checklist-item"><input type="checkbox" id="step1"><label for="step1">Register your Business Legally</label></div>
+        <div class="checklist-item"><input type="checkbox" id="step2"><label for="step2">Open a Business Bank Account</label></div>
+        <div class="checklist-item"><input type="checkbox" id="step3"><label for="step3">Obtain an Export License / Tax ID</label></div>
+        <div class="checklist-item"><input type="checkbox" id="step4"><label for="step4">Find your product's HS Code</label></div>
     </div>
+
+    <!-- Section 2: Commercial Invoice Generator -->
+    <div class="card">
+        <h2>Commercial Invoice Generator</h2>
+        <p>Create a basic shipping invoice template below:</p>
+        
+        <div class="form-group">
+            <label>Exporter Name (Your Company):</label>
+            <input type="text" id="exporter" placeholder="e.g. Global Traders Inc.">
+        </div>
+        <div class="form-group">
+            <label>Importer Name (Buyer):</label>
+            <input type="text" id="importer" placeholder="e.g. John Doe LLC (USA)">
+        </div>
+        <div class="form-group">
+            <label>Product Description:</label>
+            <input type="text" id="product" placeholder="e.g. 100% Cotton T-shirts">
+        </div>
+        <div class="form-group">
+            <label>Total Value (USD):</label>
+            <input type="number" id="value" placeholder="e.g. 5000">
+        </div>
+
+        <button onclick="generateInvoice()">Generate Invoice</button>
+
+        <!-- Hidden container that appears when button is clicked -->
+        <div id="invoiceResult" class="invoice-preview"></div>
+    </div>
+
+    <!-- JavaScript to make the button work -->
+    <script>
+        function generateInvoice() {
+            var exp = document.getElementById('exporter').value;
+            var imp = document.getElementById('importer').value;
+            var prod = document.getElementById('product').value;
+            var val = document.getElementById('value').value;
+
+            if(!exp || !imp || !prod || !val) {
+                alert("Please fill out all fields first!");
+                return;
+            }
+
+            var resultDiv = document.getElementById('invoiceResult');
+            resultDiv.innerHTML = `
+                <h3>COMMERCIAL INVOICE</h3>
+                <p><strong>From (Exporter):</strong> ${exp}</p>
+                <p><strong>To (Importer):</strong> ${imp}</p>
+                <hr>
+                <p><strong>Description of Goods:</strong> ${prod}</p>
+                <p><strong>Total Invoice Value:</strong> $${val} USD</p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
 
 </body>
 </html>
