@@ -60,7 +60,7 @@
             overflow-y: auto;
         }
         .dashboard-view {
-            display: none; /* Hidden by default, toggled via JS */
+            display: none; /* Hidden by default */
             background: white;
             padding: 30px;
             border-radius: 8px;
@@ -73,6 +73,7 @@
 
         /* UI Elements Styles */
         h1, h3 { color: #2c3e50; margin-top: 0; }
+        p { line-height: 1.6; color: #34495e; }
         .checklist-item { margin: 15px 0; display: flex; align-items: center; }
         input[type="checkbox"] { margin-right: 12px; width: 18px; height: 18px; }
         .form-group { margin-bottom: 15px; }
@@ -81,8 +82,12 @@
         .action-btn { background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
         .action-btn:hover { background-color: #2980b9; }
         .invoice-preview { margin-top: 20px; padding: 15px; border: 2px dashed #bdc3c7; background: #fdfefe; }
-        .incoterm-box { background: #f8f9fa; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
-        .incoterm-title { font-weight: bold; color: #2980b9; }
+        
+        /* Info Box styles used for Customs, Incoterms, GST */
+        .info-box { background: #f8f9fa; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .info-box.warning { border-left-color: #e74c3c; background: #fdf2f2; }
+        .info-box.success { border-left-color: #2ecc71; background: #f2fdf5; }
+        .box-title { font-weight: bold; color: #2c3e50; font-size: 16px; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -91,81 +96,83 @@
     <div class="sidebar">
         <h2>Export A to Z</h2>
         <button class="menu-btn active" onclick="switchView('checklist', this)">📋 Business Setup</button>
+        <button class="menu-btn" onclick="switchView('gst', this)">💰 GST & Taxes</button>
         <button class="menu-btn" onclick="switchView('invoice', this)">🧾 Invoice Generator</button>
         <button class="menu-btn" onclick="switchView('incoterms', this)">🚢 Incoterms Guide</button>
+        <button class="menu-btn" onclick="switchView('customs', this)">🛂 Customs & Clearance</button>
     </div>
 
     <!-- RIGHT MAIN CONTENT PANEL -->
     <div class="main-content">
         
-        <!-- View 1: Upgraded Checklist -->
+        <!-- View 1: Checklist -->
         <div id="checklist" class="dashboard-view active">
             <h1>Business Setup Checklist</h1>
             <p>Follow these detailed steps to establish a legally compliant export business:</p>
             
-            <div class="checklist-item">
-                <input type="checkbox" id="step1">
-                <label for="step1"><strong>1. Register your Business Legally</strong></label>
-            </div>
-            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
-                <p>Choose a legal structure (Sole Proprietorship, Partnership, or LLC). You must register with your corporate registry to obtain an official Business Registration Certificate.</p>
+            <div class="checklist-item"><input type="checkbox" id="step1"><label for="step1"><strong>1. Register your Business Legally</strong></label></div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;"><p>Choose a legal structure (Sole Proprietorship, Partnership, or LLC). You must register with your corporate registry to obtain an official Business Registration Certificate.</p></div>
+
+            <div class="checklist-item"><input type="checkbox" id="step2"><label for="step2"><strong>2. Open a Business Bank Account</strong></label></div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;"><p>Do not use a personal account. Open a Current Account supporting foreign currency wire transfers (SWIFT).</p></div>
+
+            <div class="checklist-item"><input type="checkbox" id="step3"><label for="step3"><strong>3. Obtain an Export License / Tax ID</strong></label></div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;"><p>Register with Customs to get your Import-Export Code (IEC).</p></div>
+
+            <div class="checklist-item"><input type="checkbox" id="step4"><label for="step4"><strong>4. Find your product's HS Code</strong></label></div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;"><p>Locate your 8-digit Harmonized System code to verify duties and taxes.</p></div>
+        </div>
+
+        <!-- View 2: GST & Taxes (NEW!) -->
+        <div id="gst" class="dashboard-view">
+            <h1>GST & Tax Rules for Exporters</h1>
+            <p>Exporting is highly incentivized. Governments want you to export, so they treat international sales as <strong>"Zero-Rated Supplies"</strong>. This means you do not pay domestic tax on goods sent out of the country.</p>
+            
+            <div class="info-box success">
+                <span class="box-title">Option A: Export Under LUT (Letter of Undertaking)</span>
+                <p>The most common method. You file a free document called an LUT online once a year. This allows you to ship goods across borders completely tax-free without blocking your working capital.</p>
             </div>
 
-            <div class="checklist-item">
-                <input type="checkbox" id="step2">
-                <label for="step2"><strong>2. Open a Business Bank Account</strong></label>
-            </div>
-            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
-                <p>Do not use a personal account. Approach a commercial bank to open a <strong>Current Account</strong> that supports foreign currency transactions (USD, EUR) and can receive international SWIFT wires.</p>
-            </div>
-
-            <div class="checklist-item">
-                <input type="checkbox" id="step3">
-                <label for="step3"><strong>3. Obtain an Export License / Tax ID</strong></label>
-            </div>
-            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
-                <p>Register with your national Customs authority. You will need your local Tax Identification Number to apply for your dedicated Import-Export Code (IEC).</p>
-            </div>
-
-            <div class="checklist-item">
-                <input type="checkbox" id="step4">
-                <label for="step4"><strong>4. Find your product's HS Code</strong></label>
-            </div>
-            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
-                <p>Every product traded internationally has an 8-digit <strong>Harmonized System (HS) Code</strong>. This code determines the exact customs duty, taxes, and rules in your buyer's country.</p>
+            <div class="info-box">
+                <span class="box-title">Option B: Export With IGST Payment</span>
+                <p>You pay the integrated tax upfront when shipping, and then claim a 100% refund from the government customs portal once the boat/plane leaves. Great if you want to clear input tax credits quickly.</p>
             </div>
         </div>
 
-        <!-- View 2: Invoice Generator -->
+        <!-- View 3: Invoice Generator -->
         <div id="invoice" class="dashboard-view">
             <h1>Commercial Invoice Generator</h1>
-            <div class="form-group">
-                <label>Exporter Name:</label>
-                <input type="text" id="exporter" placeholder="Your Company">
-            </div>
-            <div class="form-group">
-                <label>Importer Name:</label>
-                <input type="text" id="importer" placeholder="Buyer Company">
-            </div>
-            <div class="form-group">
-                <label>Product Description:</label>
-                <input type="text" id="product" placeholder="What are you exporting?">
-            </div>
-            <div class="form-group">
-                <label>Total Value (USD):</label>
-                <input type="number" id="value" placeholder="Value in $">
-            </div>
+            <div class="form-group"><label>Exporter Name:</label><input type="text" id="exporter" placeholder="Your Company"></div>
+            <div class="form-group"><label>Importer Name:</label><input type="text" id="importer" placeholder="Buyer Company"></div>
+            <div class="form-group"><label>Product Description:</label><input type="text" id="product" placeholder="What are you exporting?"></div>
+            <div class="form-group"><label>Total Value (USD):</label><input type="number" id="value" placeholder="Value in $"></div>
             <button class="action-btn" onclick="generateInvoice()">Generate Invoice</button>
             <div id="invoiceResult" class="invoice-preview" style="display:none;"></div>
         </div>
 
-        <!-- View 3: Incoterms -->
+        <!-- View 4: Incoterms -->
         <div id="incoterms" class="dashboard-view">
             <h1>Incoterms Cheat Sheet</h1>
             <p>International shipping regulations defining responsibility maps:</p>
-            <div class="incoterm-box"><span class="incoterm-title">EXW (Ex Works)</span><p>Buyer picks up goods from your factory floor. Minimal risk to you.</p></div>
-            <div class="incoterm-box"><span class="incoterm-title">FOB (Free On Board)</span><p>You cover costs until delivery onto the shipping vessel. Common benchmark.</p></div>
-            <div class="incoterm-box"><span class="incoterm-title">CIF (Cost, Insurance & Freight)</span><p>You pay freight and insurance to the destination port.</p></div>
+            <div class="info-box"><span class="incoterm-title">EXW (Ex Works)</span><p>Buyer picks up goods from your factory floor. Minimal risk to you.</p></div>
+            <div class="info-box"><span class="incoterm-title">FOB (Free On Board)</span><p>You cover costs until delivery onto the shipping vessel. Common benchmark.</p></div>
+            <div class="info-box"><span class="incoterm-title">CIF (Cost, Insurance & Freight)</span><p>You pay freight and insurance to the destination port.</p></div>
+        </div>
+
+        <!-- View 5: Customs & Clearance (NEW!) -->
+        <div id="customs" class="dashboard-view">
+            <h1>Customs Clearance Workflow</h1>
+            <p>Before your cargo goes onto an international container ship or airplane, it must pass national customs inspection.</p>
+            
+            <div class="info-box warning">
+                <span class="box-title">The Shipping Bill is Key</span>
+                <p>Your Customs Broker will submit a document called a <strong>Shipping Bill</strong> electronically. Customs officers review your Commercial Invoice, Packing List, and HS Code against this bill to clear your goods.</p>
+            </div>
+
+            <div class="info-box">
+                <span class="box-title">The Icegate / Customs Portal Tracking</span>
+                <p>Once cleared, you receive a 'Let Export Order' (LEO). This is the green light that allows your container to physically load onto the ship.</p>
+            </div>
         </div>
 
     </div>
