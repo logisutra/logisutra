@@ -217,16 +217,21 @@
         </div>
 
                 <!-- View 3: Commercial Invoice Generator (Upgraded) -->
-        <div id="invoice" class="dashboard-view">
+               <div id="invoice" class="dashboard-view">
             <h1>Commercial Invoice Generator</h1>
-            <p>Fill out the fields below to create a customs-compliant commercial invoice layout:</p>
+            <p>Fill out the fields below to create a multi-item customs-compliant commercial invoice:</p>
 
             <div class="form-group"><label>Invoice Number:</label><input type="text" id="invNum" placeholder="e.g., EXP-2026-001"></div>
             <div class="form-group"><label>Invoice Date:</label><input type="date" id="invDate"></div>
-            <div class="form-group"><label>Exporter Name & Address:</label><input type="text" id="exporter" placeholder="Your Company, City, Country"></div>
-            <div class="form-group"><label>Importer Name & Address:</label><input type="text" id="importer" placeholder="Buyer Company, City, Country"></div>
-            <div class="form-group"><label>Product Description:</label><input type="text" id="product" placeholder="What are you exporting?"></div>
-            <div class="form-group"><label>8-Digit HS Code:</label><input type="text" id="invHsCode" placeholder="e.g., 6204.42.00"></div>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <h3>🏢 Party Details</h3>
+            <div class="form-group"><label>Exporter Company Name:</label><input type="text" id="expName" placeholder="Your Company Name"></div>
+            <div class="form-group"><label>Exporter Full Address:</label><input type="text" id="expAddr" placeholder="Street, City, State, Country"></div>
+            
+            <div class="form-group"><label>Importer Company Name:</label><input type="text" id="impName" placeholder="Buyer Company Name"></div>
+            <div class="form-group"><label>Importer Full Address:</label><input type="text" id="impAddr" placeholder="Street, City, State, Country"></div>
             
             <div class="form-group">
                 <label>Delivery Terms (Incoterms):</label>
@@ -237,11 +242,27 @@
                 </select>
             </div>
 
-            <div class="form-group"><label>Total Value (USD $):</label><input type="number" id="value" placeholder="Value in $"></div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <h3>📦 Line Items</h3>
+            <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #e2e8f0;">
+                <strong>Item #1</strong>
+                <div class="form-group" style="margin-top:5px;"><label>Product Description:</label><input type="text" id="prod1" placeholder="Product 1 Name"></div>
+                <div class="form-group"><label>8-Digit HS Code (Numbers Only):</label><input type="number" id="hs1" placeholder="e.g., 62044200" oninput="this.value=this.value.replace(/[^0-digit]/g,'')"></div>
+                <div class="form-group"><label>Item Value (USD $):</label><input type="number" id="val1" placeholder="0.00" class="item-value-calc"></div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+                <strong>Item #2 (Optional)</strong>
+                <div class="form-group" style="margin-top:5px;"><label>Product Description:</label><input type="text" id="prod2" placeholder="Product 2 Name (Leave blank if none)"></div>
+                <div class="form-group"><label>8-Digit HS Code:</label><input type="number" id="hs2" placeholder="e.g., 62044200"></div>
+                <div class="form-group"><label>Item Value (USD $):</label><input type="number" id="val2" placeholder="0.00" class="item-value-calc"></div>
+            </div>
             
             <button class="action-btn" onclick="generateInvoice()">Generate Commercial Invoice</button>
             <div id="invoiceResult" class="invoice-preview" style="display:none;"></div>
         </div>
+ 
 
 
         <!-- View 4: Incoterms -->
@@ -305,20 +326,48 @@
             document.getElementById('gstResultBox').style.display = 'block';
         }
          
-       function generateInvoice() {
+               function generateInvoice() {
             var num = document.getElementById('invNum').value;
             var date = document.getElementById('invDate').value;
-            var exp = document.getElementById('exporter').value;
-            var imp = document.getElementById('importer').value;
-            var prod = document.getElementById('product').value;
-            var hs = document.getElementById('invHsCode').value;
+            var expName = document.getElementById('expName').value;
+            var expAddr = document.getElementById('expAddr').value;
+            var impName = document.getElementById('impName').value;
+            var impAddr = document.getElementById('impAddr').value;
             var inco = document.getElementById('invIncoterm').value;
-            var val = document.getElementById('value').value;
 
-            // Ensures the user doesn't leave fields blank before rendering
-            if(!num || !date || !exp || !imp || !prod || !hs || !val) {
-                alert("Please fill out all fields to comply with customs!");
+            // Product lines data
+            var prod1 = document.getElementById('prod1').value;
+            var hs1 = document.getElementById('hs1').value;
+            var val1 = parseFloat(document.getElementById('val1').value) || 0;
+
+            var prod2 = document.getElementById('prod2').value;
+            var hs2 = document.getElementById('hs2').value;
+            var val2 = parseFloat(document.getElementById('val2').value) || 0;
+
+            if(!num || !date || !expName || !expAddr || !impName || !impAddr || !prod1 || !hs1 || val1 <= 0) {
+                alert("Please complete core details and at least Item #1 to generate a legal invoice.");
                 return;
+            }
+
+            // Dynamically build item table rows
+            var tableRows = `
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">${prod1}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs1}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${val1.toFixed(2)}</td>
+                </tr>
+            `;
+            var totalVal = val1;
+
+            if(prod2 && hs2 && val2 > 0) {
+                tableRows += `
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;">${prod2}</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs2}</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${val2.toFixed(2)}</td>
+                    </tr>
+                `;
+                totalVal += val2;
             }
 
             var resultDiv = document.getElementById('invoiceResult');
@@ -327,7 +376,7 @@
                     <h2 style="margin: 0; color: #2c3e50; letter-spacing: 1px;">COMMERCIAL INVOICE</h2>
                     <small style="color: #7f8c8d;">For International Trade Customs Clearance</small>
                 </div>
-                <table style="width: 100%; font-size: 14px; margin-bottom: 15px; border-collapse: collapse;">
+                <table style="width: 100%; font-size: 13px; margin-bottom: 15px; border-collapse: collapse; line-height:1.4;">
                     <tr>
                         <td style="width: 50%; vertical-align: top; padding-right: 10px;">
                             <strong>🔑 Invoice Details:</strong><br>
@@ -343,15 +392,17 @@
                     <tr>
                         <td style="vertical-align: top; padding-right: 10px;">
                             <strong>🏢 Exporter (Shipper):</strong><br>
-                            ${exp}
+                            <strong>${expName}</strong><br>
+                            ${expAddr}
                         </td>
                         <td style="vertical-align: top;">
                             <strong>🏢 Importer (Consignee):</strong><br>
-                            ${imp}
+                            <strong>${impName}</strong><br>
+                            ${impAddr}
                         </td>
                     </tr>
                 </table>
-                <table style="width: 100%; border: 1px solid #bdc3c7; border-collapse: collapse; font-size: 14px; text-align: left;">
+                <table style="width: 100%; border: 1px solid #bdc3c7; border-collapse: collapse; font-size: 13px; text-align: left;">
                     <thead>
                         <tr style="background: #f8f9fa; border-bottom: 1px solid #bdc3c7;">
                             <th style="padding: 8px;">Description of Goods</th>
@@ -360,22 +411,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${prod}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">$${parseFloat(val).toFixed(2)} USD</td>
+                        ${tableRows}
+                        <tr style="background: #fdfefe; border-top: 2px solid #bdc3c7;">
+                            <td colspan="2" style="padding: 8px; text-align: right; font-weight: bold;">Invoice Total Value:</td>
+                            <td style="padding: 8px; text-align: right; font-weight: bold; color: #2c3e50;">$${totalVal.toFixed(2)} USD</td>
                         </tr>
                     </tbody>
                 </table>
-                                <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+                <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
                     <button class="action-btn" style="background-color: #2ecc71; font-size: 14px; padding: 8px 16px;" onclick="window.print()">🖨️ Print Invoice</button>
-                    
                     <a href="https://www.gst.gov.in/" target="_blank" class="action-btn" style="background-color: #e67e22; font-size: 14px; padding: 8px 16px; text-decoration: none; display: inline-block; border-radius: 4px; color: white; font-weight: bold;">🌐 Register Invoice (GST Portal)</a>
                 </div>
-
             `;
             resultDiv.style.display = 'block';
-                }
+        }
+
         
     </script>
 </body>
