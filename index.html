@@ -62,14 +62,14 @@
         .dashboard-view {
             display: none; /* Hidden by default, toggled via JS */
             background: white;
-                    <div id="checklist" class="dashboard-view active">
-            <h1>Business Setup Checklist</h1>
-            <p>Complete these initial steps to make your business export-ready:</p>
-            <div class="checklist-item"><input type="checkbox" id="step1"><label for="step1">Register your Business Legally</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step2"><label for="step2">Open a Business Bank Account</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step3"><label for="step3">Obtain an Export License / Tax ID</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step4"><label for="step4">Find your product's HS Code</label></div>
-        </div>
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            max-width: 700px;
+        }
+        .dashboard-view.active {
+            display: block;
+        }
 
         /* UI Elements Styles */
         h1, h3 { color: #2c3e50; margin-top: 0; }
@@ -98,14 +98,42 @@
     <!-- RIGHT MAIN CONTENT PANEL -->
     <div class="main-content">
         
-        <!-- View 1: Checklist -->
+        <!-- View 1: Upgraded Checklist -->
         <div id="checklist" class="dashboard-view active">
             <h1>Business Setup Checklist</h1>
-            <p>Complete these initial steps to make your business export-ready:</p>
-            <div class="checklist-item"><input type="checkbox" id="step1"><label for="step1">Register your Business Legally</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step2"><label for="step2">Open a Business Bank Account</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step3"><label for="step3">Obtain an Export License / Tax ID</label></div>
-            <div class="checklist-item"><input type="checkbox" id="step4"><label for="step4">Find your product's HS Code</label></div>
+            <p>Follow these detailed steps to establish a legally compliant export business:</p>
+            
+            <div class="checklist-item">
+                <input type="checkbox" id="step1">
+                <label for="step1"><strong>1. Register your Business Legally</strong></label>
+            </div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
+                <p>Choose a legal structure (Sole Proprietorship, Partnership, or LLC). You must register with your corporate registry to obtain an official Business Registration Certificate.</p>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="step2">
+                <label for="step2"><strong>2. Open a Business Bank Account</strong></label>
+            </div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
+                <p>Do not use a personal account. Approach a commercial bank to open a <strong>Current Account</strong> that supports foreign currency transactions (USD, EUR) and can receive international SWIFT wires.</p>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="step3">
+                <label for="step3"><strong>3. Obtain an Export License / Tax ID</strong></label>
+            </div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
+                <p>Register with your national Customs authority. You will need your local Tax Identification Number to apply for your dedicated Import-Export Code (IEC).</p>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="step4">
+                <label for="step4"><strong>4. Find your product's HS Code</strong></label>
+            </div>
+            <div style="margin-left: 30px; margin-bottom: 20px; color: #555; font-size: 14px;">
+                <p>Every product traded internationally has an 8-digit <strong>Harmonized System (HS) Code</strong>. This code determines the exact customs duty, taxes, and rules in your buyer's country.</p>
+            </div>
         </div>
 
         <!-- View 2: Invoice Generator -->
@@ -145,15 +173,12 @@
     <!-- JAVASCRIPT: Switches views dynamically without refreshing -->
     <script>
         function switchView(viewId, clickedButton) {
-            // Hide all views
             var views = document.querySelectorAll('.dashboard-view');
             views.forEach(v => v.classList.remove('active'));
 
-            // Remove active color from all buttons
             var buttons = document.querySelectorAll('.menu-btn');
             buttons.forEach(b => b.classList.remove('active'));
 
-            // Show current view and light up clicked button
             document.getElementById(viewId).classList.add('active');
             clickedButton.classList.add('active');
         }
