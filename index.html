@@ -216,16 +216,33 @@
             </div>
         </div>
 
-        <!-- View 3: Invoice Generator -->
+                <!-- View 3: Commercial Invoice Generator (Upgraded) -->
         <div id="invoice" class="dashboard-view">
             <h1>Commercial Invoice Generator</h1>
-            <div class="form-group"><label>Exporter Name:</label><input type="text" id="exporter" placeholder="Your Company"></div>
-            <div class="form-group"><label>Importer Name:</label><input type="text" id="importer" placeholder="Buyer Company"></div>
+            <p>Fill out the fields below to create a customs-compliant commercial invoice layout:</p>
+
+            <div class="form-group"><label>Invoice Number:</label><input type="text" id="invNum" placeholder="e.g., EXP-2026-001"></div>
+            <div class="form-group"><label>Invoice Date:</label><input type="date" id="invDate"></div>
+            <div class="form-group"><label>Exporter Name & Address:</label><input type="text" id="exporter" placeholder="Your Company, City, Country"></div>
+            <div class="form-group"><label>Importer Name & Address:</label><input type="text" id="importer" placeholder="Buyer Company, City, Country"></div>
             <div class="form-group"><label>Product Description:</label><input type="text" id="product" placeholder="What are you exporting?"></div>
-            <div class="form-group"><label>Total Value (USD):</label><input type="number" id="value" placeholder="Value in $"></div>
-            <button class="action-btn" onclick="generateInvoice()">Generate Invoice</button>
+            <div class="form-group"><label>8-Digit HS Code:</label><input type="text" id="invHsCode" placeholder="e.g., 6204.42.00"></div>
+            
+            <div class="form-group">
+                <label>Delivery Terms (Incoterms):</label>
+                <select id="invIncoterm" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: white;">
+                    <option value="FOB (Free On Board)">FOB - Free On Board</option>
+                    <option value="CIF (Cost, Insurance & Freight)">CIF - Cost, Insurance & Freight</option>
+                    <option value="EXW (Ex Works)">EXW - Ex Works</option>
+                </select>
+            </div>
+
+            <div class="form-group"><label>Total Value (USD $):</label><input type="number" id="value" placeholder="Value in $"></div>
+            
+            <button class="action-btn" onclick="generateInvoice()">Generate Commercial Invoice</button>
             <div id="invoiceResult" class="invoice-preview" style="display:none;"></div>
         </div>
+
 
         <!-- View 4: Incoterms -->
         <div id="incoterms" class="dashboard-view">
@@ -287,29 +304,79 @@
             document.getElementById('itcRefund').innerText = currencySymbol + ' ' + refundableItc.toFixed(2) + ' ' + currencyCode;
             document.getElementById('gstResultBox').style.display = 'block';
         }
-
-        function generateInvoice() {
+         
+       function generateInvoice() {
+            var num = document.getElementById('invNum').value;
+            var date = document.getElementById('invDate').value;
             var exp = document.getElementById('exporter').value;
             var imp = document.getElementById('importer').value;
             var prod = document.getElementById('product').value;
+            var hs = document.getElementById('invHsCode').value;
+            var inco = document.getElementById('invIncoterm').value;
             var val = document.getElementById('value').value;
 
-            if(!exp || !imp || !prod || !val) {
-                alert("Please fill out all fields!");
+            // Ensures the user doesn't leave fields blank before rendering
+            if(!num || !date || !exp || !imp || !prod || !hs || !val) {
+                alert("Please fill out all fields to comply with customs!");
                 return;
             }
 
             var resultDiv = document.getElementById('invoiceResult');
             resultDiv.innerHTML = `
-                <h3>COMMERCIAL INVOICE</h3>
-                <p><strong>Exporter:</strong> ${exp}</p>
-                <p><strong>Importer:</strong> ${imp}</p>
-                <hr>
-                <p><strong>Goods:</strong> ${prod}</p>
-                <p><strong>Total Value:</strong> $${val} USD</p>
+                <div style="text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; margin-bottom: 15px;">
+                    <h2 style="margin: 0; color: #2c3e50; letter-spacing: 1px;">COMMERCIAL INVOICE</h2>
+                    <small style="color: #7f8c8d;">For International Trade Customs Clearance</small>
+                </div>
+                <table style="width: 100%; font-size: 14px; margin-bottom: 15px; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                            <strong>🔑 Invoice Details:</strong><br>
+                            No: ${num}<br>
+                            Date: ${date}
+                        </td>
+                        <td style="width: 50%; vertical-align: top;">
+                            <strong>📦 Terms of Sale:</strong><br>
+                            Incoterm: ${inco}
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="height: 15px;"></td></tr>
+                    <tr>
+                        <td style="vertical-align: top; padding-right: 10px;">
+                            <strong>🏢 Exporter (Shipper):</strong><br>
+                            ${exp}
+                        </td>
+                        <td style="vertical-align: top;">
+                            <strong>🏢 Importer (Consignee):</strong><br>
+                            ${imp}
+                        </td>
+                    </tr>
+                </table>
+                <table style="width: 100%; border: 1px solid #bdc3c7; border-collapse: collapse; font-size: 14px; text-align: left;">
+                    <thead>
+                        <tr style="background: #f8f9fa; border-bottom: 1px solid #bdc3c7;">
+                            <th style="padding: 8px;">Description of Goods</th>
+                            <th style="padding: 8px;">HS Code</th>
+                            <th style="padding: 8px; text-align: right;">Total Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${prod}</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs}</td>
+                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold;">$${parseFloat(val).toFixed(2)} USD</td>
+                        </tr>
+                    </tbody>
+                </table>
+                                <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="action-btn" style="background-color: #2ecc71; font-size: 14px; padding: 8px 16px;" onclick="window.print()">🖨️ Print Invoice</button>
+                    
+                    <a href="https://www.gst.gov.in/" target="_blank" class="action-btn" style="background-color: #e67e22; font-size: 14px; padding: 8px 16px; text-decoration: none; display: inline-block; border-radius: 4px; color: white; font-weight: bold;">🌐 Register Invoice (GST Portal)</a>
+                </div>
+
             `;
             resultDiv.style.display = 'block';
-        }
+                }
+        
     </script>
 </body>
 </html>
