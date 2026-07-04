@@ -215,6 +215,69 @@
                 </div>
             </div>
         </div>
+  
+        
+        <!-- View 3: Commercial Invoice Generator (Paytm-Style Inline Validation) -->
+        <div id="invoice" class="dashboard-view">
+            <h1>Commercial Invoice Generator</h1>
+            <p>Fill out the fields below to create a customs-compliant commercial invoice:</p>
+
+            <div class="form-group"><label>Invoice Number:</label><input type="text" id="invNum" placeholder="e.g., EXP-2026-001"></div>
+            <div class="form-group"><label>Invoice Date:</label><input type="date" id="invDate"></div>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <h3>🏢 Party Details</h3>
+            <div class="form-group"><label>Exporter Company Name:</label><input type="text" id="expName" placeholder="Your Company Name"></div>
+            <div class="form-group"><label>Exporter Full Address:</label><input type="text" id="expAddr" placeholder="Street, City, State, Country"></div>
+            
+            <div class="form-group"><label>Importer Company Name:</label><input type="text" id="impName" placeholder="Buyer Company Name"></div>
+            <div class="form-group"><label>Importer Full Address:</label><input type="text" id="impAddr" placeholder="Street, City, State, Country"></div>
+            
+            <div class="form-group">
+                <label>Delivery Terms (Incoterms):</label>
+                <select id="invIncoterm" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: white;">
+                    <option value="FOB (Free On Board)">FOB - Free On Board</option>
+                    <option value="CIF (Cost, Insurance & Freight)">CIF - Cost, Insurance & Freight</option>
+                    <option value="EXW (Ex Works)">EXW - Ex Works</option>
+                </select>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <h3>🏦 Payment & Bank Details</h3>
+            <div class="form-group">
+                <label>11-Digit IFSC Code (Branch Code):</label>
+                <!-- Added oninput listener for smart, live bank detection as they type -->
+                <input type="text" id="bankSwift" placeholder="e.g., SBIN0001234" oninput="detectBankFromIFSC()" style="text-transform: uppercase;">
+                <div id="ifscBankMatch" style="margin-top: 5px; font-size: 13px; font-weight: bold; color: #00baf2; display: none;"></div>
+                <small style="display: block; margin-top: 5px;"><a href="https://www.razorpay.com/ifsc-code/" target="_blank" style="color: #00baf2; text-decoration: underline; font-weight: bold;">🔍 Find your branch IFSC Code instantly</a></small>
+            </div>
+
+            <div class="form-group">
+                <label>Bank Name:</label>
+                <input type="text" id="bankName" placeholder="Will auto-detect or type manually...">
+            </div>
+            <div class="form-group"><label>Account Number:</label><input type="password" id="bankAcc" placeholder="Enter business account number"></div>
+            <div class="form-group"><label>Confirm Account Number:</label><input type="text" id="bankAccConfirm" placeholder="Re-enter business account number"></div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <h3>📦 Description of Goods</h3>
+            <div id="invoiceItemsContainer">
+                <div class="invoice-item-row" style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin-bottom: 12px; border: 1px solid #e2e8f0; position: relative;">
+                    <div class="form-group"><label>Description of Goods:</label><input type="text" class="item-desc" placeholder="Detailed description of item"></div>
+                    <div class="form-group"><label>8-Digit HS Code (Numbers Only):</label><input type="number" class="item-hs" placeholder="e.g., 62044200"></div>
+                    <div class="form-group"><label>Item Value (USD $):</label><input type="number" class="item-val" placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <button type="button" class="action-btn" style="background-color: #34495e; margin-bottom: 20px; font-size: 14px;" onclick="addInvoiceItemRow()">➕ Add Another Item</button>
+            <br>
+            
+            <button class="action-btn" onclick="generateInvoice()">Generate Commercial Invoice</button>
+            <div id="invoiceResult" class="invoice-preview" style="display:none;"></div>
+        </div>
         
         <!-- View 4: Incoterms -->
         <div id="incoterms" class="dashboard-view">
@@ -290,36 +353,54 @@
             `;
             container.appendChild(newRow);
                             }
-                
-        function verifyBankAccount() {
-            var expName = document.getElementById('expName').value;
-            var bankName = document.getElementById('bankName').value;
-            var acc = document.getElementById('bankAcc').value;
-            var accConf = document.getElementById('bankAccConfirm').value;
-            var statusDiv = document.getElementById('verificationStatus');
 
-            if (!expName) {
-                alert("Please fill out your Exporter Company Name under Party Details first so we know who owns the account!");
-                return;
-            }
-            if (!bankName || !acc || !accConf) {
-                alert("Please enter your bank name and account numbers first!");
-                return;
-            }
-            if (acc !== accConf) {
-                alert("Account numbers do not match! Please check your typing.");
-                return;
-            }
+        function detectBankFromIFSC() {
+            var ifscInput = document.getElementById('bankSwift').value.trim().toUpperCase();
+            var feedbackDiv = document.getElementById('ifscBankMatch');
+            var bankNameInput = document.getElementById('bankName').value;
+            
+            // Clean dictionary mapping the most popular Indian bank codes
+            var bankPrefixes = {
+                'SBIN': '🏢 State Bank of India (SBI)',
+                'HDFC': '🏢 HDFC Bank',
+                'ICIC': '🏢 ICICI Bank',
+                'BARB': '🏢 Bank of Baroda',
+                'PUNB': '🏢 Punjab National Bank',
+                'UTIB': '🏢 Axis Bank',
+                'KKBK': '🏢 Kotak Mahindra Bank',
+                'CNRB': '🏢 Canara Bank',
+                'IOBA': '🏢 Indian Overseas Bank',
+                'IDIB': '🏢 Indian Bank',
+                'CENT': '🏢 Central Bank of India',
+                'MAHB': '🏢 Bank of Maharashtra',
+                'UCBA': '🏢 UCO Bank',
+                'UBIN': '🏢 Union Bank of India',
+                'YESB': '🏢 YES Bank',
+                'IBKL': '🏢 IDBI Bank',
+                'IDFB': '🏢 IDFC FIRST Bank',
+                'FBAN': '🏢 Federal Bank',
+                'SIBL': '🏢 South Indian Bank',
+                'TMBL': '🏢 Tamilnad Mercantile Bank',
+                'KARB': '🏢 Karnataka Bank',
+                'PYTM': '📱 Paytm Payments Bank'
+            };
 
-            statusDiv.style.display = 'block';
-            statusDiv.style.color = '#7f8c8d';
-            statusDiv.innerText = "⏳ Connecting to IMPS/UPI clearing network via " + bankName + "...";
-
-            setTimeout(function() {
-                statusDiv.style.color = '#2ecc71';
-                statusDiv.innerHTML = `✅ Verified at ${bankName}<br><span style="color: #2c3e50; font-size: 13px;">Account Holder: <strong>${expName.toUpperCase()}</strong></span>`;
-                statusDiv.setAttribute('data-verified', 'true');
-            }, 1200);
+            if (ifscInput.length >= 4) {
+                var prefix = ifscInput.substring(0, 4);
+                if (bankPrefixes[prefix]) {
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.style.color = '#2ecc71';
+                    feedbackDiv.innerText = "✓ Detected: " + bankPrefixes[prefix];
+                    // Auto-fill the bank name box to save user time!
+                    document.getElementById('bankName').value = bankPrefixes[prefix].replace('🏢 ', '').replace('📱 ', '');
+                } else {
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.style.color = '#e67e22';
+                    feedbackDiv.innerText = "ℹ️ Custom or Cooperative Bank Code Prefix";
+                }
+            } else {
+                feedbackDiv.style.display = 'none';
+            }
         }
 
         function generateInvoice() {
@@ -333,17 +414,16 @@
             
             var bName = document.getElementById('bankName').value;
             var bAcc = document.getElementById('bankAcc').value;
-            var bSwift = document.getElementById('bankSwift').value; // Contains the IFSC input string
-            
-            var isVerified = document.getElementById('verificationStatus').getAttribute('data-verified');
+            var bAccConfirm = document.getElementById('bankAccConfirm').value;
+            var bSwift = document.getElementById('bankSwift').value; 
 
             if(!num || !date || !expName || !expAddr || !impName || !impAddr || !bName || !bAcc || !bSwift) {
                 alert("Please complete all party, invoice, and bank details!");
                 return;
             }
 
-            if(isVerified !== 'true') {
-                alert("Security Hold: Please click the 'Verify Bank Account' button to confirm your account records before generating the legal invoice.");
+            if (bAcc !== bAccConfirm) {
+                alert("Account numbers do not match! Please verify your bank account input entry.");
                 return;
             }
 
@@ -448,6 +528,7 @@
             `;
             resultDiv.style.display = 'block';
         }
+        
 
 
         
