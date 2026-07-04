@@ -217,7 +217,7 @@
         </div>
   
         
-        <!-- View 3: Commercial Invoice Generator (Paytm-Style Inline Validation) -->
+                <!-- View 3: Commercial Invoice Generator -->
         <div id="invoice" class="dashboard-view">
             <h1>Commercial Invoice Generator</h1>
             <p>Fill out the fields below to create a customs-compliant commercial invoice:</p>
@@ -247,19 +247,17 @@
 
             <h3>🏦 Payment & Bank Details</h3>
             <div class="form-group">
-                <label>11-Digit IFSC Code (Branch Code):</label>
-                <!-- Added oninput listener for smart, live bank detection as they type -->
-                <input type="text" id="bankSwift" placeholder="e.g., SBIN0001234" oninput="detectBankFromIFSC()" style="text-transform: uppercase;">
-                <div id="ifscBankMatch" style="margin-top: 5px; font-size: 13px; font-weight: bold; color: #00baf2; display: none;"></div>
-                <small style="display: block; margin-top: 5px;"><a href="https://www.razorpay.com/ifsc-code/" target="_blank" style="color: #00baf2; text-decoration: underline; font-weight: bold;">🔍 Find your branch IFSC Code instantly</a></small>
-            </div>
-
-            <div class="form-group">
                 <label>Bank Name:</label>
-                <input type="text" id="bankName" placeholder="Will auto-detect or type manually...">
+                <input type="text" id="bankName" placeholder="e.g., State Bank of India">
             </div>
-            <div class="form-group"><label>Account Number:</label><input type="password" id="bankAcc" placeholder="Enter business account number"></div>
-            <div class="form-group"><label>Confirm Account Number:</label><input type="text" id="bankAccConfirm" placeholder="Re-enter business account number"></div>
+            <div class="form-group">
+                <label>Account Number:</label>
+                <input type="text" id="bankAcc" placeholder="Enter business account number">
+            </div>
+            <div class="form-group">
+                <label>IFSC / SWIFT Code:</label>
+                <input type="text" id="bankSwift" placeholder="e.g., SBIN0001234" style="text-transform: uppercase;">
+            </div>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
@@ -279,6 +277,7 @@
             <div id="invoiceResult" class="invoice-preview" style="display:none;"></div>
         </div>
         
+
         <!-- View 4: Incoterms -->
         <div id="incoterms" class="dashboard-view">
             <h1>Incoterms Cheat Sheet</h1>
@@ -354,56 +353,7 @@
             container.appendChild(newRow);
                             }
 
-        function detectBankFromIFSC() {
-            var ifscInput = document.getElementById('bankSwift').value.trim().toUpperCase();
-            var feedbackDiv = document.getElementById('ifscBankMatch');
-            var bankNameInput = document.getElementById('bankName').value;
-            
-            // Clean dictionary mapping the most popular Indian bank codes
-            var bankPrefixes = {
-                'SBIN': '🏢 State Bank of India (SBI)',
-                'HDFC': '🏢 HDFC Bank',
-                'ICIC': '🏢 ICICI Bank',
-                'BARB': '🏢 Bank of Baroda',
-                'PUNB': '🏢 Punjab National Bank',
-                'UTIB': '🏢 Axis Bank',
-                'KKBK': '🏢 Kotak Mahindra Bank',
-                'CNRB': '🏢 Canara Bank',
-                'IOBA': '🏢 Indian Overseas Bank',
-                'IDIB': '🏢 Indian Bank',
-                'CENT': '🏢 Central Bank of India',
-                'MAHB': '🏢 Bank of Maharashtra',
-                'UCBA': '🏢 UCO Bank',
-                'UBIN': '🏢 Union Bank of India',
-                'YESB': '🏢 YES Bank',
-                'IBKL': '🏢 IDBI Bank',
-                'IDFB': '🏢 IDFC FIRST Bank',
-                'FBAN': '🏢 Federal Bank',
-                'SIBL': '🏢 South Indian Bank',
-                'TMBL': '🏢 Tamilnad Mercantile Bank',
-                'KARB': '🏢 Karnataka Bank',
-                'PYTM': '📱 Paytm Payments Bank'
-            };
-
-            if (ifscInput.length >= 4) {
-                var prefix = ifscInput.substring(0, 4);
-                if (bankPrefixes[prefix]) {
-                    feedbackDiv.style.display = 'block';
-                    feedbackDiv.style.color = '#2ecc71';
-                    feedbackDiv.innerText = "✓ Detected: " + bankPrefixes[prefix];
-                    // Auto-fill the bank name box to save user time!
-                    document.getElementById('bankName').value = bankPrefixes[prefix].replace('🏢 ', '').replace('📱 ', '');
-                } else {
-                    feedbackDiv.style.display = 'block';
-                    feedbackDiv.style.color = '#e67e22';
-                    feedbackDiv.innerText = "ℹ️ Custom or Cooperative Bank Code Prefix";
-                }
-            } else {
-                feedbackDiv.style.display = 'none';
-            }
-        }
-
-        function generateInvoice() {
+          function generateInvoice() {
             var num = document.getElementById('invNum').value;
             var date = document.getElementById('invDate').value;
             var expName = document.getElementById('expName').value;
@@ -414,16 +364,10 @@
             
             var bName = document.getElementById('bankName').value;
             var bAcc = document.getElementById('bankAcc').value;
-            var bAccConfirm = document.getElementById('bankAccConfirm').value;
             var bSwift = document.getElementById('bankSwift').value; 
 
             if(!num || !date || !expName || !expAddr || !impName || !impAddr || !bName || !bAcc || !bSwift) {
                 alert("Please complete all party, invoice, and bank details!");
-                return;
-            }
-
-            if (bAcc !== bAccConfirm) {
-                alert("Account numbers do not match! Please verify your bank account input entry.");
                 return;
             }
 
@@ -509,7 +453,7 @@
                     <tr>
                         <td>
                             <strong>🏦 Bank Remittance Routing Details:</strong><br>
-                            Bank Name: ${bName} | Account Number: ${bAcc} | Branch IFSC Code: ${bSwift}
+                            Bank Name: ${bName} | Account Number: ${bAcc} | IFSC / SWIFT Code: ${bSwift}
                         </td>
                     </tr>
                 </table>
@@ -528,8 +472,7 @@
             `;
             resultDiv.style.display = 'block';
         }
-        
-
+      
 
         
     </script>
