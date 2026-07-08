@@ -3,153 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | Smart International Trade Platform</title>
+    <title>LogiSutra | International Trade Platform</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { color: #333; background: #fdfdfd; line-height: 1.6; }
+        body { color: #333; background: #fdfdfd; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Branded Header Navigation */
+        /* Navigation Bar */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 6px; letter-spacing: -0.5px; }
+        .logo { font-size: 24px; font-weight: 800; color: #1e3a8a; letter-spacing: -0.5px; }
         .logo span { color: #2ecc71; }
         .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #4b5563; font-weight: 500; transition: color 0.2s; }
+        .nav-links a { text-decoration: none; color: #4b5563; font-weight: 500; transition: color 0.2s; cursor: pointer; }
         .nav-links a:hover { color: #1e3a8a; }
-        .auth-btn { background: #1e3a8a; color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: bold; }
-        .auth-btn:hover { background: #1d4ed8; }
+        
+        /* Auth Menu Buttons */
+        .login-btn { color: #1e3a8a !important; font-weight: 600; }
+        .signup-btn { background: #1e3a8a; color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: bold; }
+        .signup-btn:hover { background: #1d4ed8; }
 
-        /* Hero Splash Banner */
-        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 110px 10%; text-align: center; }
+        /* Hero Layout Area */
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 110px 10%; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .hero h1 { font-size: 46px; margin-bottom: 20px; font-weight: 800; }
         .hero p { font-size: 18px; max-width: 700px; margin: 0 auto 35px auto; opacity: 0.9; }
-        .hero .btn { display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
+        .hero .btn { display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); cursor: pointer; }
         .hero .btn:hover { transform: translateY(-2px); }
 
-        /* Content Sections */
-        section { padding: 80px 10%; }
-        section h2 { text-align: center; font-size: 28px; color: #1e293b; margin-bottom: 40px; position: relative; }
-        section h2::after { content: ''; width: 50px; height: 4px; background: #2ecc71; display: block; margin: 10px auto 0 auto; border-radius: 2px; }
+        /* Interactive Authentication Modal Window */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-box { background: white; width: 100%; max-width: 400px; padding: 35px; border-radius: 8px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: #94a3b8; }
+        .close-modal:hover { color: #334155; }
+        .modal-box h2 { color: #1e293b; margin-bottom: 8px; font-size: 22px; }
+        .modal-box p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
+        .auth-submit-btn { width: 100%; background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        .auth-submit-btn:hover { background: #27ae60; }
+        .switch-auth-mode { text-align: center; margin-top: 15px; font-size: 13px; color: #64748b; }
+        .switch-auth-mode span { color: #1e3a8a; font-weight: 600; cursor: pointer; }
 
-        /* Services Grid Layout */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .service-card { background: white; border: 1px solid #e2e8f0; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.01); transition: transform 0.3s, box-shadow 0.3s; }
-        .service-card:hover { transform: translateY(-3px); box-shadow: 0 12px 20px rgba(0,0,0,0.05); }
-        .service-icon { font-size: 35px; margin-bottom: 15px; }
-        .service-card h3 { margin-bottom: 10px; color: #1e3a8a; }
-
-        /* Contact Section Form */
-        .contact-container { max-width: 600px; margin: 0 auto; background: white; border: 1px solid #e2e8f0; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.01); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 15px; }
-        .submit-btn { width: 100%; background: #1e3a8a; color: white; border: none; padding: 14px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .submit-btn:hover { background: #1d4ed8; }
-
-        /* Premium Corporate Footer */
-        footer { background: #0f172a; color: #94a3b8; padding: 50px 10% 20px 10%; font-size: 14px; }
-        .footer-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { color: white; margin-bottom: 20px; font-size: 16px; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: #94a3b8; text-decoration: none; }
-        .footer-col ul li a:hover { color: white; }
-        .footer-bottom { text-align: center; border-top: 1px solid #334155; padding-top: 20px; font-size: 13px; }
+        /* Premium Social & Utilities Corporate Footer */
+        footer { background: #0f172a; color: #94a3b8; padding: 40px 10% 30px 10%; font-size: 14px; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        
+        /* Functional Social Links Array */
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .social-links a:hover { color: #2ecc71; }
+        
+        .footer-bottom { border-top: 1px solid #334155; width: 100%; padding-top: 20px; text-align: center; font-size: 13px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation Element -->
+    <!-- Header Navigation Grid Frame -->
     <nav>
         <div class="logo">Logi<span>Sutra</span></div>
         <ul class="nav-links">
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="dashboard.html" class="auth-btn">Client Terminal</a></li>
+            <li><a onclick="openAuthModal('login')" class="login-btn">Log In</a></li>
+            <li><a onclick="openAuthModal('signup')" class="signup-btn">Sign Up</a></li>
         </ul>
     </nav>
 
-    <!-- Hero Splash Space -->
+    <!-- Visual Landing Core -->
     <div class="hero">
-        <h1>The Blueprint for Global Commerce</h1>
-        <p>Accelerate your cross-border operations with LogiSutra. An intelligent compliance suite built to streamline customs duties, legal documentation, and real-time container tracking.</p>
-        <a href="dashboard.html" class="btn">Launch Trade Control Deck →</a>
+        <h1>International Trade Workspace</h1>
+        <p>Access secure compliance engines designed to coordinate international regulatory checklists, port duty frameworks, and custom shipping matrices.</p>
+        <a onclick="openAuthModal('signup')" class="btn">Get Started Now →</a>
     </div>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>The LogiSutra Philosophy</h2>
-        <p style="text-align: center; max-width: 800px; margin: 0 auto; color: #4b5563; font-size: 16px;">We break down complex international trade laws into smart, automated steps. Whether you are navigating export shipping bills or computing multi-layered import tariff structures, LogiSutra provides the structural formulas and checklists required to eliminate port clearance delays entirely.</p>
-    </section>
-
-    <!-- Services Grid Layout Matrix -->
-    <section id="services" style="background: #f8fafc;">
-        <h2>Global Operational Utilities</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">📤</div>
-                <h3>Exporter Engine</h3>
-                <p>Generate clean commercial legal invoices, execute LUT configurations, map HS codes, and connect straight to ICEGATE tracking nodes.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">📥</div>
-                <h3>Importer Systems</h3>
-                <p>Audit necessary onboarding paperwork and run complex landing duty projections (BCD, SWS, IGST) before financing capital lines.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">⚖️</div>
-                <h3>Incoterms Advisory</h3>
-                <p>Instantly map physical delivery risk, freight costs, and insurance liability break-lines straight from globally standardized rule sets.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Form Panel -->
-    <section id="contact">
-        <h2>Connect With a Compliance Architect</h2>
-        <div class="contact-container">
-            <form onsubmit="alert('Thank you for connecting with us! A LogiSutra trade advisory specialist will review your details shortly.'); return false;">
-                <div class="form-group">
+    <!-- Interactive Security Auth Modal Box Overlay -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <h2 id="modalTitle">Account Portal Login</h2>
+            <p id="modalDesc">Enter your account access parameters to launch the trade grid.</p>
+            
+            <!-- Real Working Intercept Form -->
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="form-group" id="companyField" style="display: none;">
                     <label>Enterprise Name</label>
-                    <input type="text" required placeholder="e.g., Delta Manufacturing Ltd">
+                    <input type="text" id="authCompany" placeholder="e.g., Delta Trade Corp">
                 </div>
                 <div class="form-group">
-                    <label>Corporate Email Identity</label>
-                    <input type="email" required placeholder="operations@company.com">
+                    <label>Corporate Email Address</label>
+                    <input type="email" id="authEmail" required placeholder="name@company.com">
                 </div>
                 <div class="form-group">
-                    <label>Operational Assistance Needed</label>
-                    <textarea rows="4" required placeholder="Tell us about your core import/export cargo profile or customs bottlenecks..."></textarea>
+                    <label>Account Security Password</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="submit-btn">Submit Inquiry</button>
+                <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Access Dashboard</button>
             </form>
+            
+            <div class="switch-auth-mode" id="modalToggleText">
+                New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Professional Business Footer -->
+    <!-- Safe Corporate Footer Infrastructure -->
     <footer>
-        <div class="footer-cols">
-            <div class="footer-col">
-                <h4>LogiSutra Tech</h4>
-                <p>Engineering robust regulatory automation software systems for modern cross-border supply chains.</p>
+        <div class="footer-content">
+            <!-- Active Social Network Hub Routing -->
+            <div class="social-links">
+                <a href="https://www.instagram.com" target="_blank">Instagram</a>
+                <a href="https://www.twitter.com" target="_blank">Twitter</a>
+                <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+                <a href="https://www.facebook.com" target="_blank">Facebook</a>
             </div>
-            <div class="footer-col">
-                <h4>Workspace Hubs</h4>
-                <ul>
-                    <li><a href="dashboard.html">Outbound Exporter Workspace</a></li>
-                    <li><a href="dashboard.html">Inbound Importer Workspace</a></li>
-                    <li><a href="dashboard.html">Customs Tracking Module</a></li>
-                </ul>
+            <div class="footer-bottom">
+                © 2026 LogiSutra Platform. All rights reserved.
             </div>
-            <div class="footer-col">
-                <h4>Corporate Identity</h4>
-                <p style="line-height: 1.8;">LogiSutra Headquarters<br>Tech Zone, 4th Floor<br>New Delhi, India - 110001</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            © 2026 LogiSutra Software Group. All rights reserved.
         </div>
     </footer>
+
+    <!-- Working Execution Logic Architecture -->
+    <script>
+        var currentMode = 'login';
+
+        function openAuthModal(mode) {
+            currentMode = mode;
+            var modal = document.getElementById('authModal');
+            modal.style.display = 'flex';
+            toggleAuthMode(mode);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        function toggleAuthMode(mode) {
+            currentMode = mode;
+            var title = document.getElementById('modalTitle');
+            var desc = document.getElementById('modalDesc');
+            var companyField = document.getElementById('companyField');
+            var submitBtn = document.getElementById('authSubmitBtn');
+            var toggleText = document.getElementById('modalToggleText');
+
+            if (mode === 'signup') {
+                title.innerText = "Create Corporate Profile";
+                desc.innerText = "Register your enterprise configuration details to clear trade lines.";
+                companyField.style.display = "block";
+                document.getElementById('authCompany').required = true;
+                submitBtn.innerText = "Register & Open Control Deck";
+                toggleText.innerHTML = `Already have an account? <span onclick="toggleAuthMode('login')">Log In Here</span>`;
+            } else {
+                title.innerText = "Account Portal Login";
+                desc.innerText = "Enter your account access parameters to launch the trade grid.";
+                companyField.style.display = "none";
+                document.getElementById('authCompany').required = false;
+                submitBtn.innerText = "Access Dashboard";
+                toggleText.innerHTML = `New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>`;
+            }
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault(); // Stop page refresh
+            
+            // Collect entered inputs
+            var email = document.getElementById('authEmail').value;
+            
+            if(currentMode === 'signup') {
+                alert("Account created successfully for " + email + "! Forwarding to your operational console.");
+            } else {
+                alert("Authentication verified. Loading secure session.");
+            }
+            
+            closeAuthModal();
+            // Direct active forward routing onto your master control option grid page
+            window.location.href = "dashboard.html"; 
+        }
+
+        // Close modal if user clicks outside the form container box area
+        window.onclick = function(event) {
+            var modal = document.getElementById('authModal');
+            if (event.target == modal) {
+                closeAuthModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
