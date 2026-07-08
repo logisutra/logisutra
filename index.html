@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Trade Portal - Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-box: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header styling */
+        header { background: #1e3a8a; color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { font-size: 24px; margin-bottom: 5px; }
+        header p { font-size: 14px; opacity: 0.9; }
+
+        /* Gateway Grid Layout */
+        .gateway-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 900px; margin: 60px auto; padding: 0 20px; flex: 1; }
+        
+        .portal-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 40px 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .portal-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        .icon { font-size: 50px; margin-bottom: 15px; }
+        .portal-card h2 { color: #2c3e50; margin-bottom: 15px; font-size: 22px; }
+        .portal-card p { color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 30px; }
+        
+        /* Action Buttons */
+        .portal-btn { display: inline-block; padding: 14px 28px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 16px; transition: background 0.2s; color: white; }
+        .export-btn { background: #3498db; }
+        .export-btn:hover { background: #2980b9; }
+        .import-btn { background: #2ecc71; }
+        .import-btn:hover { background: #27ae60; }
+
+        /* Simple Footer */
+        footer { background: #2c3e50; color: #bdc3c7; text-align: center; padding: 15px; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌐 Global Trade Operations Control Deck</h1>
+        <p>Select your trade direction to launch customized calculators, checklists, and legal workflows.</p>
+    </header>
+
+    <div class="gateway-container">
+        <div class="portal-card" style="border-top: 6px solid #3498db;">
+            <div>
+                <div class="icon">📤</div>
+                <h2>Exporter A to Z Hub</h2>
+                <p>Access your setup checklist, live GST/LUT tax calculators, custom commercial invoice generators, Incoterms reference matrix, and automated ICEGATE customs tracking panels.</p>
+            </div>
+            <a href="export.html" class="portal-btn export-btn">Launch Exporter Portal →</a>
+        </div>
+
+        <div class="portal-card" style="border-top: 6px solid #2ecc71;">
+            <div>
+                <div class="icon">📥</div>
+                <h2>Importer A to Z Hub</h2>
+                <p>Manage foreign import documentation, estimate customs import duties, track Bill of Entry approvals, and verify compliance frameworks for incoming goods.</p>
+            </div>
+            <a href="import.html" class="portal-btn import-btn">Launch Importer Portal →</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Global Trade Operations Dashboard. All rights reserved.
+    </footer>
+
+</body>
+</html>
