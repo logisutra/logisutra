@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations Control Deck - Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #f4f6f9; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background: #0f172a; color: white; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        header h1 { font-size: 22px; font-weight: 700; color: #38bdf8; }
+        .user-profile { font-size: 14px; background: #1e293b; padding: 8px 15px; border-radius: 20px; border: 1px solid #334155; }
+
+        .dashboard-container { max-width: 1000px; margin: 60px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .welcome-msg { margin-bottom: 30px; }
+        .welcome-msg h2 { color: #1e293b; font-size: 28px; margin-bottom: 5px; }
+        .welcome-msg p { color: #64748b; font-size: 15px; }
+
+        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+        .portal-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px 30px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.3s; }
+        .portal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        
+        .card-meta { margin-bottom: 30px; }
+        .portal-icon { font-size: 45px; margin-bottom: 15px; }
+        .portal-card h3 { color: #1e293b; font-size: 22px; margin-bottom: 12px; }
+        .portal-card p { color: #64748b; font-size: 14px; line-height: 1.6; }
+
+        .launch-btn { display: inline-block; width: 100%; text-align: center; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 15px; transition: background 0.2s; color: white; }
+        .export-theme { background: #3498db; }
+        .export-theme:hover { background: #2471a3; }
+        .import-theme { background: #2ecc71; }
+        .import-theme:hover { background: #239b56; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌐 Operations Control Deck</h1>
+        <div class="user-profile">🔑 Secure Session Active</div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-msg">
+            <h2>Welcome Back to Your Workspace</h2>
+            <p>Select your operative logistics pipeline direction to access custom workspace features.</p>
+        </div>
+
+        <div class="portal-grid">
+            <!-- Export Path Card -->
+            <div class="portal-card" style="border-top: 6px solid #3498db;">
+                <div class="card-meta">
+                    <div class="portal-icon">📤</div>
+                    <h3>Exporter A to Z Hub</h3>
+                    <p>Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
+                </div>
+                <a href="export.html" class="launch-btn export-theme">Open Export Workspace →</a>
+            </div>
+
+            <!-- Import Path Card -->
+            <div class="portal-card" style="border-top: 6px solid #2ecc71;">
+                <div class="card-meta">
+                    <div class="portal-icon">📥</div>
+                    <h3>Importer A to Z Hub</h3>
+                    <p>Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
+                </div>
+                <a href="import.html" class="launch-btn import-theme">Open Import Workspace →</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
