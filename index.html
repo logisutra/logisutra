@@ -376,126 +376,147 @@
                             }
 
           function generateInvoice() {
-            var num = document.getElementById('invNum').value;
-            var date = document.getElementById('invDate').value;
-            var expName = document.getElementById('expName').value;
-            var expAddr = document.getElementById('expAddr').value;
-            var impName = document.getElementById('impName').value;
-            var impAddr = document.getElementById('impAddr').value;
-            var inco = document.getElementById('invIncoterm').value;
-            
-            var bName = document.getElementById('bankName').value;
-            var bAcc = document.getElementById('bankAcc').value;
-            var bSwift = document.getElementById('bankICFC').value; 
+            try {
+                // Get form values safely with fallbacks if an ID is slightly different
+                var num = document.getElementById('invNum') ? document.getElementById('invNum').value : '';
+                var date = document.getElementById('invDate') ? document.getElementById('invDate').value : '';
+                var expName = document.getElementById('expName') ? document.getElementById('expName').value : '';
+                var expAddr = document.getElementById('expAddr') ? document.getElementById('expAddr').value : '';
+                var impName = document.getElementById('impName') ? document.getElementById('impName').value : '';
+                var impAddr = document.getElementById('impAddr') ? document.getElementById('impAddr').value : '';
+                
+                // Fallback check for Incoterm dropdown select element
+                var incoEl = document.getElementById('invIncoterm') || document.getElementById('incoterm');
+                var inco = incoEl ? incoEl.value : 'FOB';
+                
+                var bName = document.getElementById('bankName') ? document.getElementById('bankName').value : '';
+                var bAcc = document.getElementById('bankAcc') ? document.getElementById('bankAcc').value : '';
+                var bSwift = document.getElementById('bankSwift') ? document.getElementById('bankSwift').value : ''; 
 
-            if(!num || !date || !expName || !expAddr || !impName || !impAddr || !bName || !bAcc || !bSwift) {
-                alert("Please complete all party, invoice, and bank details!");
-                return;
-            }
-
-            var rows = document.querySelectorAll('.invoice-item-row');
-            var tableRows = '';
-            var totalVal = 0;
-            var validItemCount = 0;
-
-            for(var i = 0; i < rows.length; i++) {
-                var desc = rows[i].querySelector('.item-desc').value;
-                var hs = rows[i].querySelector('.item-hs').value;
-                var val = parseFloat(rows[i].querySelector('.item-val').value) || 0;
-
-                if(desc && hs && val > 0) {
-                    tableRows += `
-                        <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${desc}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${val.toFixed(2)}</td>
-                        </tr>
-                    `;
-                    totalVal += val;
-                    validItemCount++;
+                // Alert if basic mandatory fields are completely blank
+                if(!num || !date || !expName || !impName || !bAcc) {
+                    alert("Please fill out the basic Invoice, Party, and Bank Account details first!");
+                    return;
                 }
-            }
 
-            if(validItemCount === 0) {
-                alert("Please add at least one complete item description, HS Code, and value.");
-                return;
-            }
+                // Gather item rows safely
+                var rows = document.querySelectorAll('.invoice-item-row');
+                var tableRows = '';
+                var totalVal = 0;
+                var validItemCount = 0;
 
-            var resultDiv = document.getElementById('invoiceResult');
-            resultDiv.innerHTML = `
-                <div style="text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; margin-bottom: 15px;">
-                    <h2 style="margin: 0; color: #2c3e50; letter-spacing: 1px;">COMMERCIAL INVOICE</h2>
-                    <small style="color: #7f8c8d;">For International Trade Customs Clearance</small>
-                </div>
-                <table style="width: 100%; font-size: 13px; margin-bottom: 15px; border-collapse: collapse; line-height:1.4;">
-                    <tr>
-                        <td style="width: 50%; vertical-align: top; padding-right: 10px;">
-                            <strong>🔑 Invoice Details:</strong><br>
-                            No: ${num}<br>
-                            Date: ${date}
-                        </td>
-                        <td style="width: 50%; vertical-align: top;">
-                            <strong>📦 Terms of Sale:</strong><br>
-                            Incoterm: ${inco}
-                        </td>
-                    </tr>
-                    <tr><td colspan="2" style="height: 15px;"></td></tr>
-                    <tr>
-                        <td style="vertical-align: top; padding-right: 10px;">
-                            <strong>🏢 Exporter (Shipper):</strong><br>
-                            <strong>${expName}</strong><br>
-                            ${expAddr}
-                        </td>
-                        <td style="vertical-align: top;">
-                            <strong>🏢 Importer (Consignee):</strong><br>
-                            <strong>${impName}</strong><br>
-                            ${impAddr}
-                        </td>
-                    </tr>
-                </table>
+                if (rows.length === 0) {
+                    alert("Please add at least one item description row.");
+                    return;
+                }
 
-                <table style="width: 100%; border: 1px solid #bdc3c7; border-collapse: collapse; font-size: 13px; text-align: left; margin-bottom: 15px;">
-                    <thead>
-                        <tr style="background: #f8f9fa; border-bottom: 1px solid #bdc3c7;">
-                            <th style="padding: 8px;">Description of Goods</th>
-                            <th style="padding: 8px;">HS Code</th>
-                            <th style="padding: 8px; text-align: right;">Total Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tableRows}
-                        <tr style="background: #fdfefe; border-top: 2px solid #bdc3c7;">
-                            <td colspan="2" style="padding: 8px; text-align: right; font-weight: bold;">Invoice Total Value:</td>
-                            <td style="padding: 8px; text-align: right; font-weight: bold; color: #2c3e50;">$${totalVal.toFixed(2)} USD</td>
-                        </tr>
-                    </tbody>
-                </table>
+                for(var i = 0; i < rows.length; i++) {
+                    var descInput = rows[i].querySelector('.item-desc') || rows[i].querySelector('input[placeholder*="Description"]');
+                    var hsInput = rows[i].querySelector('.item-hs') || rows[i].querySelector('input[placeholder*="HS"]');
+                    var valInput = rows[i].querySelector('.item-val') || rows[i].querySelector('input[placeholder*="Value"]');
 
-                <table style="width: 100%; font-size: 12px; background: #fdfefe; border: 1px dashed #bdc3c7; padding: 10px; margin-bottom: 15px;">
-                    <tr>
-                        <td>
-                            <strong>🏦 Bank Remittance Routing Details:</strong><br>
-                            Bank Name: ${bName} | Account Number: ${bAcc} | IFSC / SWIFT Code: ${bSwift}
-                        </td>
-                    </tr>
-                </table>
+                    var desc = descInput ? descInput.value : '';
+                    var hs = hsInput ? hsInput.value : '';
+                    var val = valInput ? parseFloat(valInput.value) || 0 : 0;
 
-                <div style="font-size: 11px; color: #555; font-style: italic; margin-bottom: 25px;">
-                    "We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct."
-                    <div style="margin-top: 20px; text-align: right;">
-                        <span style="border-top: 1px solid #333; padding-top: 5px; display: inline-block; width: 200px; text-align: center;">Authorized Signatory</span>
+                    if(desc || val > 0) {
+                        tableRows += `
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">${desc || 'Goods'}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee;">${hs || 'N/A'}</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${val.toFixed(2)}</td>
+                            </tr>
+                        `;
+                        totalVal += val;
+                        validItemCount++;
+                    }
+                }
+
+                var resultDiv = document.getElementById('invoiceResult');
+                if (!resultDiv) {
+                    alert("Error: HTML preview container box '#invoiceResult' was not found on the page.");
+                    return;
+                }
+
+                resultDiv.innerHTML = `
+                    <div style="text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; margin-bottom: 15px; margin-top: 25px;">
+                        <h2 style="margin: 0; color: #2c3e50; letter-spacing: 1px;">COMMERCIAL INVOICE</h2>
+                        <small style="color: #7f8c8d;">For International Trade Customs Clearance</small>
                     </div>
-                </div>
+                    <table style="width: 100%; font-size: 13px; margin-bottom: 15px; border-collapse: collapse; line-height:1.4;">
+                        <tr>
+                            <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                                <strong>🔑 Invoice Details:</strong><br>
+                                No: ${num}<br>
+                                Date: ${date}
+                            </td>
+                            <td style="width: 50%; vertical-align: top;">
+                                <strong>📦 Terms of Sale:</strong><br>
+                                Incoterm: ${inco}
+                            </td>
+                        </tr>
+                        <tr><td colspan="2" style="height: 15px;"></td></tr>
+                        <tr>
+                            <td style="vertical-align: top; padding-right: 10px;">
+                                <strong>🏢 Exporter (Shipper):</strong><br>
+                                <strong>${expName}</strong><br>
+                                ${expAddr}
+                            </td>
+                            <td style="vertical-align: top;">
+                                <strong>🏢 Importer (Consignee):</strong><br>
+                                <strong>${impName}</strong><br>
+                                ${impAddr}
+                            </td>
+                        </tr>
+                    </table>
 
-                <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
-                    <button class="action-btn" style="background-color: #2ecc71; font-size: 14px; padding: 8px 16px;" onclick="window.print()">🖨️ Print Invoice</button>
-                    <a href="https://payment.gst.gov.in/" target="_blank" class="action-btn" style="background-color: #e67e22; font-size: 14px; padding: 8px 16px; text-decoration: none; display: inline-block; border-radius: 4px; color: white; font-weight: bold;">🌐 Register Invoice (GST Portal)</a>
-                </div>
-            `;
-            resultDiv.style.display = 'block';
+                    <table style="width: 100%; border: 1px solid #bdc3c7; border-collapse: collapse; font-size: 13px; text-align: left; margin-bottom: 15px;">
+                        <thead>
+                            <tr style="background: #f8f9fa; border-bottom: 1px solid #bdc3c7;">
+                                <th style="padding: 8px;">Description of Goods</th>
+                                <th style="padding: 8px;">HS Code</th>
+                                <th style="padding: 8px; text-align: right;">Total Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows || '<tr><td colspan="3" style="padding:8px; text-align:center;">No items specified</td></tr>'}
+                            <tr style="background: #fdfefe; border-top: 2px solid #bdc3c7;">
+                                <td colspan="2" style="padding: 8px; text-align: right; font-weight: bold;">Invoice Total Value:</td>
+                                <td style="padding: 8px; text-align: right; font-weight: bold; color: #2c3e50;">$${totalVal.toFixed(2)} USD</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table style="width: 100%; font-size: 12px; background: #fdfefe; border: 1px dashed #bdc3c7; padding: 10px; margin-bottom: 15px;">
+                        <tr>
+                            <td>
+                                <strong>🏦 Bank Remittance Routing Details:</strong><br>
+                                Bank Name: ${bName || 'N/A'} | Account Number: ${bAcc} | IFSC / SWIFT Code: ${bSwift || 'N/A'}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="font-size: 11px; color: #555; font-style: italic; margin-bottom: 25px;">
+                        "We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct."
+                        <div style="margin-top: 20px; text-align: right;">
+                            <span style="border-top: 1px solid #333; padding-top: 5px; display: inline-block; width: 200px; text-align: center;">Authorized Signatory</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+                        <button class="action-btn" style="background-color: #2ecc71; font-size: 14px; padding: 8px 16px;" onclick="window.print()">🖨️ Print Invoice</button>
+                    </div>
+                `;
+                resultDiv.style.display = 'block';
+                
+                // Automatically smooth-scroll straight down to show the beautifully generated layout!
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                alert("An error occurred while generating the invoice layout: " + err.message);
+            }
+                        
         }
-      
-
         
     </script>
 </body>
