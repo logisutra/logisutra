@@ -310,31 +310,56 @@
 
 
         <!-- View 5: Customs & Clearance -->
-                <div id="customs" class="dashboard-view">
-            <h1>🛂 Customs Clearance Workflow</h1>
-            <p>Before your cargo can be loaded onto an international vessel or aircraft, it must pass Indian Customs verification. Follow this structured roadmap:</p>
+        <div id="customs" class="dashboard-view">
+            <h1 style="color: #2c3e50; margin-bottom: 5px;">🛂 Customs Clearance Hub</h1>
+            <p style="color: #7f8c8d; margin-bottom: 25px;">Track your clearance workflow, verify mandatory shipping documents, and estimate your customs incentives.</p>
 
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0; color: #2c3e50;">1. Filing the Shipping Bill</h3>
-                <p style="color: #555; font-size: 14px; line-height: 1.5;"> Your Customs Broker (CHA) will submit a <strong>Shipping Bill</strong> electronically via the ICEGATE portal before your goods arrive at the port. Customs system evaluates your Commercial Invoice, Packing List, and HS Codes to determine if your shipment requires physical inspection or falls under a green channel wrapper.</p>
-            </div>
+            <!-- Grid Layout for Steps and Sidebar Tools -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px; line-height: 1.5;">
+                
+                <!-- Left Column: The Workflow Steps -->
+                <div>
+                    <!-- Step 1 Card -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #3498db;">
+                        <h3 style="margin-top:0; color: #2c3e50;">1. Filing the Shipping Bill</h3>
+                        <p style="color: #555; font-size: 14px; margin-bottom: 0;">Your Customs Broker (CHA) submits a <strong>Shipping Bill</strong> electronically via ICEGATE. Customs evaluates your Commercial Invoice and HS Codes to determine if your container falls into the automatic green channel or requires verification.</p>
+                    </div>
 
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0; color: #2c3e50;">2. Port Assessment & Inspection</h3>
-                <p style="color: #555; font-size: 14px; line-height: 1.5;">Once the cargo physically arrives at the port's Container Freight Station (CFS), a Customs Officer reviews the documentation. If selected for inspection, they will verify the physical goods match the descriptions and item quantities declared on your generated invoice.</p>
-            </div>
+                    <!-- Step 2 Card -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #f1c40f;">
+                        <h3 style="margin-top:0; color: #2c3e50;">2. Port Assessment & Inspection</h3>
+                        <p style="color: #555; font-size: 14px; margin-bottom: 0;">Once the cargo arrives at the port's Container Freight Station (CFS), officers review physical parameters. If flagged, they cross-examine physical quantities against your digital invoice declarations.</p>
+                    </div>
 
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0; color: #2c3e50;">3. Let Export Order (LEO)</h3>
-                <p style="color: #555; font-size: 14px; line-height: 1.5;">When customs officers are completely satisfied, they issue the crucial <strong>Let Export Order (LEO)</strong>. This is the official legal green light that allows your container handler to physically load your cargo onto the departing international cargo ship or aircraft.</p>
-            </div>
-
-            <div style="background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 20px; text-align: center;">
-                <h4 style="margin-top: 0; color: #334155; margin-bottom: 8px;">🌐 Live Customs Document Tracking</h4>
-                <p style="color: #64748b; font-size: 13px; margin-bottom: 15px; max-width: 500px; margin-left: auto; margin-right: auto;">Once your broker shares your 7-digit Shipping Bill number, you can monitor its real-time clearance and LEO release status directly on the national government server.</p>
-                <a href="https://www.icegate.gov.in/" target="_blank" class="action-btn" style="background-color: #1e3a8a; font-size: 14px; padding: 10px 20px; text-decoration: none; display: inline-block; border-radius: 4px; color: white; font-weight: bold; cursor: pointer;">Track Shipping Bill on ICEGATE</a>
-            </div>
+                    <!-- Step 3 Card -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 25px; border-left: 4px solid #2ecc71;">
+                        <h3 style="margin-top:0; color: #2c3e50;">3. Let Export Order (LEO)</h3>
+                        <p style="color: #555; font-size: 14px; margin-bottom: 0;">The grand finale! Once satisfied, customs issues the <strong>Let Export Order (LEO)</strong>. This is the legal green light allowing the crane crew to physically load your cargo onto the vessel.</p>
+                    </div>
                 </div>
+
+                <!-- Document Checklist Matrix -->
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+                    <h3 style="margin-top: 0; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 10px;">📋 Mandatory Document Checklist</h3>
+                    <p style="font-size: 13px; color: #7f8c8d;">Ensure your broker has these files ready before gate-in:</p>
+                    <div style="font-size: 14px; color: #34495e; display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;"><input type="checkbox"> Commercial Invoice (Generated from Step 3)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;"><input type="checkbox"> Packing List (Item weights and box counts)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;"><input type="checkbox"> Certificate of Origin (Proves goods are made in India)</label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;"><input type="checkbox"> Bill of Lading / Airway Bill (Issued by carrier)</label>
+                    </div>
+                </div>
+
+                <!-- Live Interface Actions -->
+                <div style="background: #f8f9fa; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 25px; text-align: center;">
+                    <h4 style="margin-top: 0; color: #2c3e50; margin-bottom: 8px; font-size: 16px;">🌐 Live ICEGATE Gateway Portal</h4>
+                    <p style="color: #64748b; font-size: 13px; margin-bottom: 20px; max-width: 550px; margin-left: auto; margin-right: auto;">Once your CHA shares your official 7-digit Shipping Bill tracking ID code, you can monitor the real-time processing status directly on the national server link.</p>
+                    <a href="https://www.icegate.gov.in/" target="_blank" class="action-btn" style="background-color: #1e3a8a; font-size: 14px; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 4px; color: white; font-weight: bold; cursor: pointer; transition: background 0.2s;">Track Live Shipping Bill</a>
+                </div>
+
+            </div>
+        </div>
+
         
 
     <!-- JAVASCRIPT ENGINE -->
