@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiSutra | Trade Transaction Terms Matrix</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background: #0f172a; color: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 20px; color: #38bdf8; }
+        .back-btn { background: #1e293b; color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 600; border: 1px solid #334155; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .intro { margin-bottom: 30px; text-align: center; }
+        .intro h2 { color: #1e293b; font-size: 26px; margin-bottom: 8px; }
+        .intro p { color: #64748b; font-size: 15px; }
+
+        /* Category Selector Toggle Buttons */
+        .category-selector { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+        .toggle-btn { padding: 12px 30px; font-size: 15px; font-weight: bold; border: 2px solid #cbd5e1; background: white; color: #64748b; border-radius: 30px; cursor: pointer; transition: all 0.2s; }
+        .toggle-btn.active-export { background: #3498db; color: white; border-color: #3498db; }
+        .toggle-btn.active-import { background: #2ecc71; color: white; border-color: #2ecc71; }
+
+        /* Term Information Cards */
+        .terms-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .term-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.01); display: none; }
+        .term-card.show { display: block; }
+        
+        .term-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 15px; }
+        .term-badge { font-size: 18px; font-weight: 800; color: #1e3a8a; background: #e0f2fe; padding: 4px 12px; border-radius: 4px; }
+        .term-name { font-size: 18px; font-weight: 700; color: #1e293b; flex: 1; margin-left: 15px; }
+        
+        .perspective-box { margin-top: 15px; padding: 15px; border-radius: 6px; font-size: 14px; }
+        .export-perspective { background: #f0f9ff; border-left: 4px solid #3498db; }
+        .import-perspective { background: #f0fdf4; border-left: 4px solid #2ecc71; }
+        
+        .perspective-box strong { display: block; margin-bottom: 5px; color: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤝 Global Transaction Terms Matrix</h1>
+        <a href="dashboard.html" class="back-btn">← Exit Matrix</a>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2>International Commercial Terms (Incoterms)</h2>
+            <p>Select your business's current operational perspective to filter financial liabilities and shipping risk boundaries.</p>
+        </div>
+
+        <!-- Dynamic Category Selector -->
+        <div class="category-selector">
+            <button class="toggle-btn active-export" id="expToggle" onclick="switchPerspective('export')">📤 Outbound Exporter View</button>
+            <button class="toggle-btn" id="impToggle" onclick="switchPerspective('import')">📥 Inbound Importer View</button>
+        </div>
+
+        <!-- Terms Matrix Stack -->
+        <div class="terms-grid">
+            
+            <!-- Term 1: FOB -->
+            <div class="term-card show" data-type="export import">
+                <div class="term-header">
+                    <span class="term-badge">FOB</span>
+                    <span class="term-name">Free On Board (Named Port of Shipment)</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; margin-bottom: 15px;">Risk transfers completely the moment the goods safely clear the ship's rail at the originating shipping port.</p>
+                
+                <div class="perspective-box export-perspective" id="fob-exp">
+                    <strong>Your Responsibility as the Exporter:</strong> You pay to bring goods to the port and load them onto the vessel. Once they are on the ship, you are free of liability and can legally claim your export payment.
+                </div>
+                <div class="perspective-box import-perspective" id="fob-imp" style="display: none;">
+                    <strong>Your Responsibility as the Importer:</strong> You pay for ocean freight transportation, marine cargo transit insurance, destination customs port clearance, and final localized trucking.
+                </div>
+            </div>
+
+            <!-- Term 2: CIF -->
+            <div class="term-card show" data-type="export import">
+                <div class="term-header">
+                    <span class="term-badge">CIF</span>
+                    <span class="term-name">Cost, Insurance & Freight (Named Port of Destination)</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; margin-bottom: 15px;">Seller pays freight and basic marine insurance up to the buyer's destination port, but risk transfers once cargo is loaded at source.</p>
+                
+                <div class="perspective-box export-perspective" id="cif-exp">
+                    <strong>Your Responsibility as the Exporter:</strong> You must buy cargo insurance and arrange ocean freight delivery up to the destination harbor. Your cost calculation metrics must factor in international ocean transit fees.
+                </div>
+                <div class="perspective-box import-perspective" id="cif-imp" style="display: none;">
+                    <strong>Your Responsibility as the Importer:</strong> Your shipping costs start directly at your local arrival port. You are completely liable for domestic customs clearance and unloading logistics.
+                </div>
+            </div>
+
+            <!-- Term 3: EXW -->
+            <div class="term-card show" data-type="export import">
+                <div class="term-header">
+                    <span class="term-badge">EXW</span>
+                    <span class="term-name">Ex Works (Named Place of Delivery)</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; margin-bottom: 15px;">Maximum obligation falls squarely on the buyer. Seller simply makes goods available at their factory door step.</p>
+                
+                <div class="perspective-box export-perspective" id="exw-exp">
+                    <strong>Your Responsibility as the Exporter:</strong> Minimum obligation. You simply pack the items safely inside your domestic warehouse. You have no duty to handle local port trucking or export customs clearances.
+                </div>
+                <div class="perspective-box import-perspective" id="exw-imp" style="display: none;">
+                    <strong>Your Responsibility as the Importer:</strong> You bear 100% of all expenses and risks. You must hire local trucks inside the exporter's country, manage their foreign customs export clearings, and handle the ocean logistics.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function switchPerspective(type) {
+            var expToggle = document.getElementById('expToggle');
+            var impToggle = document.getElementById('impToggle');
+            
+            // Adjust visual classes
+            if (type === 'export') {
+                expToggle.classList.add('active-export');
+                impToggle.classList.remove('active-import');
+                
+                // Show exporter info blocks, hide importer info blocks
+                document.querySelectorAll('.export-perspective').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.import-perspective').forEach(el => el.style.display = 'none');
+            } else {
+                impToggle.classList.add('active-import');
+                expToggle.classList.remove('active-export');
+                
+                // Show importer info blocks, hide exporter info blocks
+                document.querySelectorAll('.export-perspective').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.import-perspective').forEach(el => el.style.display = 'block');
+            }
+        }
+    </script>
+
+</body>
+</html>
