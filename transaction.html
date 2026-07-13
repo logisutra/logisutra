@@ -20,10 +20,10 @@
         .gateway-desc { color: #64748b; margin-bottom: 30px; font-size: 15px; }
         .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .role-btn { padding: 25px; font-size: 18px; font-weight: bold; border: 2px solid #cbd5e1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .role-btn:hover { border-color: #1e3a8a; background: #f0fdf4; }
+        .role-btn:hover { border-color: #1e3a8a; background: #f8fafc; }
         .role-btn span { font-size: 32px; }
 
-        /* STEP 2: Options Menu Deck (Hidden Initially) */
+        /* STEP 2: Options Menu Deck */
         .options-deck { display: none; flex-direction: column; gap: 25px; }
         .view-banner { background: #1e3a8a; color: white; padding: 15px 25px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
         .change-role-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
@@ -34,16 +34,16 @@
         .tab-btn.active { color: #1e3a8a; }
         .tab-btn.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background: #2ecc71; border-radius: 2px; }
 
-        /* STEP 3: Content Containers */
+        /* Content Containers */
         .content-panel { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.01); display: none; }
         .content-panel.active { display: block; }
 
         .data-item { border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 20px; }
         .data-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .data-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-        .badge { background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 14px; }
+        .badge { background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 14px; text-transform: uppercase; }
         .item-title { font-weight: 700; font-size: 16px; }
-        .item-desc { font-size: 14px; color: #475569; line-height: 1.5; background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 8px; border-left: 3px solid #cbd5e1; }
+        .item-desc { font-size: 14px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 6px; margin-top: 8px; border-left: 4px solid #cbd5e1; }
     </style>
 </head>
 <body>
@@ -69,44 +69,56 @@
             </div>
         </div>
 
-        <!-- STEP 2 & 3 SCREEN: Interactive Workspace Menu & Info System -->
+        <!-- STEP 2 & 3 SCREEN: Interactive Dynamic Workspace -->
         <div class="options-deck" id="step2-workspace">
             <div class="view-banner">
                 <span id="activeRoleLabel" style="font-weight: 600;">Active Perspective: Exporter</span>
                 <button class="change-role-btn" onclick="resetGateway()">🔄 Change Perspective</button>
             </div>
 
-            <!-- Options Framework Tabs -->
+            <!-- Options Navigation Tabs -->
             <div class="menu-tabs">
-                <button class="tab-btn active" id="tab-incoterms" onclick="switchTab('incoterms')">🚚 Incoterms (Logistics)</button>
+                <button class="tab-btn active" id="tab-incoterms" onclick="switchTab('incoterms')">🚚 Incoterms Matrix</button>
                 <button class="tab-btn" id="tab-payment" onclick="switchTab('payment')">💰 Payment Instruments</button>
             </div>
 
-            <!-- Content Panel: Incoterms Grid -->
+            <!-- Content Panel: Extended Incoterms -->
             <div class="content-panel active" id="panel-incoterms">
                 <div class="data-item">
+                    <div class="data-header"><span class="badge" style="background:#fee2e2; color:#991b1b;">EXW</span> <span class="item-title">Ex Works</span></div>
+                    <div class="item-desc" id="exw-text">Loading...</div>
+                </div>
+                <div class="data-item">
                     <div class="data-header"><span class="badge">FOB</span> <span class="item-title">Free On Board</span></div>
-                    <p style="font-size:14px; color:#64748b;">Risk transfers when items cross the ship's rail at the source port.</p>
-                    <div class="item-desc" id="fob-text">Loading text...</div>
+                    <div class="item-desc" id="fob-text">Loading...</div>
                 </div>
                 <div class="data-item">
                     <div class="data-header"><span class="badge">CIF</span> <span class="item-title">Cost, Insurance & Freight</span></div>
-                    <p style="font-size:14px; color:#64748b;">Seller pays transport/insurance to destination port; risk leaves early at source loading.</p>
-                    <div class="item-desc" id="cif-text">Loading text...</div>
+                    <div class="item-desc" id="cif-text">Loading...</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-header"><span class="badge" style="background:#dcfce7; color:#166534;">DDP</span> <span class="item-title">Delivered Duty Paid</span></div>
+                    <div class="item-desc" id="ddp-text">Loading...</div>
                 </div>
             </div>
 
-            <!-- Content Panel: Payment Methods Grid -->
+            <!-- Content Panel: Extended Payment Systems -->
             <div class="content-panel" id="panel-payment">
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">L/C</span> <span class="item-title">Letter of Credit (Documentary Credit)</span></div>
-                    <p style="font-size:14px; color:#64748b;">A formal bank guarantee securing funds against verifiable presentation of shipping bills.</p>
-                    <div class="item-desc" id="lc-text">Loading text...</div>
+                    <div class="data-header"><span class="badge">Advance TT</span> <span class="item-title">Telegraphic Transfer (Pre-Payment)</span></div>
+                    <div class="item-desc" id="tt-text">Loading...</div>
                 </div>
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">Advance TT</span> <span class="item-title">Telegraphic Transfer (Advance Payment)</span></div>
-                    <p style="font-size:14px; color:#64748b;">Direct electronic wire transfers processed ahead of cargo execution cycles.</p>
-                    <div class="item-desc" id="tt-text">Loading text...</div>
+                    <div class="data-header"><span class="badge">L/C</span> <span class="item-title">Letter of Credit (Documentary Credit)</span></div>
+                    <div class="item-desc" id="lc-text">Loading...</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-header"><span class="badge">DP / CAD</span> <span class="item-title">Documents Against Payment</span></div>
+                    <div class="item-desc" id="dp-text">Loading...</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-header"><span class="badge" style="background:#fef3c7; color:#92400e;">Open Account</span> <span class="item-title">Open Account Credit Terms</span></div>
+                    <div class="item-desc" id="open-text">Loading...</div>
                 </div>
             </div>
 
@@ -117,19 +129,33 @@
     <script>
         var selectedRole = "";
 
-        // Text data dictionary mapped distinctly to clear out cross-view bleeding
+        // Completely separated, deep operational database text entries
         var database = {
             export: {
-                fob: "Your Task: Deliver cargo safely to the local port and pay for onboarding crane handling fees. Once secured on the vessel, legal delivery completes.",
-                cif: "Your Task: Pay both local loading fees and international ocean freight costs. You are structurally obligated to procure transport insurance mapping up to their discharge port.",
-                lc: "Security Metric: Highly safe. The buyer's bank holds the cash and will release it to your Indian bank account the moment you submit clean original Bills of Lading.",
-                tt: "Security Metric: Maximum safety. You receive capital currency directly into your banking channels before you pack or release ownership documents."
+                // Incoterms - Exporter View
+                exw: "🔴 RISK POINT: Factory Floor. You only have to pack the goods. The foreign buyer's truck picks them up from your warehouse door. You bear zero shipping costs, local port fees, or custom risks.",
+                fob: "🔵 RISK POINT: Ship's Rail at Origin. You pay for domestic trucking, export customs clearance, and terminal handling fees at the Indian port. Risk transfers to the buyer the moment goods rest on the vessel.",
+                cif: "🔵 RISK POINT: Onboard at Origin (Costs paid to Destination). You must cover the local port fees, export clearance, AND pay the ocean freight liner and cargo insurance to the buyer's landing port.",
+                ddp: "🟢 RISK POINT: Buyer's Facility. Maximum obligation for you. You must pay international freight, insurance, and handle import customs clearance and duties inside the buyer's country. Highly risky for beginners.",
+                
+                // Payments - Exporter View
+                tt: "🟢 FINANCIAL RISK: None. The international buyer transfers 100% of the cash balance before you initiate production or release the original documents. Ideal cash-flow setup.",
+                lc: "🟡 FINANCIAL RISK: Low. Highly secure because a reputable global bank promises to release payment. You must ensure your Bills of Lading and Certificates match every character typed in the L/C terms.",
+                dp: "🧡 FINANCIAL RISK: Medium. Your bank sends the shipping files to the buyer's bank. The buyer cannot get the paperwork to release the container from the port until they pay cash on the counter.",
+                open: "🔴 FINANCIAL RISK: Extreme. You manufacture, clear, and deliver the cargo to the foreign buyer upfront. They agree to pay you 30, 60, or 90 days later. You are completely vulnerable to payment defaults."
             },
             import: {
-                fob: "Your Task: You select and contract the ocean vessel carrier lines. You take on 100% of the freight liability and cost the split-second the seller places it on deck.",
-                cif: "Your Task: The seller pays for transit lines, but your direct expenses start immediately upon harbor arrival. You handle destination custom duty clearance layers.",
-                lc: "Security Metric: Moderate risk. Your banking institution locks up your credit or cash allocation lines until the foreign seller files valid original proof-of-export papers.",
-                tt: "Security Metric: High financial vulnerability. You clear currency lines upfront to an international supplier, taking on full risk that they ship correct quality specifications."
+                // Incoterms - Importer View
+                exw: "🟢 RISK POINT: Supplier Factory Door. You take full control. You must hire local logistics agents inside the exporter's country, handle their foreign export filings, pay all ocean lines, and run domestic customs clearance.",
+                fob: "🔵 RISK POINT: Ship's Rail at Origin. The seller brings the cargo onto the vessel. Your expenses start the second it is loaded. You control the shipping schedule by selecting your own preferred ocean liner carrier.",
+                cif: "🔵 RISK POINT: Onboard at Origin. The supplier arranges the ocean freighter and minimum cargo insurance. Your financial liability starts at your destination discharge port—handling container unloading and import duty blocks.",
+                ddp: "🔴 RISK POINT: Your Warehouse. Minimum logistics effort for you. The seller drops the container right at your facility door. However, your purchase invoice costs will be highly inflated to cover their risks.",
+                
+                // Payments - Importer View
+                tt: "🔴 FINANCIAL RISK: Severe. You wire hard capital to a foreign seller before receiving proof of shipment. You face high exposure if the supplier defaults, sends damaged stock, or disappears.",
+                lc: "🟡 FINANCIAL RISK: Low to Moderate. Safe but ties up liquidity. Your banking institution locks your corporate cash lines or credit facility as collateral until the exporter submits verified clean port paperwork.",
+                dp: "🧡 FINANCIAL RISK: Balanced. You don't pay anything upfront. However, you cannot legally pick up the arriving freight container until you visit your bank and clear the collection balance to release the documents.",
+                open: "🟢 FINANCIAL RISK: None. Exceptional financial leverage. You receive the shipping container, unload and clear customs, sell the inventory locally, and wire the cash to your supplier up to 90 days later."
             }
         };
 
@@ -138,15 +164,31 @@
             document.getElementById('step1-gateway').style.display = 'none';
             document.getElementById('step2-workspace').style.display = 'flex';
             
-            document.getElementById('activeRoleLabel').innerText = "Active Perspective: " + (role === 'export' ? "Outbound Exporter Matrix" : "Inbound Importer Matrix");
+            var labelText = (role === 'export') ? "📤 Outbound Exporter Paradigm Active" : "📥 Inbound Importer Paradigm Active";
+            document.getElementById('activeRoleLabel').innerText = labelText;
             
-            // Pop the localized structural text into the data panels dynamically
+            // Inject dynamic, distinct entries based on current selection
+            document.getElementById('exw-text').innerText = database[role].exw;
             document.getElementById('fob-text').innerText = database[role].fob;
             document.getElementById('cif-text').innerText = database[role].cif;
-            document.getElementById('lc-text').innerText = database[role].lc;
-            document.getElementById('tt-text').innerText = database[role].tt;
+            document.getElementById('ddp-text').innerText = database[role].ddp;
             
-            switchTab('incoterms'); // Reset view back onto the primary default tab
+            document.getElementById('tt-text').innerText = database[role].tt;
+            document.getElementById('lc-text').innerText = database[role].lc;
+            document.getElementById('dp-text').innerText = database[role].dp;
+            document.getElementById('open-text').innerText = database[role].open;
+            
+            // Enforce color formatting indicator tweaks
+            var banner = document.querySelector('.view-banner');
+            if (role === 'export') {
+                banner.style.background = "#1e3a8a";
+                document.getElementById('tab-incoterms').nextElementSibling.style.setProperty('--tab-line-color', '#3498db');
+            } else {
+                banner.style.background = "#2e7d32";
+                banner.style.color = "#ffffff";
+            }
+            
+            switchTab('incoterms'); 
         }
 
         function resetGateway() {
@@ -156,7 +198,6 @@
         }
 
         function switchTab(targetTab) {
-            // Manage active styles across target elements
             document.getElementById('tab-incoterms').classList.remove('active');
             document.getElementById('tab-payment').classList.remove('active');
             document.getElementById('panel-incoterms').classList.remove('active');
