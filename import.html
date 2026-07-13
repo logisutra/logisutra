@@ -3,153 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Importer A to Z Hub</title>
+    <title>LogiSutra | Inbound Importer Hub</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { display: flex; background: #f8fafc; min-height: 100vh; }
+        body { background: #f8fafc; min-height: 100vh; display: flex; color: #1e293b; }
         
-        /* Sidebar Styling */
-        .sidebar { width: 260px; background: #0f172a; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar h2 { font-size: 18px; margin-bottom: 20px; color: #38bdf8; text-align: center; }
-        .nav-btn { background: none; border: none; color: #94a3b8; padding: 12px 15px; text-align: left; font-size: 14px; cursor: pointer; border-radius: 6px; width: 100%; transition: all 0.2s; }
-        .nav-btn:hover, .nav-btn.active { background: #1e293b; color: white; border-left: 4px solid #2ecc71; }
-        .back-home { margin-top: auto; background: #ef4444; color: white; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        /* Persistent Sidebar Navigation */
+        .sidebar { width: 260px; background: #0f172a; color: white; padding: 25px 20px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+        .sidebar .logo { font-size: 20px; font-weight: 700; color: #38bdf8; margin-bottom: 30px; padding-left: 8px; }
+        .sidebar .logo span { color: white; }
+        .nav-btn { width: 100%; padding: 12px 16px; background: none; border: none; color: #94a3b8; text-align: left; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+        .nav-btn:hover { background: #1e293b; color: white; }
+        .nav-btn.active { background: #1e652c; color: white; }
 
-        /* Main Workspace Container */
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .dashboard-view { display: none; }
-        .dashboard-view.active { display: block; }
-        
-        h1 { color: #1e293b; margin-bottom: 10px; font-size: 26px; }
-        p { color: #64748b; margin-bottom: 25px; font-size: 15px; }
-        .card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 20px; }
-        
-        /* Interactive Forms & Tables */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #334155; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-        .action-btn { background: #2ecc71; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; font-size: 14px; }
-        .action-btn:hover { background: #27ae60; }
+        /* Main Workspace Content Layout */
+        .workspace { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        header h2 { font-size: 20px; font-weight: 700; color: #0f172a; }
+        .exit-btn { background: #f1f5f9; color: #475569; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+        .exit-btn:hover { background: #e2e8f0; }
+
+        .main-panel { padding: 40px; max-width: 1000px; width: 100%; margin: 0 auto; display: none; }
+        .main-panel.active { display: block; }
+
+        /* Interactive Card Framework */
+        .card-container { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 25px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #0f172a; }
+
+        /* Operational Spec Matrix */
+        .spec-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+        .spec-cell { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 6px; }
+        .spec-cell strong { display: block; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .spec-cell p { color: #0f172a; font-weight: 500; font-size: 13px; }
+
+        /* Checklist styling */
+        .task-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .task-row { display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; }
+        .task-status { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .task-text strong { display: block; font-size: 14px; color: #0f172a; margin-bottom: 2px; }
+        .task-text p { font-size: 13px; color: #475569; }
     </style>
 </head>
 <body>
 
+    <!-- Left Navigation Bar Module -->
     <div class="sidebar">
-        <h2>📥 Importer Hub</h2>
-        <button class="nav-btn active" onclick="switchView('checklist')">📋 Setup Checklist</button>
-        <button class="nav-btn" onclick="switchView('duty')">🧮 Duty Estimator</button>
-        <button class="nav-btn" onclick="switchView('boe')">📝 Bill of Entry Draft</button>
-        <button class="nav-btn" onclick="switchView('tracking')">🌐 Customs Clearance</button>
-        <a href="index.html" class="back-home">← Back to Main Hub</a>
+        <div class="logo">Logi<span>Sutra</span></div>
+        <button class="nav-btn active" id="btn-clearance" onclick="switchTab('clearance')">📥 Customs Clearance</button>
+        <button class="nav-btn" id="btn-duty" onclick="switchTab('duty')">💸 Duty Allocation</button>
+        <a href="transaction.html" class="nav-btn" style="text-decoration: none; color: #94a3b8;">🤝 Transaction Matrix</a>
     </div>
 
-    <div class="main-content">
+    <!-- Right Task Desk Workspace -->
+    <div class="workspace">
+        <header>
+            <h2 id="workspaceHeader">ICEGATE Customs Clearance Hub</h2>
+            <a href="dashboard.html" class="exit-btn">← Switch Workspace</a>
+        </header>
 
-        <div id="checklist" class="dashboard-view active">
-            <h1>📋 Importer Onboarding Checklist</h1>
-            <p>Ensure your Indian business legal compliance framework is fully active before authorizing overseas payments.</p>
-            <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
-                <label style="display: flex; align-items: center; gap: 12px;"><input type="checkbox"> Register business legal entity and obtain a corporate PAN card.</label>
-                <label style="display: flex; align-items: center; gap: 12px;"><input type="checkbox"> Open a dedicated Current Bank Account for international remittance operations.</label>
-                <label style="display: flex; align-items: center; gap: 12px;"><input type="checkbox"> Secure an Import Export Code (IEC) from the DGFT portal.</label>
-                <label style="display: flex; align-items: center; gap: 12px;"><input type="checkbox"> Complete AD Bank registration to facilitate foreign outward wire routing.</label>
+        <!-- PANEL 1: Customs Clearance Dashboard -->
+        <div class="main-panel active" id="panel-clearance">
+            <div class="card-container">
+                <div class="section-title">📝 Active Bill of Entry (BoE) Status</div>
+                <div class="spec-matrix">
+                    <div class="spec-cell"><strong>Filing Sequence</strong><p>Prior / Advance Entry mode enabled</p></div>
+                    <div class="spec-cell"><strong>ICEGATE Status</strong><p>Verification Checklist Generated</p></div>
+                    <div class="spec-cell"><strong>Assessment Track</strong><p>Faceless Assessment Group (FAG)</p></div>
+                </div>
+            </div>
+
+            <div class="card-container">
+                <div class="section-title">🛠️ Verification & Customs Clearance Checklist</div>
+                <div class="task-list">
+                    <div class="task-row">
+                        <span class="task-status">Verified</span>
+                        <div class="task-text">
+                            <strong>Manifest Cross-Check (IGM)</strong>
+                            <p>Import General Manifest match verified successfully against submitted Sea Bill of Lading entries.</p>
+                        </div>
+                    </div>
+                    <div class="task-row">
+                        <span class="task-status" style="background:#fee2e2; color:#991b1b;">Pending</span>
+                        <div class="task-text">
+                            <strong>KYC & IEC Validation Verification</strong>
+                            <p>Upload current Importer-Exporter Code credentials alongside corporate PAN validation certificates to release gate locks.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="duty" class="dashboard-view">
-            <h1>🧮 Customs Duty & Tariff Estimator</h1>
-            <p>Calculate your landing tax parameters based on the standard assessment valuation matrix.</p>
-            <div class="card">
-                <div class="form-group">
-                    <label>Assessable Value of Cargo (CIF Value + Loading Charges in USD):</label>
-                    <input type="number" id="cifValue" placeholder="Enter value in USD, e.g., 10000">
+        <!-- PANEL 2: Duty Payment Allocation Profile -->
+        <div class="main-panel" id="panel-duty">
+            <div class="card-container">
+                <div class="section-title">📊 Assessment of Import Customs Tariff</div>
+                <div class="spec-matrix">
+                    <div class="spec-cell"><strong>Basic Customs Duty (BCD)</strong><p>Standard Tariff rate based on global HSN Classification</p></div>
+                    <div class="spec-cell"><strong>Integrated GST (IGST)</strong><p>18% Allocation applied onto total assessable cargo value</p></div>
+                    <div class="spec-cell"><strong>Social Welfare Surcharge</strong><p>10% flat addition evaluated directly against primary BCD balance</p></div>
                 </div>
-                <div class="form-group">
-                    <label>Basic Customs Duty Rate (BCD %):</label>
-                    <input type="number" id="bcdRate" placeholder="Standard percentage rate, e.g., 10" value="10">
-                </div>
-                <div class="form-group">
-                    <label>Integrated GST Rate (IGST %):</label>
-                    <select id="igstRate">
-                        <option value="18">18% (Standard Industrial Goods)</option>
-                        <option value="28">28% (Luxury / Demerit)</option>
-                        <option value="12">12% (Machinery)</option>
-                        <option value="5">5% (Essentials)</option>
-                        <option value="0">0% (Exempted)</option>
-                    </select>
-                </div>
-                <button class="action-btn" onclick="calculateImportDuty()">Calculate Landing Duty Matrix</button>
-
-                <div id="dutyResult" style="margin-top: 25px; display: none; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 6px;"></div>
             </div>
-        </div>
 
-        <div id="boe" class="dashboard-view">
-            <h1>📝 Bill of Entry (BoE) Draft Framework</h1>
-            <p>Draft your formal import entry application to clear incoming sea/air freight through customs.</p>
-            <div class="card">
-                <p style="font-size: 14px; color: #64748b;">The interactive Bill of Entry engine is ready. Use this panel to map your incoming supplier invoices directly to manifest declarations.</p>
-            </div>
-        </div>
-
-        <div id="tracking" class="dashboard-view">
-            <h1>🌐 ICEGATE Customs Clearance Terminal</h1>
-            <p>Track your Bill of Entry (BoE) clearance progress and container scanning status across national ports.</p>
-            <div class="card" style="text-align: center; padding: 40px 20px; border: 1px dashed #cbd5e1; background: #f1f5f9;">
-                <h4 style="color: #1e293b; margin-bottom: 10px;">Monitor Live Customs Port Release</h4>
-                <p style="max-width: 500px; margin: 0 auto 20px auto; font-size: 13px;">Once your customs agent records your formal entry filing, you can view up-to-the-minute assessment logs directly on the secure national trade portal.</p>
-                <a href="https://www.icegate.gov.in/" target="_blank" class="action-btn" style="text-decoration: none; display: inline-block;">Launch ICEGATE System Portal</a>
+            <div class="card-container">
+                <div class="section-title">💸 Active Payment Framework Gateway</div>
+                <div class="task-list">
+                    <div class="task-row">
+                        <span class="task-status" style="background:#e0f2fe; color:#0369a1;">Challan ready</span>
+                        <div class="task-text">
+                            <strong>ICEGATE E-Payment Challan execution</strong>
+                            <p>Customs duty assessment payment slip is open. Route transaction records through designated corporate net banking portals to clear terminal gates.</p>
+                        </div>
+                    </div>
+                    <div class="task-row">
+                        <span class="task-status" style="background:#fef3c7; color:#92400e;">Deferred Account</span>
+                        <div class="task-text">
+                            <strong>AEO Tier-Two/Three Duty Window</strong>
+                            <p>Authorized Economic Operator clearance window allows for deferred payment cycles spanning up to 14 days post-cargo entry tracking loops.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        function switchView(viewId) {
-            document.querySelectorAll('.dashboard-view').forEach(view => view.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(viewId).classList.add('active');
-            event.target.classList.add('active');
-        }
+        function switchTab(targetView) {
+            // Drop current active class states across UI modules
+            document.getElementById('btn-clearance').classList.remove('active');
+            document.getElementById('btn-duty').classList.remove('active');
+            document.getElementById('panel-clearance').classList.remove('active');
+            document.getElementById('panel-duty').classList.remove('active');
 
-        function calculateImportDuty() {
-            var cif = parseFloat(document.getElementById('cifValue').value) || 0;
-            var bcdPct = parseFloat(document.getElementById('bcdRate').value) || 0;
-            var igstPct = parseFloat(document.getElementById('igstRate').value) || 0;
-
-            if (cif <= 0) {
-                alert("Please provide a valid assessable cargo value.");
-                return;
+            if(targetView === 'clearance') {
+                document.getElementById('btn-clearance').classList.add('active');
+                document.getElementById('panel-clearance').classList.add('active');
+                document.getElementById('workspaceHeader').innerText = "ICEGATE Customs Clearance Hub";
+            } else {
+                document.getElementById('btn-duty').classList.add('active');
+                document.getElementById('panel-duty').classList.add('active');
+                document.getElementById('workspaceHeader').innerText = "Inbound Duty Payment Console";
             }
-
-            // Calculation Logic Architecture
-            var bcdAmt = cif * (bcdPct / 100);
-            var swsAmt = bcdAmt * 0.10; // Social Welfare Surcharge is flat 10% of BCD value
-            var valueForIgst = cif + bcdAmt + swsAmt;
-            var igstAmt = valueForIgst * (igstPct / 100);
-            var totalDuty = bcdAmt + swsAmt + igstAmt;
-            var totalLandCost = cif + totalDuty;
-
-            var resultBox = document.getElementById('dutyResult');
-            resultBox.innerHTML = `
-                <h3 style="color: #1e293b; margin-bottom: 15px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">📊 Customs Import Duty Breakdown</h3>
-                <table style="width: 100%; font-size: 14px; border-collapse: collapse; line-height: 2;">
-                    <tr><td>Assessable Base Value (CIF):</td><td style="text-align: right; font-weight: bold;">$${cif.toFixed(2)} USD</td></tr>
-                    <tr><td>Basic Customs Duty (BCD) [${bcdPct}%]:</td><td style="text-align: right; color: #e67e22;">+$${bcdAmt.toFixed(2)} USD</td></tr>
-                    <tr><td>Social Welfare Surcharge (SWS) [10% of BCD]:</td><td style="text-align: right; color: #e67e22;">+$${swsAmt.toFixed(2)} USD</td></tr>
-                    <tr><td>Integrated GST (IGST) [${igstPct}% on Base+BCD+SWS]:</td><td style="text-align: right; color: #e67e22;">+$${igstAmt.toFixed(2)} USD</td></tr>
-                    <tr style="border-top: 1px solid #cbd5e1; font-weight: bold; font-size: 15px;">
-                        <td style="padding-top: 8px; color: #c0392b;">Total Customs Duty Payable:</td>
-                        <td style="text-align: right; padding-top: 8px; color: #c0392b;">$${totalDuty.toFixed(2)} USD</td>
-                    </tr>
-                    <tr style="font-weight: bold; font-size: 16px; color: #2ecc71;">
-                        <td>Total Landed Cost at Indian Port:</td>
-                        <td style="text-align: right;">$${totalLandCost.toFixed(2)} USD</td>
-                    </tr>
-                </table>
-            `;
-            resultBox.style.display = 'block';
         }
     </script>
 
