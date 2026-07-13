@@ -14,7 +14,7 @@
 
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
         
-        /* STEP 1: Main Gateway Selection (Clean Layout) */
+        /* STEP 1: Main Gateway Selection */
         .gateway-box { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .gateway-title { font-size: 24px; margin-bottom: 10px; font-weight: 700; }
         .gateway-desc { color: #64748b; margin-bottom: 30px; font-size: 15px; }
@@ -27,25 +27,27 @@
         .options-deck { display: none; flex-direction: column; gap: 25px; }
         .view-banner { background: #1e3a8a; color: white; padding: 15px 25px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
         .change-role-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-        .change-role-btn:hover { background: rgba(255,255,255,0.3); }
 
         .menu-tabs { display: flex; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 2px; }
         .tab-btn { padding: 12px 20px; border: none; background: none; font-size: 15px; font-weight: 600; color: #64748b; cursor: pointer; position: relative; }
         .tab-btn.active { color: #1e3a8a; }
         .tab-btn.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background: #2ecc71; border-radius: 2px; }
 
-        /* Beautiful Clean Content Cards */
+        /* Content Cards & High-Density Tables */
         .content-panel { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.01); display: none; }
         .content-panel.active { display: block; }
 
-        .data-item { border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 20px; }
+        .data-item { border-bottom: 1px solid #f1f5f9; padding-bottom: 25px; margin-bottom: 25px; }
         .data-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-        .data-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .data-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .badge { background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 14px; text-transform: uppercase; }
         .item-title { font-weight: 700; font-size: 16px; }
         
-        /* The Clean Role Perspective Text Block */
-        .item-desc { font-size: 14px; color: #334155; line-height: 1.6; background: #f8fafc; padding: 15px; border-radius: 6px; margin-top: 8px; border-left: 4px solid #cbd5e1; }
+        /* Execution Specifications Matrix Layout */
+        .spec-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .spec-cell { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; font-size: 13px; }
+        .spec-cell strong { display: block; color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .spec-cell p { color: #0f172a; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -71,91 +73,167 @@
             </div>
         </div>
 
-        <!-- STEP 2 & 3 SCREEN: Interactive Beautiful Cards Layout -->
+        <!-- STEP 2 & 3 SCREEN: Interactive Layout -->
         <div class="options-deck" id="step2-workspace">
             <div class="view-banner" id="bannerElement">
                 <span id="activeRoleLabel" style="font-weight: 600;">Active Perspective: Exporter</span>
                 <button class="change-role-btn" onclick="resetGateway()">🔄 Change Perspective</button>
             </div>
 
-            <!-- Clean Tabs Options -->
             <div class="menu-tabs">
                 <button class="tab-btn active" id="tab-incoterms" onclick="switchTab('incoterms')">🚚 Incoterms Matrix</button>
                 <button class="tab-btn" id="tab-payment" onclick="switchTab('payment')">💰 Payment Instruments</button>
             </div>
 
-            <!-- Content Panel: Extended Incoterms Cards -->
+            <!-- Content Panel: Incoterms -->
             <div class="content-panel active" id="panel-incoterms">
+                <!-- EXW -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge" style="background:#fee2e2; color:#991b1b;">EXW</span> <span class="item-title">Ex Works (Named Place of Delivery)</span></div>
-                    <div class="item-desc" id="exw-text">Loading...</div>
+                    <div class="data-header"><span class="badge" style="background:#fee2e2; color:#991b1b;">EXW</span> <span class="item-title">Ex Works (Named Place)</span></div>
+                    <div class="spec-matrix" id="exw-matrix"></div>
                 </div>
+                <!-- FOB -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">FOB</span> <span class="item-title">Free On Board (Named Port of Shipment)</span></div>
-                    <div class="item-desc" id="fob-text">Loading...</div>
+                    <div class="data-header"><span class="badge">FOB</span> <span class="item-title">Free On Board (Origin Port)</span></div>
+                    <div class="spec-matrix" id="fob-matrix"></div>
                 </div>
+                <!-- CIF -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">CIF</span> <span class="item-title">Cost, Insurance & Freight (Named Port of Destination)</span></div>
-                    <div class="item-desc" id="cif-text">Loading...</div>
+                    <div class="data-header"><span class="badge">CIF</span> <span class="item-title">Cost, Insurance & Freight</span></div>
+                    <div class="spec-matrix" id="cif-matrix"></div>
                 </div>
+                <!-- DDP -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge" style="background:#dcfce7; color:#166534;">DDP</span> <span class="item-title">Delivered Duty Paid (Named Place of Destination)</span></div>
-                    <div class="item-desc" id="ddp-text">Loading...</div>
+                    <div class="data-header"><span class="badge" style="background:#dcfce7; color:#166534;">DDP</span> <span class="item-title">Delivered Duty Paid</span></div>
+                    <div class="spec-matrix" id="ddp-matrix"></div>
                 </div>
             </div>
 
-            <!-- Content Panel: Extended Payment Systems Cards -->
+            <!-- Content Panel: Payment Methods -->
             <div class="content-panel" id="panel-payment">
+                <!-- Advance TT -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">Advance TT</span> <span class="item-title">Telegraphic Transfer (Pre-Payment Wire)</span></div>
-                    <div class="item-desc" id="tt-text">Loading...</div>
+                    <div class="data-header"><span class="badge">Advance TT</span> <span class="item-title">Telegraphic Transfer</span></div>
+                    <div class="spec-matrix" id="tt-matrix"></div>
                 </div>
+                <!-- L/C -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">L/C</span> <span class="item-title">Letter of Credit (Documentary Bank Credit)</span></div>
-                    <div class="item-desc" id="lc-text">Loading...</div>
+                    <div class="data-header"><span class="badge">L/C</span> <span class="item-title">Letter of Credit</span></div>
+                    <div class="spec-matrix" id="lc-matrix"></div>
                 </div>
+                <!-- DP -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge">DP / CAD</span> <span class="item-title">Documents Against Payment (Bank Collection Collection)</span></div>
-                    <div class="item-desc" id="dp-text">Loading...</div>
+                    <div class="data-header"><span class="badge">DP / CAD</span> <span class="item-title">Documents Against Payment</span></div>
+                    <div class="spec-matrix" id="dp-matrix"></div>
                 </div>
+                <!-- Open Account -->
                 <div class="data-item">
-                    <div class="data-header"><span class="badge" style="background:#fef3c7; color:#92400e;">Open Account</span> <span class="item-title">Open Account Credit Terms (Deferred Payment)</span></div>
-                    <div class="item-desc" id="open-text">Loading...</div>
+                    <div class="data-header"><span class="badge" style="background:#fef3c7; color:#92400e;">Open Account</span> <span class="item-title">Deferred Credit Terms</span></div>
+                    <div class="spec-matrix" id="open-matrix"></div>
                 </div>
             </div>
 
         </div>
-
     </div>
 
     <script>
         var selectedRole = "";
 
-        // Deep operational database text entries matching the chosen perspective perfectly
+        // High-density professional technical grid specifications
         var database = {
             export: {
-                exw: "🟢  EXPORTER LIABILITIES: Factory Floor. You only have to pack the goods. The foreign buyer's truck picks them up from your warehouse door. You bear zero shipping costs, local port fees, or customs clearance steps.",
-                fob: "🔵 EXPORTER LIABILITIES: Ship's Rail at Origin. You pay for domestic trucking, export customs clearance, and terminal handling fees at the Indian port. Delivery completes the moment goods rest securely on the vessel.",
-                cif: "🔵 EXPORTER LIABILITIES: Onboard at Origin (Freight Paid to Destination). You must cover local port fees, export clearance, AND pay the ocean freight liner and marine cargo insurance to the buyer's landing port.",
-                ddp: "🔴  EXPORTER LIABILITIES: Buyer's Facility door. Maximum obligation for you. You must pay international freight, insurance, and handle import customs clearance and duties inside the buyer's destination country.",
-                
-                tt: "🟢 FINANCIAL SECURITY: Maximum Safety. The international buyer transfers 100% of the cash balance via wire before you initiate production or release the original bills of lading. Zero default exposure.",
-                lc: "🟡 FINANCIAL SECURITY: High Safety. A reputable global bank guarantees payment. Funds release instantly to your bank account the second you submit original port shipping logs matching the exact text criteria rules.",
-                dp: "🧡 FINANCIAL SECURITY: Balanced Risk. Your bank holds original freight release files. The buyer cannot pick up their container from the port until they drop physical cash on their local bank counter to clear the exchange.",
-                open: "🔴 FINANCIAL SECURITY: Dangerous Exposure. You manufacture, clear, and deliver the cargo to the foreign buyer completely upfront. They agree to settle payment 30 to 90 days later. You bear full default risks."
+                exw: [
+                    { label: "Cost Obligations", val: "Packaging & Ex-Works handling only." },
+                    { label: "Customs Liability", val: "None. Buyer handles Indian Export Customs Clearance." },
+                    { label: "Risk Transfer Point", val: "When goods are picked up at your warehouse floor." }
+                ],
+                fob: [
+                    { label: "Cost Obligations", val: "Inland freight to port + Origin Terminal Handling (THC)." },
+                    { label: "Customs Liability", val: "Exporter handles full Custom Shipping Bill filing." },
+                    { label: "Risk Transfer Point", val: "The exact moment goods are securely placed on the vessel vessel deck." }
+                ],
+                cif: [
+                    { label: "Cost Obligations", val: "Local port fees + Ocean/Air Freight + Marine Insurance." },
+                    { label: "Customs Liability", val: "Filing export customs declarations at origin port." },
+                    { label: "Risk Transfer Point", val: "Onboard the vessel at origin port (Costs paid to destination)." }
+                ],
+                ddp: [
+                    { label: "Cost Obligations", val: "Door-to-door transit, destination handling, and local unloading." },
+                    { label: "Customs Liability", val: "You must clear destination Import Customs & pay local Duties/Taxes." },
+                    { label: "Risk Transfer Point", val: "Delivered at the buyer's destination facility door." }
+                ],
+                tt: [
+                    { label: "Cash Flow Timing", val: "100% upfront liquidity before production/dispatch." },
+                    { label: "Credit Exposure", val: "Zero financial default risk for the business." },
+                    { label: "Required Documents", val: "Commercial Invoice, Packing List, Advance FIRC copy." }
+                ],
+                lc: [
+                    { label: "Cash Flow Timing", val: "Funds released post-shipment upon presentation of clean docs." },
+                    { label: "Credit Exposure", val: "Bank-backed security. Risk limited to documentation discrepancies." },
+                    { label: "Required Documents", val: "Original Bill of Lading, Certificate of Origin matching L/C text." }
+                ],
+                dp: [
+                    { label: "Cash Flow Timing", val: "Payment collection upon container arrival at destination port." },
+                    { label: "Credit Exposure", val: "Medium. Buyer can refuse documents, leaving cargo stuck at port." },
+                    { label: "Required Documents", val: "Sight Draft, Bill of Lading routed via corresponding banks." }
+                ],
+                open: [
+                    { label: "Cash Flow Timing", val: "Deferred collection (30, 60, or 90 days post-delivery)." },
+                    { label: "Credit Exposure", val: "Extreme. High exposure to buyer bankruptcy or insolvency." },
+                    { label: "Required Documents", val: "Open account trade invoice, delivery notes, proof of receipt." }
+                ]
             },
             import: {
-                exw: "🔴 IMPORTER LIABILITIES: Supplier Factory Door. You take full control. You must hire local logistics agents inside the exporter's country, manage their foreign export filings, pay all ocean lines, and run domestic customs clearance.",
-                fob: "🔵 IMPORTER LIABILITIES: Ship's Rail at Origin. The seller brings the cargo onto the vessel. Your expenses start the second it is loaded. You control the shipping schedule by selecting your own preferred ocean liner carrier.",
-                cif: "🔵 IMPORTER LIABILITIES: Onboard at Origin. The supplier arranges the ocean freighter and minimum cargo insurance. Your financial liability starts at your destination discharge port—handling container unloading and import duty blocks.",
-                ddp: "🟢 IMPORTER LIABILITIES: Your Warehouse Dock. Minimum logistics effort for you. The seller drops the container right at your facility door. However, your purchase invoice costs will be highly inflated to cover their risks.",
-                
-                tt: "🔴 FINANCIAL SECURITY: Extreme Risk. You wire hard capital to a foreign seller before receiving proof of shipment. You face high exposure if the supplier defaults, sends damaged stock, or disappears.",
-                lc: "🟡 FINANCIAL SECURITY: Balanced Protection. Safe but ties up liquidity. Your banking institution locks your corporate cash lines or credit facility as collateral until the exporter submits verified clean port paperwork.",
-                dp: "🧡 FINANCIAL SECURITY: Moderate Protection. You don't pay anything upfront. However, you cannot legally pick up the arriving freight container until you visit your bank and clear the collection balance to release the documents.",
-                open: "🟢 FINANCIAL SECURITY: Exceptional Advantage. You receive the shipping container, unload and clear customs, sell the inventory locally, and wire the cash to your supplier up to 90 days later."
+                exw: [
+                    { label: "Cost Obligations", val: "Full pickup logistics inside origin country + Ocean freight fees." },
+                    { label: "Customs Liability", val: "You must handle foreign export customs inside the supplier's country." },
+                    { label: "Risk Transfer Point", val: "At the supplier's warehouse floor before transit starts." }
+                ],
+                fob: [
+                    { label: "Cost Obligations", val: "International Ocean/Air freight + Destination Port Handling + Taxes." },
+                    { label: "Customs Liability", val: "You file localized Indian Bill of Entry customs declarations." },
+                    { label: "Risk Transfer Point", val: "The moment the seller loads cargo over the origin vessel rails." }
+                ],
+                cif: [
+                    { label: "Cost Obligations", val: "Destination Port Handling Charges (DTHC) + Local Delivery trucking." },
+                    { label: "Customs Liability", val: "Indian Import Customs Clearance entry and Duty payments." },
+                    { label: "Risk Transfer Point", val: "Onboard the origin ship (Seller covers freight bills to port)." }
+                ],
+                ddp: [
+                    { label: "Cost Obligations", val: "Zero freight costs. Pay the comprehensive commercial invoice directly." },
+                    { label: "Customs Liability", val: "None. Supplier clears import customs before warehouse delivery." },
+                    { label: "Risk Transfer Point", val: "Unloaded safely inside your domestic warehouse dock." }
+                ],
+                tt: [
+                    { label: "Cash Flow Timing", val: "Capital locked up and paid out before cargo tracking starts." },
+                    { label: "Credit Exposure", val: "Severe. High exposure to non-shipment or sub-standard goods." },
+                    { label: "Required Documents", val: "Proforma Invoice, Advance Bank Outward Remittance proof." }
+                ],
+                lc: [
+                    { label: "Cash Flow Timing", val: "Capital blocked via Bank Credit Limits until compliance check." },
+                    { label: "Credit Exposure", val: "Protected. Funds only leave your bank if paperwork is perfect." },
+                    { label: "Required Documents", val: "Irrevocable L/C issuance files, transport documents matching rules." }
+                ],
+                dp: [
+                    { label: "Cash Flow Timing", val: "Pay collection balance at your bank to release cargo entry codes." },
+                    { label: "Credit Exposure", val: "Balanced. Low risk of losing capital without receiving goods." },
+                    { label: "Required Documents", val: "Original Bill of Lading collection via domestic bank desk." }
+                ],
+                open: [
+                    { label: "Cash Flow Timing", val: "Maximum working capital retention. Pay 30-90 days post-delivery." },
+                    { label: "Credit Exposure", val: "Zero asset risk. Full control over quality inspection before payment." },
+                    { label: "Required Documents", val: "Commercial Invoice tracking records, import customs documents." }
+                ]
             }
         };
+
+        function renderMatrix(elementId, items) {
+            var html = "";
+            items.forEach(function(item) {
+                html += '<div class="spec-cell"><strong>' + item.label + '</strong><p>' + item.val + '</p></div>';
+            });
+            document.getElementById(elementId).innerHTML = html;
+        }
 
         function selectRole(role) {
             selectedRole = role;
@@ -164,23 +242,23 @@
             
             var banner = document.getElementById('bannerElement');
             if(role === 'export') {
-                document.getElementById('activeRoleLabel').innerText = "Active Perspective: Outbound Exporter Hub";
+                document.getElementById('activeRoleLabel').innerText = "Active Perspective: Outbound Exporter Matrix";
                 banner.style.background = "#1e3a8a";
             } else {
-                document.getElementById('activeRoleLabel').innerText = "Active Perspective: Inbound Importer Hub";
+                document.getElementById('activeRoleLabel').innerText = "Active Perspective: Inbound Importer Matrix";
                 banner.style.background = "#2e7d32";
             }
 
-            // Dynamically apply separate view text inside your neat card styling blocks
-            document.getElementById('exw-text').innerText = database[role].exw;
-            document.getElementById('fob-text').innerText = database[role].fob;
-            document.getElementById('cif-text').innerText = database[role].cif;
-            document.getElementById('ddp-text').innerText = database[role].ddp;
+            // Render high-density grids instead of generic paragraph strings
+            renderMatrix('exw-matrix', database[role].exw);
+            renderMatrix('fob-matrix', database[role].fob);
+            renderMatrix('cif-matrix', database[role].cif);
+            renderMatrix('ddp-matrix', database[role].ddp);
             
-            document.getElementById('tt-text').innerText = database[role].tt;
-            document.getElementById('lc-text').innerText = database[role].lc;
-            document.getElementById('dp-text').innerText = database[role].dp;
-            document.getElementById('open-text').innerText = database[role].open;
+            renderMatrix('tt-matrix', database[role].tt);
+            renderMatrix('lc-matrix', database[role].lc);
+            renderMatrix('dp-matrix', database[role].dp);
+            renderMatrix('open-matrix', database[role].open);
             
             switchTab('incoterms');
         }
