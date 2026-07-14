@@ -38,10 +38,22 @@
 
         /* Checklist styling */
         .task-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-        .task-row { display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; }
-        .task-status { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .task-row { display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; transition: all 0.3s; }
+        .task-status { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; transition: all 0.3s; }
         .task-text strong { display: block; font-size: 14px; color: #0f172a; margin-bottom: 2px; }
         .task-text p { font-size: 13px; color: #475569; }
+
+        /* Interactive Elements styling */
+        .calc-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        .input-group label { font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; }
+        .input-group input, .input-group select { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; color: #0f172a; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
+        
+        .upload-wrapper { margin-top: 10px; display: inline-block; }
+        .upload-label { background: #1e293b; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .upload-label:hover { background: #0f172a; }
+        .upload-input { display: none; }
     </style>
 </head>
 <body>
@@ -73,7 +85,7 @@
             </div>
 
             <div class="card-container">
-                <div class="section-title">🛠️ Verification & Customs Clearance Checklist</div>
+                <div class="section-title">🛠| Verification & Customs Clearance Checklist</div>
                 <div class="task-list">
                     <div class="task-row">
                         <span class="task-status">Verified</span>
@@ -82,11 +94,18 @@
                             <p>Import General Manifest match verified successfully against submitted Sea Bill of Lading entries.</p>
                         </div>
                     </div>
-                    <div class="task-row">
-                        <span class="task-status" style="background:#fee2e2; color:#991b1b;">Pending</span>
+                    <!-- This task row is now interactive with dynamic upload mechanics -->
+                    <div class="task-row" id="kyc-row">
+                        <span class="task-status" id="kyc-status" style="background:#fee2e2; color:#991b1b;">Pending</span>
                         <div class="task-text">
                             <strong>KYC & IEC Validation Verification</strong>
-                            <p>Upload current Importer-Exporter Code credentials alongside corporate PAN validation certificates to release gate locks.</p>
+                            <p id="kyc-desc">Upload current Importer-Exporter Code credentials alongside corporate PAN validation certificates to release gate locks.</p>
+                            <div class="upload-wrapper" id="upload-container">
+                                <label for="file-upload" class="upload-label">
+                                    📂 Choose File to Upload
+                                </label>
+                                <input type="file" id="file-upload" class="upload-input" onchange="simulateKycVerification(this)">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,12 +114,45 @@
 
         <!-- PANEL 2: Duty Payment Allocation Profile -->
         <div class="main-panel" id="panel-duty">
+            <!-- Dynamic Tariff Calculator Section -->
+            <div class="card-container">
+                <div class="section-title">🧮 Interactive Tariff Assessment Calculator</div>
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label for="cargo-value">CIF Cargo Value ($)</label>
+                        <input type="number" id="cargo-value" value="15000" oninput="calculateCustomsTaxes()" placeholder="Enter cargo value in USD">
+                    </div>
+                    <div class="input-group">
+                        <label for="bcd-rate">Basic Customs Duty (BCD) Tariff Rate</label>
+                        <select id="bcd-rate" onchange="calculateCustomsTaxes()">
+                            <option value="0.05">5.0% (Machinery / Electronic Elements)</option>
+                            <option value="0.075">7.5% (Chemical Compunds & Raw Plastics)</option>
+                            <option value="0.10" selected>10.0% (Standard Customs Tariff Limit)</option>
+                            <option value="0.15">15.0% (Premium Finished Luxury Items)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-container">
                 <div class="section-title">📊 Assessment of Import Customs Tariff</div>
                 <div class="spec-matrix">
-                    <div class="spec-cell"><strong>Basic Customs Duty (BCD)</strong><p>Standard Tariff rate based on global HSN Classification</p></div>
-                    <div class="spec-cell"><strong>Integrated GST (IGST)</strong><p>18% Allocation applied onto total assessable cargo value</p></div>
-                    <div class="spec-cell"><strong>Social Welfare Surcharge</strong><p>10% flat addition evaluated directly against primary BCD balance</p></div>
+                    <div class="spec-cell">
+                        <strong>Basic Customs Duty (BCD)</strong>
+                        <p id="bcd-output">$1,500.00</p>
+                    </div>
+                    <div class="spec-cell">
+                        <strong>Integrated GST (IGST)</strong>
+                        <p id="igst-output">$2,970.00</p>
+                    </div>
+                    <div class="spec-cell">
+                        <strong>Social Welfare Surcharge</strong>
+                        <p id="sws-output">$150.00</p>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="font-size: 13px; color: #475569; text-transform: uppercase;">Total Cumulative Duty Liability:</strong>
+                    <span id="total-duty-output" style="font-size: 18px; font-weight: 700; color: #1e652c;">$4,620.00</span>
                 </div>
             </div>
 
@@ -128,8 +180,8 @@
     </div>
 
     <script>
+        // Tab Navigation Router
         function switchTab(targetView) {
-            // Drop current active class states across UI modules
             document.getElementById('btn-clearance').classList.remove('active');
             document.getElementById('btn-duty').classList.remove('active');
             document.getElementById('panel-clearance').classList.remove('active');
@@ -143,7 +195,54 @@
                 document.getElementById('btn-duty').classList.add('active');
                 document.getElementById('panel-duty').classList.add('active');
                 document.getElementById('workspaceHeader').innerText = "Inbound Duty Payment Console";
+                calculateCustomsTaxes(); // Freshly recalculate on view switch
             }
+        }
+
+        // Checklist KYC Simulation Upload 
+        function simulateKycVerification(inputElement) {
+            if (inputElement.files && inputElement.files[0]) {
+                const fileName = inputElement.files[0].name;
+                const statusBadge = document.getElementById('kyc-status');
+                const descriptionText = document.getElementById('kyc-desc');
+                const uploadContainer = document.getElementById('upload-container');
+
+                // Visual Feedback: simulate dynamic verification status conversion
+                statusBadge.innerText = "Verified";
+                statusBadge.style.background = "#dcfce7";
+                statusBadge.style.color = "#166534";
+                
+                descriptionText.innerHTML = `File <strong>${fileName}</strong> verified successfully. Importer-Exporter Code validated with corporate PAN registers. Access key unlocked.`;
+                
+                // Hide the upload trigger once file is validated
+                uploadContainer.style.display = "none";
+            }
+        }
+
+        // Live Tariff Math Calculator logic
+        function calculateCustomsTaxes() {
+            const cargoVal = parseFloat(document.getElementById('cargo-value').value) || 0;
+            const bcdRate = parseFloat(document.getElementById('bcd-rate').value) || 0;
+
+            // Indian/ICEGATE standard calculation structure:
+            // 1. Basic Customs Duty (BCD) = Cargo Value * BCD Rate
+            const bcdVal = cargoVal * bcdRate;
+
+            // 2. Social Welfare Surcharge (SWS) = BCD * 10%
+            const swsVal = bcdVal * 0.10;
+
+            // 3. Integrated GST (IGST) = (Cargo Value + BCD + SWS) * 18%
+            const assessableValue = cargoVal + bcdVal + swsVal;
+            const igstVal = assessableValue * 0.18;
+
+            // 4. Total Cumulative Duty
+            const totalDuty = bcdVal + swsVal + igstVal;
+
+            // Dynamically write variables straight to UI outputs
+            document.getElementById('bcd-output').innerText = `$${bcdVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('sws-output').innerText = `$${swsVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('igst-output').innerText = `$${igstVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('total-duty-output').innerText = `$${totalDuty.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
     </script>
 
