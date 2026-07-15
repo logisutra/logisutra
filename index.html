@@ -28,22 +28,6 @@
         .hero .btn { display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); cursor: pointer; }
         .hero .btn:hover { transform: translateY(-2px); }
 
-        /* Interactive Authentication Modal Window */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-box { background: white; width: 100%; max-width: 400px; padding: 35px; border-radius: 8px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: #94a3b8; }
-        .close-modal:hover { color: #334155; }
-        .modal-box h2 { color: #1e293b; margin-bottom: 8px; font-size: 22px; }
-        .modal-box p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
-        
-        .form-group { margin-bottom: 16px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
-        .auth-submit-btn { width: 100%; background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
-        .auth-submit-btn:hover { background: #27ae60; }
-        .switch-auth-mode { text-align: center; margin-top: 15px; font-size: 13px; color: #64748b; }
-        .switch-auth-mode span { color: #1e3a8a; font-weight: 600; cursor: pointer; }
-
         /* Premium Social & Utilities Corporate Footer */
         footer { background: #0f172a; color: #94a3b8; padding: 40px 10% 30px 10%; font-size: 14px; margin-top: auto; }
         .footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
@@ -62,8 +46,9 @@
     <nav>
         <div class="logo">Logi<span>Sutra</span></div>
         <ul class="nav-links">
-            <li><a onclick="openAuthModal('login')" class="login-btn">Log In</a></li>
-            <li><a onclick="openAuthModal('signup')" class="signup-btn">Sign Up</a></li>
+            <!-- Fixed: Routes directly to the new login page -->
+            <li><a href="login.html" class="login-btn">Log In</a></li>
+            <li><a href="login.html" class="signup-btn">Sign Up</a></li>
         </ul>
     </nav>
 
@@ -71,37 +56,8 @@
     <div class="hero">
         <h1>International Trade Workspace</h1>
         <p>Access secure compliance engines designed to coordinate international regulatory checklists, port duty frameworks, and custom shipping matrices.</p>
-        <a onclick="openAuthModal('signup')" class="btn">Get Started Now →</a>
-    </div>
-
-    <!-- Interactive Security Auth Modal Box Overlay -->
-    <div id="authModal" class="modal-overlay">
-        <div class="modal-box">
-            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
-            <h2 id="modalTitle">Account Portal Login</h2>
-            <p id="modalDesc">Enter your account access parameters to launch the trade grid.</p>
-            
-            <!-- Real Working Intercept Form -->
-            <form onsubmit="handleAuthSubmit(event)">
-                <div class="form-group" id="companyField" style="display: none;">
-                    <label>Enterprise Name</label>
-                    <input type="text" id="authCompany" placeholder="e.g., Delta Trade Corp">
-                </div>
-                <div class="form-group">
-                    <label>Corporate Email Address</label>
-                    <input type="email" id="authEmail" required placeholder="name@company.com">
-                </div>
-                <div class="form-group">
-                    <label>Account Security Password</label>
-                    <input type="password" id="authPassword" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Access Dashboard</button>
-            </form>
-            
-            <div class="switch-auth-mode" id="modalToggleText">
-                New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>
-            </div>
-        </div>
+        <!-- Fixed: Routes directly to the new login page -->
+        <a href="login.html" class="btn">Get Started Now →</a>
     </div>
 
     <!-- Safe Corporate Footer Infrastructure -->
@@ -119,72 +75,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Working Execution Logic Architecture -->
-    <script>
-        var currentMode = 'login';
-
-        function openAuthModal(mode) {
-            currentMode = mode;
-            var modal = document.getElementById('authModal');
-            modal.style.display = 'flex';
-            toggleAuthMode(mode);
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-
-        function toggleAuthMode(mode) {
-            currentMode = mode;
-            var title = document.getElementById('modalTitle');
-            var desc = document.getElementById('modalDesc');
-            var companyField = document.getElementById('companyField');
-            var submitBtn = document.getElementById('authSubmitBtn');
-            var toggleText = document.getElementById('modalToggleText');
-
-            if (mode === 'signup') {
-                title.innerText = "Create Corporate Profile";
-                desc.innerText = "Register your enterprise configuration details to clear trade lines.";
-                companyField.style.display = "block";
-                document.getElementById('authCompany').required = true;
-                submitBtn.innerText = "Register & Open Control Deck";
-                toggleText.innerHTML = `Already have an account? <span onclick="toggleAuthMode('login')">Log In Here</span>`;
-            } else {
-                title.innerText = "Account Portal Login";
-                desc.innerText = "Enter your account access parameters to launch the trade grid.";
-                companyField.style.display = "none";
-                document.getElementById('authCompany').required = false;
-                submitBtn.innerText = "Access Dashboard";
-                toggleText.innerHTML = `New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>`;
-            }
-        }
-
-        function handleAuthSubmit(event) {
-            event.preventDefault(); // Stop page refresh
-            
-            // Collect entered inputs
-            var email = document.getElementById('authEmail').value;
-            
-            if(currentMode === 'signup') {
-                alert("Account created successfully for " + email + "! Forwarding to your operational console.");
-            } else {
-                alert("Authentication verified. Loading secure session.");
-            }
-            
-            closeAuthModal();
-            // Direct active forward routing onto your master control option grid page
-            window.location.href = "dashboard.html"; 
-        }
-
-        // Close modal if user clicks outside the form container box area
-        window.onclick = function(event) {
-            var modal = document.getElementById('authModal');
-            if (event.target == modal) {
-                closeAuthModal();
-            }
-        }
-    </script>
 
 </body>
 </html>
