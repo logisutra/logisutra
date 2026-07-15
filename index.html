@@ -53,12 +53,12 @@
         .mockup-label { color: #64748b; }
         .mockup-val { font-weight: 500; color: #f8fafc; }
         .mockup-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-top: 15px; overflow: hidden; }
-        .mockup-progress { width: 78%; height: 100%; background: var(--secondary); }
+        .mockup-progress { width: 100%; height: 100%; background: var(--secondary); }
 
-        /* Trust & Statistics Grid */
-        .stats-container { background: white; padding: 40px 8%; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; gap: 20px; }
-        .stat-item { text-align: left; }
-        .stat-num { font-size: 32px; font-weight: 800; color: var(--dark); display: block; }
+        /* Safe Enterprise Overview Grid */
+        .stats-container { background: white; padding: 40px 8%; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+        .stat-item { text-align: left; min-width: 200px; }
+        .stat-num { font-size: 28px; font-weight: 800; color: var(--dark); display: block; }
         .stat-label { font-size: 13px; color: var(--slate); font-weight: 500; }
 
         /* Core Enterprise Features */
@@ -73,12 +73,12 @@
         .feature-card p { font-size: 14px; color: var(--slate); }
 
         /* Premium Social & Utilities Corporate Footer */
-        footer { background: var(--dark); color: #94a3b8; padding: 50px 8% 30px 8%; font-size: 14px; margin-top: auto; border-top: 1px solid #1e293b; }
-        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 30px; }
-        .social-links { display: flex; gap: 25px; }
-        .social-links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-        .social-links a:hover { color: var(--secondary); }
-        .footer-bottom { width: 100%; padding-top: 25px; text-align: center; font-size: 13px; color: #64748b; }
+        footer { background: var(--dark); color: #94a3b8; padding: 60px 8% 30px 8%; font-size: 14px; margin-top: auto; border-top: 1px solid #1e293b; }
+        .footer-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h4 { color: #f8fafc; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
+        .footer-col a { display: block; color: #94a3b8; text-decoration: none; margin-bottom: 12px; font-size: 14px; transition: color 0.2s; width: fit-content; }
+        .footer-col a:hover { color: var(--secondary); }
+        .footer-bottom { border-top: 1px solid #1e293b; padding-top: 25px; text-align: center; font-size: 13px; color: #64748b; }
     </style>
 </head>
 <body>
@@ -97,7 +97,7 @@
     <main>
         <section class="hero-section">
             <div class="hero-content">
-                <span class="hero-badge">LogiSutra Core v4.2</span>
+                <span class="hero-badge">LogiSutra Trade Core</span>
                 <h1>Modern Infrastructure for Global Trade</h1>
                 <p>Automate structural logistics, monitor custom duty frameworks, and map regulatory maritime frameworks from a single engineering interface.</p>
                 <div class="hero-actions">
@@ -107,23 +107,23 @@
             </div>
             
             <div class="hero-visual">
-                <!-- Interactive Operational Live Data Panel Preview Mockup -->
+                <!-- Generic Compliance Panel Preview Mockup -->
                 <div class="mockup-card">
                     <div class="mockup-header">
-                        <span class="mockup-title">Consignment Matrix ID-998</span>
-                        <span class="mockup-status">In Transit</span>
+                        <span class="mockup-title">Consignment Ledger Matrix</span>
+                        <span class="mockup-status">Active Pipeline</span>
                     </div>
                     <div class="mockup-row">
-                        <span class="mockup-label">Origin Hub</span>
-                        <span class="mockup-val">Port of Rotterdam</span>
+                        <span class="mockup-label">Origin / Destination</span>
+                        <span class="mockup-val">Configured Sea Route</span>
                     </div>
                     <div class="mockup-row">
                         <span class="mockup-label">Customs Protocol</span>
-                        <span class="mockup-val">EU-T1 Compliant</span>
+                        <span class="mockup-val">Regulatory Verified</span>
                     </div>
                     <div class="mockup-row">
                         <span class="mockup-label">Duty Framework</span>
-                        <span class="mockup-val">Tariff Zone B</span>
+                        <span class="mockup-val">Tariff Calculated</span>
                     </div>
                     <div class="mockup-bar">
                         <div class="mockup-progress"></div>
@@ -132,23 +132,23 @@
             </div>
         </section>
 
-        <!-- Trust Stats Grid -->
+        <!-- Safe Enterprise Overview Grid -->
         <section class="stats-container">
             <div class="stat-item">
-                <span class="stat-num">$42B+</span>
-                <span class="stat-label">Trade Volume Managed</span>
+                <span class="stat-num">Global</span>
+                <span class="stat-label">Trade Corridor Coverage</span>
             </div>
             <div class="stat-item">
-                <span class="stat-num">140+</span>
-                <span class="stat-label">Global Ports Integrated</span>
+                <span class="stat-num">End-to-End</span>
+                <span class="stat-label">Compliance Tracking</span>
             </div>
             <div class="stat-item">
-                <span class="stat-num">&lt; 0.08%</span>
-                <span class="stat-label">Compliance Clearance Delay Rate</span>
+                <span class="stat-num">Automated</span>
+                <span class="stat-label">Duty & Tariff Matrices</span>
             </div>
             <div class="stat-item">
-                <span class="stat-num">99.99%</span>
-                <span class="stat-label">Console Engine Uptime</span>
+                <span class="stat-num">Secure</span>
+                <span class="stat-label">Console Cloud Architecture</span>
             </div>
         </section>
 
@@ -177,17 +177,34 @@
         </section>
     </main>
 
-    <!-- Corporate Footer Infrastructure -->
+    <!-- Premium Social & Utilities Corporate Footer -->
     <footer>
-        <div class="footer-content">
-            <a href="#" class="logo" style="color: white;">Logi<span>Sutra</span></a>
-            <div class="social-links">
-                <a href="https://www.instagram.com" target="_blank">Instagram</a>
-                <a href="https://www.twitter.com" target="_blank">Twitter</a>
-                <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
-                <a href="https://www.facebook.com" target="_blank">Facebook</a>
+        <div class="footer-columns">
+            <!-- Column 1: Brand -->
+            <div class="footer-col">
+                <a href="#" class="logo" style="color: white; display: inline-block; margin-bottom: 15px;">Logi<span>Sutra</span></a>
+                <p style="font-size: 13px; color: #64748b; line-height: 1.6; max-width: 240px;">
+                    Next-generation engineering interface for automated structural logistics and maritime compliance tracking.
+                </p>
+            </div>
+            
+            <!-- Column 2: Company Info -->
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Support</a>
+                <a href="#features">Platform Features</a>
+            </div>
+            
+            <!-- Column 3: Connect -->
+            <div class="footer-col">
+                <h4>Connect With Us</h4>
+                <a href="https://linkedin.com/company/logisutra" target="_blank">LinkedIn Profile</a>
+                <a href="https://x.com/logisutra" target="_blank">X / Twitter Feed</a>
+                <a href="https://facebook.com/logisutra" target="_blank">Facebook Page</a>
             </div>
         </div>
+
         <div class="footer-bottom">
             © 2026 LogiSutra Platform. All rights reserved. Managed enterprise console infrastructure.
         </div>
