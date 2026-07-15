@@ -3,79 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | Operations Control Deck</title>
+    <title>LogiSutra | Dashboard</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; color: #1e293b; }
-        
-        header { background: #0f172a; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #38bdf8; }
-        header h1 { font-size: 20px; font-weight: 700; color: #38bdf8; }
-        header h1 span { color: white; }
-        .session-badge { background: #1e293b; border: 1px solid #334155; color: #38bdf8; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        :root {
+            --primary: #1e293b;
+            --primary-light: #334155;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
 
-        .container { max-width: 1100px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
-        
-        .welcome-hero { margin-bottom: 35px; }
-        .welcome-hero h2 { font-size: 24px; color: #0f172a; margin-bottom: 8px; }
-        .welcome-hero p { color: #64748b; font-size: 15px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        
-        .card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        
-        .card-icon { font-size: 32px; margin-bottom: 15px; }
-        .card-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
-        .card-desc { font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 25px; }
-        
-        .card-link { display: block; text-align: center; padding: 12px; background: #0f172a; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
-        .card-link:hover { background: #1e293b; }
-        .card.highlight .card-link { background: #1e652c; }
-        .card.highlight .card-link:hover { background: #14491f; }
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .session-badge {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            flex-grow: 1;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.25rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .card.export:hover::before { background-color: #e11d48; }
+        .card.import:hover::before { background-color: #10b981; }
+        .card.transaction:hover::before { background-color: #2563eb; }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .export .card-btn {
+            background-color: #ffe4e6;
+            color: #be123c;
+        }
+        .export .card-btn:hover {
+            background-color: #be123c;
+            color: white;
+        }
+
+        .import .card-btn {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .import .card-btn:hover {
+            background-color: #065f46;
+            color: white;
+        }
+
+        .transaction .card-btn {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .transaction .card-btn:hover {
+            background-color: #1e40af;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Logi<span>Sutra</span> | Operations Control Deck</h1>
-        <div class="session-badge">🔑 Secure Session Active</div>
+        <div class="logo">Logi<span>Sutra</span></div>
+        <div class="session-badge">🔑 Operations Control Deck</div>
     </header>
 
     <div class="container">
-        <div class="welcome-hero">
+        <div class="hero">
             <h2>Welcome Back to Your Workspace</h2>
-            <p>Select your operative logistics pipeline direction to access custom workspace features.</p>
+            <p>Select an operative logistics pipeline below to access your customs, trade rules, and regulatory tools.</p>
         </div>
 
         <div class="grid">
-            <!-- Exporter Hub Card -->
-            <div class="card">
+            <!-- Export Card -->
+            <div class="card export">
                 <div>
                     <div class="card-icon">📤</div>
-                    <div class="card-title">Exporter A to Z Hub</div>
-                    <p class="card-desc">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, and access live port tracking infrastructure.</p>
+                    <h3 class="card-title">Exporter A to Z Hub</h3>
+                    <p class="card-description">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
                 </div>
-                <a href="export.html" class="card-link">Open Export Workspace →</a>
+                <a href="export.html" class="card-btn">Open Export Workspace →</a>
             </div>
 
-            <!-- Importer Hub Card (Highlighting this since we just built it!) -->
-            <div class="card highlight">
+            <!-- Import Card -->
+            <div class="card import">
                 <div>
                     <div class="card-icon">📥</div>
-                    <div class="card-title" style="color:#1e652c;">Importer A to Z Hub</div>
-                    <p class="card-desc">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle real-time verification checklists, and audit digital PDF documents.</p>
+                    <h3 class="card-title">Importer A to Z Hub</h3>
+                    <p class="card-description">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
                 </div>
-                <a href="import.html" class="card-link">Open Import Workspace →</a>
+                <a href="import.html" class="card-btn">Open Import Workspace →</a>
             </div>
 
-            <!-- Transaction Hub Card -->
-            <div class="card">
+            <!-- Transaction Card -->
+            <div class="card transaction">
                 <div>
                     <div class="card-icon">🤝</div>
-                    <div class="card-title">Transaction Rules Matrix</div>
-                    <p class="card-desc">Review universal Incoterms (logistics frameworks) and financial Letters of Credit tailored separately for both your export and import trade operations.</p>
+                    <h3 class="card-title">Transaction Rules Matrix</h3>
+                    <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
                 </div>
-                <a href="transaction.html" class="card-link">Open Transaction Workspace →</a>
+                <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
             </div>
         </div>
     </div>
