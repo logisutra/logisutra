@@ -180,71 +180,161 @@
     </div>
 
     <script>
-        // Tab Navigation Router
-        function switchTab(targetView) {
-            document.getElementById('btn-clearance').classList.remove('active');
-            document.getElementById('btn-duty').classList.remove('active');
-            document.getElementById('panel-clearance').classList.remove('active');
-            document.getElementById('panel-duty').classList.remove('active');
+        <!-- 1. Load the PDF.js library right before the script starts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-            if(targetView === 'clearance') {
-                document.getElementById('btn-clearance').classList.add('active');
-                document.getElementById('panel-clearance').classList.add('active');
-                document.getElementById('workspaceHeader').innerText = "ICEGATE Customs Clearance Hub";
-            } else {
-                document.getElementById('btn-duty').classList.add('active');
-                document.getElementById('panel-duty').classList.add('active');
-                document.getElementById('workspaceHeader').innerText = "Inbound Duty Payment Console";
-                calculateCustomsTaxes(); // Freshly recalculate on view switch
-            }
+<script>
+   
+    // Point PDF.js to its standard Web Worker CDN
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // Tab Navigation Router
+    function switchTab(targetView) {
+        document.getElementById('btn-clearance').classList.remove('active');
+        document.getElementById('btn-duty').classList.remove('active');
+        document.getElementById('panel-clearance').classList.remove('active');
+        document.getElementById('panel-duty').classList.remove('active');
+
+        if(targetView === 'clearance') {
+            document.getElementById('btn-clearance').classList.add('active');
+            document.getElementById('panel-clearance').classList.add('active');
+            document.getElementById('workspaceHeader').innerText = "ICEGATE Customs Clearance Hub";
+        } else {
+            document.getElementById('btn-duty').classList.add('active');
+            document.getElementById('panel-duty').classList.add('active');
+            document.getElementById('workspaceHeader').innerText = "Inbound Duty Payment Console";
+            calculateCustomsTaxes();
+        }
+    }
+
+    // REAL CLIENT-SIDE PDF PARSING & VERIFICATION
+    async function simulateKycVerification(inputElement) {
+        if (!inputElement.files || !inputElement.files[0]) return;
+
+        const file = inputElement.files[0];
+        const fileName = file.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        
+        const statusBadge = document.getElementById('kyc-status');
+        const descriptionText = document.getElementById('kyc-desc');
+        const uploadContainer = document.getElementById('upload-container');
+        const uploadBtnLabel = document.querySelector('.upload-label');
+
+        // Rule 1: Only allow PDFs
+        if (fileExtension !== 'pdf') {
+            statusBadge.innerText = "Error";
+            statusBadge.style.background = "#fee2e2";
+            statusBadge.style.color = "#991b1b";
+            descriptionText.innerHTML = `<span style="color: #ef4444; font-weight: 600;">❌ Verification Failed:</span> The file is a <strong>.${fileExtension}</strong>. ICEGATE regulations require credentials in a secured <strong>.pdf</strong> format.`;
+            inputElement.value = "";
+            return;
         }
 
-        // Checklist KYC Simulation Upload 
-        function simulateKycVerification(inputElement) {
-            if (inputElement.files && inputElement.files[0]) {
-                const fileName = inputElement.files[0].name;
-                const statusBadge = document.getElementById('kyc-status');
-                const descriptionText = document.getElementById('kyc-desc');
-                const uploadContainer = document.getElementById('upload-container');
+        // Visual feedback: Start scanning
+        uploadContainer.style.opacity = "0.5";
+        uploadBtnLabel.innerText = "⏳ Running Security Audit...";
+        statusBadge.innerText = "Scanning";
+        statusBadge.style.background = "#fef3c7";
+        statusBadge.style.color = "#d97706";
+        descriptionText.innerHTML = "Opening document structure and analyzing text layers for registration numbers...";
 
-                // Visual Feedback: simulate dynamic verification status conversion
-                statusBadge.innerText = "Verified";
-                statusBadge.style.background = "#dcfce7";
-                statusBadge.style.color = "#166534";
+        try {
+            // Read the uploaded file into an ArrayBuffer
+            const fileReader = new FileReader();
+            
+            fileReader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
                 
-                descriptionText.innerHTML = `File <strong>${fileName}</strong> verified successfully. Importer-Exporter Code validated with corporate PAN registers. Access key unlocked.`;
-                
-                // Hide the upload trigger once file is validated
-                uploadContainer.style.display = "none";
-            }
+                try {
+                    // Load the PDF via PDF.js
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let fullText = "";
+
+                    // Extract and combine text from all pages
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(" ");
+                        fullText += pageText + " ";
+                    }
+
+                    // Regex checks to find valid patterns inside the PDF text
+                    const iecRegex = /\b\d{10}\b/;                 // Matches 10 digits
+                    const panRegex = /\b[A-Z]{5}[0-9]{4}[A-Z]\b/i; // Matches 5 letters, 4 digits, 1 letter
+
+                    const foundIEC = fullText.match(iecRegex);
+                    const foundPAN = fullText.match(panRegex);
+
+                    // Real verification logic
+                    if (foundIEC && foundPAN) {
+                        statusBadge.innerText = "Verified";
+                        statusBadge.style.background = "#dcfce7";
+                        statusBadge.style.color = "#166534";
+                        
+                        descriptionText.innerHTML = `✅ <strong>Success!</strong> ICEGATE matched credentials.<br>
+                        • Extracted IEC: <code>${foundIEC[0]}</code><br>
+                        • Extracted PAN: <code>${foundPAN[0].toUpperCase()}</code><br>
+                        Document security clearance complete!`;
+                        
+                        uploadContainer.style.display = "none";
+                    } else {
+                        // Document opened, but lacks the necessary credentials
+                        statusBadge.innerText = "Rejected";
+                        statusBadge.style.background = "#fee2e2";
+                        statusBadge.style.color = "#991b1b";
+                        uploadContainer.style.opacity = "1";
+                        uploadBtnLabel.innerText = "📂 Try Another File";
+                        
+                        let missing = [];
+                        if (!foundIEC) missing.push("10-digit Importer-Exporter Code (IEC)");
+                        if (!foundPAN) missing.push("10-character PAN card registration identifier");
+
+                        descriptionText.innerHTML = `<span style="color: #ef4444; font-weight: 600;">❌ Audit Failed:</span> The document loaded successfully, but we could not identify: <br>• ${missing.join('<br>• ')}.<br><span style="font-size: 11px; color:#64748b;">Hint: Upload a document that actually contains a dummy 10-digit code and a PAN number (like ABCDE1234F).</span>`;
+                        inputElement.value = "";
+                    }
+
+                } catch (pdfError) {
+                    console.error(pdfError);
+                    failWithMsg("Unable to parse document layers. Ensure PDF is text-readable and not a scanned image.");
+                }
+            };
+
+            fileReader.readAsArrayBuffer(file);
+
+        } catch (err) {
+            console.error(err);
+            failWithMsg("Security sandboxing blocked local file access.");
         }
 
-        // Live Tariff Math Calculator logic
-        function calculateCustomsTaxes() {
-            const cargoVal = parseFloat(document.getElementById('cargo-value').value) || 0;
-            const bcdRate = parseFloat(document.getElementById('bcd-rate').value) || 0;
-
-            // Indian/ICEGATE standard calculation structure:
-            // 1. Basic Customs Duty (BCD) = Cargo Value * BCD Rate
-            const bcdVal = cargoVal * bcdRate;
-
-            // 2. Social Welfare Surcharge (SWS) = BCD * 10%
-            const swsVal = bcdVal * 0.10;
-
-            // 3. Integrated GST (IGST) = (Cargo Value + BCD + SWS) * 18%
-            const assessableValue = cargoVal + bcdVal + swsVal;
-            const igstVal = assessableValue * 0.18;
-
-            // 4. Total Cumulative Duty
-            const totalDuty = bcdVal + swsVal + igstVal;
-
-            // Dynamically write variables straight to UI outputs
-            document.getElementById('bcd-output').innerText = `$${bcdVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('sws-output').innerText = `$${swsVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('igst-output').innerText = `$${igstVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('total-duty-output').innerText = `$${totalDuty.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        function failWithMsg(msg) {
+            statusBadge.innerText = "Error";
+            statusBadge.style.background = "#fee2e2";
+            statusBadge.style.color = "#991b1b";
+            uploadContainer.style.opacity = "1";
+            uploadBtnLabel.innerText = "📂 Choose File to Upload";
+            descriptionText.innerHTML = `<span style="color: #ef4444; font-weight: 600;">❌ System Error:</span> ${msg}`;
+            inputElement.value = "";
         }
-    </script>
+    }
+
+    // Live Tariff Math Calculator logic
+    function calculateCustomsTaxes() {
+        const cargoVal = parseFloat(document.getElementById('cargo-value').value) || 0;
+        const bcdRate = parseFloat(document.getElementById('bcd-rate').value) || 0;
+
+        const bcdVal = cargoVal * bcdRate;
+        const swsVal = bcdVal * 0.10;
+        const assessableValue = cargoVal + bcdVal + swsVal;
+        const igstVal = assessableValue * 0.18;
+        const totalDuty = bcdVal + swsVal + igstVal;
+
+        document.getElementById('bcd-output').innerText = `$${bcdVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('sws-output').innerText = `$${swsVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('igst-output').innerText = `$${igstVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('total-duty-output').innerText = `$${totalDuty.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+</script>
+    
 
 </body>
 </html>
