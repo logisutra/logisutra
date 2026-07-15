@@ -5,145 +5,306 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LogiSutra | Transaction Matrix</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: #f8fafc; min-height: 100vh; display: flex; color: #1e293b; }
-        
-        /* Persistent Sidebar Navigation (Matches import.html) */
-        .sidebar { width: 260px; background: #0f172a; color: white; padding: 25px 20px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-        .sidebar .logo { font-size: 20px; font-weight: 700; color: #38bdf8; margin-bottom: 30px; padding-left: 8px; }
-        .sidebar .logo span { color: white; }
-        .nav-btn { width: 100%; padding: 12px 16px; background: none; border: none; color: #94a3b8; text-align: left; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; text-decoration: none; }
-        .nav-btn:hover { background: #1e293b; color: white; }
-        .nav-btn.active { background: #1e652c; color: white; }
+        :root {
+            --primary: #1e293b;
+            --primary-light: #334155;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
 
-        /* Workspace Grid Container */
-        .workspace { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        header { background: white; border-bottom: 1px solid #e2e8f0; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
-        header h2 { font-size: 20px; font-weight: 700; color: #0f172a; }
-        .exit-btn { background: #f1f5f9; color: #475569; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-        .exit-btn:hover { background: #e2e8f0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-        .main-panel { padding: 40px; max-width: 1000px; width: 100%; margin: 0 auto; }
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
 
-        /* Configurator Card styling */
-        .card-container { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 25px; }
-        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #0f172a; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Switch Button Group styling */
-        .toggle-group { display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 6px; }
-        .toggle-btn { padding: 6px 16px; font-size: 12px; font-weight: 600; border: none; background: transparent; color: #64748b; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
-        .toggle-btn.active { background: white; color: #0f172a; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
 
-        /* Grid Framework for Incoterms */
-        .rule-list { display: flex; flex-direction: column; gap: 12px; }
-        .rule-row { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 18px; display: flex; justify-content: space-between; align-items: center; }
-        .rule-badge { background: #0f172a; color: white; padding: 4px 10px; font-weight: 700; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
-        .rule-text { flex: 1; margin-left: 20px; }
-        .rule-text strong { display: block; font-size: 14px; color: #0f172a; margin-bottom: 4px; }
-        .rule-text p { font-size: 13px; color: #475569; line-height: 1.4; }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .back-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .title-area {
+            margin-bottom: 2rem;
+        }
+
+        .title-area h2 {
+            font-size: 1.85rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-area p {
+            color: var(--text-muted);
+        }
+
+        /* Toggle Perspective Controls */
+        .perspective-selector {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .selector-text h4 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .selector-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .btn-group {
+            display: flex;
+            background-color: #f1f5f9;
+            padding: 0.25rem;
+            border-radius: 8px;
+        }
+
+        .toggle-btn {
+            border: none;
+            outline: none;
+            background: none;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+        }
+
+        .toggle-btn.active {
+            background-color: white;
+            color: var(--accent);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Section Layouts */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .matrix-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .matrix-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(0,0,0,0.05);
+        }
+
+        .card-header-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background-color: #eff6ff;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .matrix-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .matrix-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .responsibility-tag {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #0284c7;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Left Navigation Bar Module (Perfectly matches import.html) -->
-    <div class="sidebar">
-        <div class="logo">Logi<span>Sutra</span></div>
-        <a href="import.html" class="nav-btn">📥 Customs Clearance</a>
-        <a href="import.html" class="nav-btn">💸 Duty Allocation</a>
-        <a href="transaction.html" class="nav-btn active">🤝 Transaction Matrix</a>
-    </div>
+    <header>
+        <a href="dashboard.html" class="logo">Logi<span>Sutra</span></a>
+        <a href="dashboard.html" class="back-btn">← Switch Workspace</a>
+    </header>
 
-    <!-- Right Content Frame -->
-    <div class="workspace">
-        <header>
-            <h2>Incoterms & Letter of Credit Rules Matrix</h2>
-            <a href="dashboard.html" class="exit-btn">← Switch Workspace</a>
-        </header>
+    <div class="container">
+        <div class="title-area">
+            <h2>🤝 Transaction Rules Matrix Console</h2>
+            <p>Evaluate risk profiles, delivery liability boundaries, and secure payment setups.</p>
+        </div>
 
-        <div class="main-panel">
-            
-            <!-- Paradigm Switch Configurator Card -->
-            <div class="card-container">
-                <div class="section-title">
-                    <span>Select Operational Paradigm</span>
-                    <div class="toggle-group">
-                        <button class="toggle-btn active" id="btn-exp" onclick="setParadigm('exporter')">Exporter Perspective</button>
-                        <button class="toggle-btn" id="btn-imp" onclick="setParadigm('importer')">Importer Perspective</button>
-                    </div>
-                </div>
-                <p style="font-size: 13.5px; color: #64748b; line-height: 1.5;">Select whether you are checking rules as an exporter or an importer. The risk assessment points will automatically modify themselves to reflect your liability margins.</p>
+        <div class="perspective-selector">
+            <div class="selector-text">
+                <h4>Select Operational Paradigm</h4>
+                <p>Configure the matrix based on your contract alignment.</p>
             </div>
-
-            <!-- Rules Matrix Panel -->
-            <div class="card-container">
-                <div class="section-title">📦 International Incoterm Guidelines (2020)</div>
-                <div class="rule-list">
-                    
-                    <div class="rule-row">
-                        <span class="rule-badge">EXW</span>
-                        <div class="rule-text">
-                            <strong>Ex Works (Named Place)</strong>
-                            <p id="exw-desc">You must package goods and make them ready at your warehouse. The buyer absorbs all transport costs and hazards.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-row">
-                        <span class="rule-badge">FOB</span>
-                        <div class="rule-text">
-                            <strong>Free On Board (Origin Port)</strong>
-                            <p id="fob-desc">Your responsibility ends once the goods safely cross the ship's rail at the export port terminal.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-row">
-                        <span class="rule-badge">CIF</span>
-                        <div class="rule-text">
-                            <strong>Cost, Insurance & Freight</strong>
-                            <p id="cif-desc">You are contractually required to pay for the marine freight transit and basic cargo insurance to the port of entry.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-row">
-                        <span class="rule-badge">DDP</span>
-                        <div class="rule-text">
-                            <strong>Delivered Duty Paid</strong>
-                            <p id="ddp-desc">You hold ultimate liability, handling all clearances, local import taxes, and direct deliveries to the buyer's destination.</p>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="btn-group">
+                <button class="toggle-btn active" onclick="switchPerspective('exporter')">Exporter Focus</button>
+                <button class="toggle-btn" onclick="switchPerspective('importer')">Importer Focus</button>
             </div>
+        </div>
 
+        <!-- Incoterms Section -->
+        <h3 class="section-title">📦 Incoterms (Rules of Delivery)</h3>
+        <div class="matrix-grid" id="incoterms-container">
+            <!-- Cards populated dynamically via script -->
+        </div>
+
+        <!-- Payments Section -->
+        <h3 class="section-title">💸 Payment Instruments</h3>
+        <div class="matrix-grid" id="payments-container">
+            <!-- Cards populated dynamically via script -->
         </div>
     </div>
 
     <script>
-        // Interactive state switcher for Transaction Rules Matrix
-        function setParadigm(type) {
-            const btnExp = document.getElementById('btn-exp');
-            const btnImp = document.getElementById('btn-imp');
-
-            if(type === 'exporter') {
-                btnExp.classList.add('active');
-                btnImp.classList.remove('active');
-                
-                // Exporter Perspective Descriptions
-                document.getElementById('exw-desc').innerHTML = "You must package goods and make them ready at your warehouse. The buyer absorbs all shipping, customs, and transport hazards.";
-                document.getElementById('fob-desc').innerHTML = "Your liability ends once the cargo safely crosses the ship's rail at the designated departure port terminal.";
-                document.getElementById('cif-desc').innerHTML = "You are contractually required to pay the transport cost and insurance premiums to carry the cargo directly to the port of entry.";
-                document.getElementById('ddp-desc').innerHTML = "You hold ultimate risk. You must manage all custom taxes, clearance processes, and transport straight to the buyer's doorstep.";
-            } else {
-                btnExp.classList.remove('active');
-                btnImp.classList.add('active');
-
-                // Importer Perspective Descriptions
-                document.getElementById('exw-desc').innerHTML = "You hold full responsibility. You must arrange transit, handle both export & import customs, and cover all transport risks from the seller's factory.";
-                document.getElementById('fob-desc').innerHTML = "You take over risk and cost once the cargo is loaded onto the vessel at the export port. You handle ocean transit and import duties.";
-                document.getElementById('cif-desc').innerHTML = "The seller covers sea freight and insurance, but you take over liability once the cargo reaches the arrival port. You are responsible for local import customs and local transport.";
-                document.getElementById('ddp-desc').innerHTML = "Zero risk. The seller handles everything. You simply wait for the goods to arrive cleared and fully tax-paid at your warehouse.";
+        const data = {
+            exporter: {
+                incoterms: [
+                    { code: "EXW", name: "Ex Works", desc: "Maximum buyer risk. Your responsibility ends when products are packaged and sitting in your warehouse floor.", duty: "Seller Scope: Pack goods only." },
+                    { code: "FOB", name: "Free On Board", desc: "You are responsible for loading charges, transport inland, and terminal clearance up to port vessel railing.", duty: "Seller Scope: Cover origin port loading costs." },
+                    { code: "CIF", name: "Cost, Insurance & Freight", desc: "You arrange marine transit insurance and maritime freight expenses to destination ports.", duty: "Seller Scope: Prepay main cargo freight." },
+                    { code: "DDP", name: "Delivered Duty Paid", desc: "Maximum seller risk. You pay freight, marine insurance, and custom clearance taxes inside the destination country.", duty: "Seller Scope: Complete door-to-door delivery." }
+                ],
+                payments: [
+                    { code: "L/C", name: "Letter of Credit", desc: "Bank-guaranteed payment framework. Released strictly upon presenting clean bills of lading matching terms.", duty: "Risk: Very Low (Safe)" },
+                    { code: "Advance TT", name: "Telegraphic Transfer", desc: "Buyer wires deposit (typically 30/70) prior to production or container loading cycles.", duty: "Risk: None (Safest)" },
+                    { code: "DP / CAD", name: "Documents Against Payment", desc: "Documents are released to the importer via banking lines only after payment clearance.", duty: "Risk: Moderate" },
+                    { code: "Open Account", name: "Deferred Credit Terms", desc: "Goods delivered prior to cash conversion, offering 30-90 days credit limits.", duty: "Risk: Extreme" }
+                ]
+            },
+            importer: {
+                incoterms: [
+                    { code: "EXW", name: "Ex Works", desc: "You take charge from the seller's factory gate. You pay handling, shipping, domestic customs, and marine insurances.", duty: "Buyer Scope: Complete logistics chain." },
+                    { code: "FOB", name: "Free On Board", desc: "The seller gets the goods onto the ship. Once across the rail, you bear all transit risks and import clearing.", duty: "Buyer Scope: Pay ocean freight & clearing." },
+                    { code: "CIF", name: "Cost, Insurance & Freight", desc: "Seller pays ocean freight and insurance to the harbor, but you assume all cargo liability risks upon loading.", duty: "Buyer Scope: Handle local custom import taxes." },
+                    { code: "DDP", name: "Delivered Duty Paid", desc: "The seller delivers goods directly to your door. Ideal for simple setups but minimizes oversight.", duty: "Buyer Scope: Unload goods at facility." }
+                ],
+                payments: [
+                    { code: "L/C", name: "Letter of Credit", desc: "Securely locks funds inside escrow. Protects you by requiring clean documentary proof of loading before release.", duty: "Risk: Low" },
+                    { code: "Advance TT", name: "Telegraphic Transfer", desc: "Requires paying before shipping. Highly risky if the supplier drops communication or quality standards.", duty: "Risk: Extreme" },
+                    { code: "DP / CAD", name: "Documents Against Payment", desc: "Pay local bank upon arrival notification to release cargo-holding delivery vouchers.", duty: "Risk: Moderate" },
+                    { code: "Open Account", name: "Deferred Credit Terms", desc: "Receive products first, verify quality, and pay on a net-30/60 timeline window.", duty: "Risk: None" }
+                ]
             }
-        }
-    </script>
+        };
 
+        function renderMatrix(perspective) {
+            const incotermsBox = document.getElementById('incoterms-container');
+            const paymentsBox = document.getElementById('payments-container');
+
+            incotermsBox.innerHTML = data[perspective].incoterms.map(item => `
+                <div class="matrix-card">
+                    <span class="card-header-badge">${item.code}</span>
+                    <h4>${item.name}</h4>
+                    <p>${item.desc}</p>
+                    <div class="responsibility-tag">⚙️ ${item.duty}</div>
+                </div>
+            `).join('');
+
+            paymentsBox.innerHTML = data[perspective].payments.map(item => `
+                <div class="matrix-card">
+                    <span class="card-header-badge" style="background-color: #f0fdf4; color: #16a34a;">${item.code}</span>
+                    <h4>${item.name}</h4>
+                    <p>${item.desc}</p>
+                    <div class="responsibility-tag" style="color: #16a34a;">⚠️ ${item.duty}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchPerspective(perspective) {
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderMatrix(perspective);
+        }
+
+        // Initialize default state
+        renderMatrix('exporter');
+    </script>
 </body>
-</html>
+    </html>
+    
