@@ -3,80 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operations Control Deck - Dashboard</title>
+    <title>LogiSutra | Operations Control Deck</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: #f4f6f9; min-height: 100vh; display: flex; flex-direction: column; }
+        body { background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; color: #1e293b; }
         
-        header { background: #0f172a; color: white; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        header h1 { font-size: 22px; font-weight: 700; color: #38bdf8; }
-        .user-profile { font-size: 14px; background: #1e293b; padding: 8px 15px; border-radius: 20px; border: 1px solid #334155; }
+        header { background: #0f172a; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #38bdf8; }
+        header h1 { font-size: 20px; font-weight: 700; color: #38bdf8; }
+        header h1 span { color: white; }
+        .session-badge { background: #1e293b; border: 1px solid #334155; color: #38bdf8; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 
-        .dashboard-container { max-width: 1000px; margin: 60px auto; padding: 0 20px; flex: 1; width: 100%; }
-        .welcome-msg { margin-bottom: 30px; }
-        .welcome-msg h2 { color: #1e293b; font-size: 28px; margin-bottom: 5px; }
-        .welcome-msg p { color: #64748b; font-size: 15px; }
-
-        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
-        .portal-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px 30px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.3s; }
-        .portal-card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        .container { max-width: 1100px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
         
-        .card-meta { margin-bottom: 30px; }
-        .portal-icon { font-size: 45px; margin-bottom: 15px; }
-        .portal-card h3 { color: #1e293b; font-size: 22px; margin-bottom: 12px; }
-        .portal-card p { color: #64748b; font-size: 14px; line-height: 1.6; }
+        .welcome-hero { margin-bottom: 35px; }
+        .welcome-hero h2 { font-size: 24px; color: #0f172a; margin-bottom: 8px; }
+        .welcome-hero p { color: #64748b; font-size: 15px; }
 
-        .launch-btn { display: inline-block; width: 100%; text-align: center; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; font-size: 15px; transition: background 0.2s; color: white; }
-        .export-theme { background: #3498db; }
-        .export-theme:hover { background: #2471a3; }
-        .import-theme { background: #2ecc71; }
-        .import-theme:hover { background: #239b56; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        
+        .card-icon { font-size: 32px; margin-bottom: 15px; }
+        .card-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+        .card-desc { font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 25px; }
+        
+        .card-link { display: block; text-align: center; padding: 12px; background: #0f172a; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .card-link:hover { background: #1e293b; }
+        .card.highlight .card-link { background: #1e652c; }
+        .card.highlight .card-link:hover { background: #14491f; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🌐 Operations Control Deck</h1>
-        <div class="user-profile">🔑 Secure Session Active</div>
+        <h1>Logi<span>Sutra</span> | Operations Control Deck</h1>
+        <div class="session-badge">🔑 Secure Session Active</div>
     </header>
 
-    <div class="dashboard-container">
-        <div class="welcome-msg">
+    <div class="container">
+        <div class="welcome-hero">
             <h2>Welcome Back to Your Workspace</h2>
             <p>Select your operative logistics pipeline direction to access custom workspace features.</p>
         </div>
 
-        <div class="portal-grid">
-            <!-- Export Path Card -->
-            <div class="portal-card" style="border-top: 6px solid #3498db;">
-                <div class="card-meta">
-                    <div class="portal-icon">📤</div>
-                    <h3>Exporter A to Z Hub</h3>
-                    <p>Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
+        <div class="grid">
+            <!-- Exporter Hub Card -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">📤</div>
+                    <div class="card-title">Exporter A to Z Hub</div>
+                    <p class="card-desc">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, and access live port tracking infrastructure.</p>
                 </div>
-                <a href="export.html" class="launch-btn export-theme">Open Export Workspace →</a>
+                <a href="export.html" class="card-link">Open Export Workspace →</a>
             </div>
 
-            <!-- Import Path Card -->
-            <div class="portal-card" style="border-top: 6px solid #2ecc71;">
-                <div class="card-meta">
-                    <div class="portal-icon">📥</div>
-                    <h3>Importer A to Z Hub</h3>
-                    <p>Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
+            <!-- Importer Hub Card (Highlighting this since we just built it!) -->
+            <div class="card highlight">
+                <div>
+                    <div class="card-icon">📥</div>
+                    <div class="card-title" style="color:#1e652c;">Importer A to Z Hub</div>
+                    <p class="card-desc">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle real-time verification checklists, and audit digital PDF documents.</p>
                 </div>
-                <a href="import.html" class="launch-btn import-theme">Open Import Workspace →</a>
+                <a href="import.html" class="card-link">Open Import Workspace →</a>
             </div>
 
-<!-- Clean Transaction Gateway Card -->
-<div class="portal-card" style="border-top: 6px solid #9b59b6; background: white; border-radius: 8px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.01); display: flex; flex-direction: column; justify-content: space-between;">
-    <div class="card-meta">
-        <div class="portal-icon" style="font-size: 40px; margin-bottom: 15px;">🤝</div>
-        <h3 style="margin-bottom: 10px; color: #1e3a8a;">Transaction Rules Matrix</h3>
-        <p style="color: #64748b; font-size: 14px; line-height: 1.5;">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your trade operations.</p>
-    </div>
-    <a href="transaction.html" class="launch-btn" style="display: block; text-align: center; margin-top: 20px; background: #9b59b6; color: white; text-decoration: none; padding: 12px; border-radius: 4px; font-weight: bold;">Open Transaction Workspace →</a>
-</div>
-            
+            <!-- Transaction Hub Card -->
+            <div class="card">
+                <div>
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">Transaction Rules Matrix</div>
+                    <p class="card-desc">Review universal Incoterms (logistics frameworks) and financial Letters of Credit tailored separately for both your export and import trade operations.</p>
+                </div>
+                <a href="transaction.html" class="card-link">Open Transaction Workspace →</a>
+            </div>
         </div>
     </div>
 
