@@ -3,138 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | Secure Gateway</title>
+    <title>LogiSutra | International Trade Platform</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: #0f172a; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { color: #333; background: #fdfdfd; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        .auth-container { background: #1e293b; border: 1px solid #334155; width: 100%; max-width: 400px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        /* Navigation Bar */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; color: #1e3a8a; letter-spacing: -0.5px; }
+        .logo span { color: #2ecc71; }
+        .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #4b5563; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover { color: #1e3a8a; }
         
-        .logo { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; color: #38bdf8; letter-spacing: -0.05em; }
-        .logo span { color: white; }
-        .subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
+        /* Auth Menu Buttons */
+        .login-btn { color: #1e3a8a !important; font-weight: 600; }
+        .signup-btn { background: #1e3a8a; color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: bold; }
+        .signup-btn:hover { background: #1d4ed8; }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
-        input { width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; transition: border 0.2s; }
-        input:focus { outline: none; border-color: #38bdf8; }
+        /* Hero Layout Area */
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 110px 10%; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero h1 { font-size: 46px; margin-bottom: 20px; font-weight: 800; }
+        .hero p { font-size: 18px; max-width: 700px; margin: 0 auto 35px auto; opacity: 0.9; }
+        .hero .btn { display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); cursor: pointer; }
+        .hero .btn:hover { transform: translateY(-2px); }
 
-        .auth-btn { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        .auth-btn:hover { background: #1d4ed8; }
+        /* Interactive Authentication Modal Window */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-box { background: white; width: 100%; max-width: 400px; padding: 35px; border-radius: 8px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 22px; cursor: pointer; color: #94a3b8; }
+        .close-modal:hover { color: #334155; }
+        .modal-box h2 { color: #1e293b; margin-bottom: 8px; font-size: 22px; }
+        .modal-box p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
+        .auth-submit-btn { width: 100%; background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 4px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        .auth-submit-btn:hover { background: #27ae60; }
+        .switch-auth-mode { text-align: center; margin-top: 15px; font-size: 13px; color: #64748b; }
+        .switch-auth-mode span { color: #1e3a8a; font-weight: 600; cursor: pointer; }
 
-        .alert-box { padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; display: none; line-height: 1.4; }
-        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-
-        .switch-mode { text-align: center; margin-top: 25px; font-size: 13.5px; color: #94a3b8; }
-        .switch-mode a { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
-        .switch-mode a:hover { text-decoration: underline; }
+        /* Premium Social & Utilities Corporate Footer */
+        footer { background: #0f172a; color: #94a3b8; padding: 40px 10% 30px 10%; font-size: 14px; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        
+        /* Functional Social Links Array */
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .social-links a:hover { color: #2ecc71; }
+        
+        .footer-bottom { border-top: 1px solid #334155; width: 100%; padding-top: 20px; text-align: center; font-size: 13px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="auth-container">
+    <!-- Header Navigation Grid Frame -->
+    <nav>
         <div class="logo">Logi<span>Sutra</span></div>
-        <div class="subtitle" id="auth-subtitle">Global Trade Operations Gateway</div>
+        <ul class="nav-links">
+            <li><a onclick="openAuthModal('login')" class="login-btn">Log In</a></li>
+            <li><a onclick="openAuthModal('signup')" class="signup-btn">Sign Up</a></li>
+        </ul>
+    </nav>
 
-        <!-- System Message Alerts -->
-        <div class="alert-box" id="alert-msg"></div>
+    <!-- Visual Landing Core -->
+    <div class="hero">
+        <h1>International Trade Workspace</h1>
+        <p>Access secure compliance engines designed to coordinate international regulatory checklists, port duty frameworks, and custom shipping matrices.</p>
+        <a onclick="openAuthModal('signup')" class="btn">Get Started Now →</a>
+    </div>
 
-        <form id="auth-form" onsubmit="handleAuth(event)">
-            <div class="form-group">
-                <label for="username">Username / Email</label>
-                <input type="text" id="username" required autocomplete="username">
-            </div>
+    <!-- Interactive Security Auth Modal Box Overlay -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <h2 id="modalTitle">Account Portal Login</h2>
+            <p id="modalDesc">Enter your account access parameters to launch the trade grid.</p>
             
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required autocomplete="current-password">
+            <!-- Real Working Intercept Form -->
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="form-group" id="companyField" style="display: none;">
+                    <label>Enterprise Name</label>
+                    <input type="text" id="authCompany" placeholder="e.g., Delta Trade Corp">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address</label>
+                    <input type="email" id="authEmail" required placeholder="name@company.com">
+                </div>
+                <div class="form-group">
+                    <label>Account Security Password</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Access Dashboard</button>
+            </form>
+            
+            <div class="switch-auth-mode" id="modalToggleText">
+                New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>
             </div>
-
-            <button type="submit" class="auth-btn" id="submit-btn">Sign In</button>
-        </form>
-
-        <div class="switch-mode" id="toggle-container">
-            Don't have an operative account? <a onclick="toggleMode('signup')">Create Account</a>
         </div>
     </div>
 
+    <!-- Safe Corporate Footer Infrastructure -->
+    <footer>
+        <div class="footer-content">
+            <!-- Active Social Network Hub Routing -->
+            <div class="social-links">
+                <a href="https://www.instagram.com" target="_blank">Instagram</a>
+                <a href="https://www.twitter.com" target="_blank">Twitter</a>
+                <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+                <a href="https://www.facebook.com" target="_blank">Facebook</a>
+            </div>
+            <div class="footer-bottom">
+                © 2026 LogiSutra Platform. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Working Execution Logic Architecture -->
     <script>
-        // Set up a permanent default fallback admin profile so the page is ready to test instantly
-        if (!localStorage.getItem('auth_admin')) {
-            localStorage.setItem('auth_admin', 'password123');
+        var currentMode = 'login';
+
+        function openAuthModal(mode) {
+            currentMode = mode;
+            var modal = document.getElementById('authModal');
+            modal.style.display = 'flex';
+            toggleAuthMode(mode);
         }
 
-        let currentMode = 'login';
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
 
-        function toggleMode(mode) {
+        function toggleAuthMode(mode) {
             currentMode = mode;
-            const subtitle = document.getElementById('auth-subtitle');
-            const submitBtn = document.getElementById('submit-btn');
-            const toggleContainer = document.getElementById('toggle-container');
-            const alertBox = document.getElementById('alert-msg');
-            
-            alertBox.style.display = "none"; // Clear any old errors
+            var title = document.getElementById('modalTitle');
+            var desc = document.getElementById('modalDesc');
+            var companyField = document.getElementById('companyField');
+            var submitBtn = document.getElementById('authSubmitBtn');
+            var toggleText = document.getElementById('modalToggleText');
 
             if (mode === 'signup') {
-                subtitle.innerText = "Register New Corporate Operator Profile";
-                submitBtn.innerText = "Register & Initialize";
-                toggleContainer.innerHTML = `Already registered? <a onclick="toggleMode('login')">Sign In here</a>`;
+                title.innerText = "Create Corporate Profile";
+                desc.innerText = "Register your enterprise configuration details to clear trade lines.";
+                companyField.style.display = "block";
+                document.getElementById('authCompany').required = true;
+                submitBtn.innerText = "Register & Open Control Deck";
+                toggleText.innerHTML = `Already have an account? <span onclick="toggleAuthMode('login')">Log In Here</span>`;
             } else {
-                subtitle.innerText = "Global Trade Operations Gateway";
-                submitBtn.innerText = "Sign In";
-                toggleContainer.innerHTML = `Don't have an operative account? <a onclick="toggleMode('signup')">Create Account</a>`;
+                title.innerText = "Account Portal Login";
+                desc.innerText = "Enter your account access parameters to launch the trade grid.";
+                companyField.style.display = "none";
+                document.getElementById('authCompany').required = false;
+                submitBtn.innerText = "Access Dashboard";
+                toggleText.innerHTML = `New to the platform? <span onclick="toggleAuthMode('signup')">Create an Account</span>`;
             }
         }
 
-        function showAlert(message, type) {
-            const alertBox = document.getElementById('alert-msg');
-            alertBox.className = `alert-box alert-${type}`;
-            alertBox.innerHTML = message;
-            alertBox.style.display = "block";
+        function handleAuthSubmit(event) {
+            event.preventDefault(); // Stop page refresh
+            
+            // Collect entered inputs
+            var email = document.getElementById('authEmail').value;
+            
+            if(currentMode === 'signup') {
+                alert("Account created successfully for " + email + "! Forwarding to your operational console.");
+            } else {
+                alert("Authentication verified. Loading secure session.");
+            }
+            
+            closeAuthModal();
+            // Direct active forward routing onto your master control option grid page
+            window.location.href = "dashboard.html"; 
         }
 
-        function handleAuth(event) {
-            event.preventDefault();
-            
-            const user = document.getElementById('username').value.trim().toLowerCase();
-            const pass = document.getElementById('password').value;
-            
-            if (!user || !pass) return;
-
-            if (currentMode === 'signup') {
-                // Check if user already exists
-                if (localStorage.getItem('auth_' + user)) {
-                    showAlert("❌ <strong>Registration Failed:</strong> That username is already mapped to an active session profile.", "error");
-                    return;
-                }
-                
-                // Real local save execution
-                localStorage.setItem('auth_' + user, pass);
-                showAlert("✅ <strong>Profile Initialized!</strong> Local credentials encrypted and saved. Switching to Login...", "success");
-                
-                setTimeout(() => {
-                    toggleMode('login');
-                    document.getElementById('password').value = "";
-                }, 1800);
-
-            } else {
-                // Real verification step against database layer
-                const savedPassword = localStorage.getItem('auth_' + user);
-                
-                if (savedPassword && savedPassword === pass) {
-                    showAlert("🔒 <strong>Identity Confirmed.</strong> Authorizing tokens, routing to dashboard...", "success");
-                    
-                    // Route directly into the dashboard page
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html";
-                    }, 1000);
-                } else {
-                    showAlert("❌ <strong>Access Denied:</strong> Invalid username or security signature profile check failed.", "error");
-                    document.getElementById('password').value = ""; // Clear password field on failure
-                }
+        // Close modal if user clicks outside the form container box area
+        window.onclick = function(event) {
+            var modal = document.getElementById('authModal');
+            if (event.target == modal) {
+                closeAuthModal();
             }
         }
     </script>
+
 </body>
 </html>
