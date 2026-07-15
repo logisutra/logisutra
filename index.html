@@ -3,76 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | International Trade Platform</title>
+    <title>LogiSutra | Enterprise International Trade Platform</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { color: #333; background: #fdfdfd; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        /* Navigation Bar */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 800; color: #1e3a8a; letter-spacing: -0.5px; }
-        .logo span { color: #2ecc71; }
-        .nav-links { display: flex; list-style: none; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #4b5563; font-weight: 500; transition: color 0.2s; cursor: pointer; }
-        .nav-links a:hover { color: #1e3a8a; }
-        
-        /* Auth Menu Buttons */
-        .login-btn { color: #1e3a8a !important; font-weight: 600; }
-        .signup-btn { background: #1e3a8a; color: white !important; padding: 8px 18px; border-radius: 4px; font-weight: bold; }
-        .signup-btn:hover { background: #1d4ed8; }
+        :root {
+            --primary: #1e40af;
+            --primary-hover: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #0f172a;
+            --slate: #475569;
+            --light: #f8fafc;
+        }
 
-        /* Hero Layout Area */
-        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 110px 10%; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .hero h1 { font-size: 46px; margin-bottom: 20px; font-weight: 800; }
-        .hero p { font-size: 18px; max-width: 700px; margin: 0 auto 35px auto; opacity: 0.9; }
-        .hero .btn { display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-weight: bold; font-size: 16px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); cursor: pointer; }
-        .hero .btn:hover { transform: translateY(-2px); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { color: #1e293b; background: var(--light); line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Premium Navigation Bar */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 8%; background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--dark); letter-spacing: -0.05em; text-decoration: none; }
+        .logo span { color: var(--secondary); }
+        .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--slate); font-weight: 500; font-size: 14.5px; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        /* Auth Buttons */
+        .login-btn { color: var(--primary) !important; font-weight: 600; }
+        .signup-btn { background: var(--dark); color: white !important; padding: 10px 20px; border-radius: 6px; font-weight: 600; transition: background 0.2s !important; }
+        .signup-btn:hover { background: var(--primary); }
+
+        /* Modern Split Hero Layout */
+        .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 80px 8%; display: flex; align-items: center; gap: 50px; min-height: calc(85vh - 70px); }
+        .hero-content { flex: 1; text-align: left; }
+        .hero-badge { display: inline-block; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--secondary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+        .hero-content h1 { font-size: 48px; line-height: 1.15; margin-bottom: 20px; font-weight: 800; letter-spacing: -0.03em; }
+        .hero-content p { font-size: 17px; color: #94a3b8; margin-bottom: 35px; max-width: 560px; }
+        
+        .hero-actions { display: flex; gap: 15px; }
+        .btn-primary { background: var(--secondary); color: white; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 15px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.08); color: white; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 15px; border: 1px solid rgba(255,255,255,0.15); transition: background 0.2s; }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
+
+        /* Mockup Visual Panel */
+        .hero-visual { flex: 1; display: flex; justify-content: center; }
+        .mockup-card { background: #1e293b; border: 1px solid #334155; width: 100%; max-width: 500px; border-radius: 12px; padding: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .mockup-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 12px; }
+        .mockup-title { font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .mockup-status { font-size: 12px; background: rgba(16, 185, 129, 0.2); color: var(--secondary); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .mockup-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+        .mockup-label { color: #64748b; }
+        .mockup-val { font-weight: 500; color: #f8fafc; }
+        .mockup-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; margin-top: 15px; overflow: hidden; }
+        .mockup-progress { width: 78%; height: 100%; background: var(--secondary); }
+
+        /* Trust & Statistics Grid */
+        .stats-container { background: white; padding: 40px 8%; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; gap: 20px; }
+        .stat-item { text-align: left; }
+        .stat-num { font-size: 32px; font-weight: 800; color: var(--dark); display: block; }
+        .stat-label { font-size: 13px; color: var(--slate); font-weight: 500; }
+
+        /* Core Enterprise Features */
+        .features-section { padding: 90px 8%; text-align: center; background: #ffffff; }
+        .features-section h2 { font-size: 32px; font-weight: 800; color: var(--dark); margin-bottom: 12px; letter-spacing: -0.02em; }
+        .features-section > p { color: var(--slate); font-size: 16px; max-width: 600px; margin: 0 auto 60px auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .feature-card { background: var(--light); border: 1px solid #e2e8f0; padding: 35px 25px; border-radius: 8px; text-align: left; transition: all 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); background: white; box-shadow: 0 12px 20px -5px rgba(0,0,0,0.05); border-color: #cbd5e1; }
+        .feature-icon { font-size: 24px; margin-bottom: 15px; display: inline-block; }
+        .feature-card h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+        .feature-card p { font-size: 14px; color: var(--slate); }
 
         /* Premium Social & Utilities Corporate Footer */
-        footer { background: #0f172a; color: #94a3b8; padding: 40px 10% 30px 10%; font-size: 14px; margin-top: auto; }
-        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        
-        /* Functional Social Links Array */
-        .social-links { display: flex; gap: 20px; }
+        footer { background: var(--dark); color: #94a3b8; padding: 50px 8% 30px 8%; font-size: 14px; margin-top: auto; border-top: 1px solid #1e293b; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 30px; }
+        .social-links { display: flex; gap: 25px; }
         .social-links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-        .social-links a:hover { color: #2ecc71; }
-        
-        .footer-bottom { border-top: 1px solid #334155; width: 100%; padding-top: 20px; text-align: center; font-size: 13px; margin-top: 10px; }
+        .social-links a:hover { color: var(--secondary); }
+        .footer-bottom { width: 100%; padding-top: 25px; text-align: center; font-size: 13px; color: #64748b; }
     </style>
 </head>
 <body>
 
-    <!-- Header Navigation Grid Frame -->
+    <!-- Header Navigation Frame -->
     <nav>
-        <div class="logo">Logi<span>Sutra</span></div>
+        <a href="#" class="logo">Logi<span>Sutra</span></a>
         <ul class="nav-links">
-            <!-- Fixed: Routes directly to the new login page -->
-            <li><a href="login.html" class="login-btn">Log In</a></li>
-            <li><a href="login.html" class="signup-btn">Sign Up</a></li>
+            <li><a href="#features">Platform Features</a></li>
+            <li><a href="login.html" class="login-btn">Sign In</a></li>
+            <li><a href="login.html" class="signup-btn">Deploy Console</a></li>
         </ul>
     </nav>
 
     <!-- Visual Landing Core -->
-    <div class="hero">
-        <h1>International Trade Workspace</h1>
-        <p>Access secure compliance engines designed to coordinate international regulatory checklists, port duty frameworks, and custom shipping matrices.</p>
-        <!-- Fixed: Routes directly to the new login page -->
-        <a href="login.html" class="btn">Get Started Now →</a>
-    </div>
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <span class="hero-badge">LogiSutra Core v4.2</span>
+                <h1>Modern Infrastructure for Global Trade</h1>
+                <p>Automate structural logistics, monitor custom duty frameworks, and map regulatory maritime frameworks from a single engineering interface.</p>
+                <div class="hero-actions">
+                    <a href="login.html" class="btn-primary">Get Started Now →</a>
+                    <a href="#features" class="btn-secondary">Explore Features</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <!-- Interactive Operational Live Data Panel Preview Mockup -->
+                <div class="mockup-card">
+                    <div class="mockup-header">
+                        <span class="mockup-title">Consignment Matrix ID-998</span>
+                        <span class="mockup-status">In Transit</span>
+                    </div>
+                    <div class="mockup-row">
+                        <span class="mockup-label">Origin Hub</span>
+                        <span class="mockup-val">Port of Rotterdam</span>
+                    </div>
+                    <div class="mockup-row">
+                        <span class="mockup-label">Customs Protocol</span>
+                        <span class="mockup-val">EU-T1 Compliant</span>
+                    </div>
+                    <div class="mockup-row">
+                        <span class="mockup-label">Duty Framework</span>
+                        <span class="mockup-val">Tariff Zone B</span>
+                    </div>
+                    <div class="mockup-bar">
+                        <div class="mockup-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Safe Corporate Footer Infrastructure -->
+        <!-- Trust Stats Grid -->
+        <section class="stats-container">
+            <div class="stat-item">
+                <span class="stat-num">$42B+</span>
+                <span class="stat-label">Trade Volume Managed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">140+</span>
+                <span class="stat-label">Global Ports Integrated</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">&lt; 0.08%</span>
+                <span class="stat-label">Compliance Clearance Delay Rate</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">99.99%</span>
+                <span class="stat-label">Console Engine Uptime</span>
+            </div>
+        </section>
+
+        <!-- Core Enterprise Features -->
+        <section class="features-section" id="features">
+            <h2>Engineered for Modern Logistics</h2>
+            <p>Eliminate processing barriers with standard-compliant operational systems built directly for institutional trade networks.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">⚓</span>
+                    <h3>Customs Mapping</h3>
+                    <p>Instantly align import structures with shifting multi-national tariff regulations and documentation rules.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛡️</span>
+                    <h3>Compliance Auditing</h3>
+                    <p>Run real-time automated verification scripts against complex port security requirements instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3>Duty Matrices</h3>
+                    <p>Calculate deep cost projections across multiple corridors accounting for spot rates and local taxes.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Corporate Footer Infrastructure -->
     <footer>
         <div class="footer-content">
-            <!-- Active Social Network Hub Routing -->
+            <a href="#" class="logo" style="color: white;">Logi<span>Sutra</span></a>
             <div class="social-links">
                 <a href="https://www.instagram.com" target="_blank">Instagram</a>
                 <a href="https://www.twitter.com" target="_blank">Twitter</a>
                 <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
                 <a href="https://www.facebook.com" target="_blank">Facebook</a>
             </div>
-            <div class="footer-bottom">
-                © 2026 LogiSutra Platform. All rights reserved.
-            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 LogiSutra Platform. All rights reserved. Managed enterprise console infrastructure.
         </div>
     </footer>
 
