@@ -3,100 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | LogiSutra Console</title>
+    <title>LogiSutra | Secure Gateway</title>
     <style>
-        :root {
-            --primary: #1e40af;
-            --primary-hover: #1d4ed8;
-            --secondary: #10b981;
-            --dark: #0f172a;
-            --slate: #475569;
-            --light: #f8fafc;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background: var(--dark); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #f8fafc; padding: 20px; }
-
-        .login-container { background: #1e293b; border: 1px solid #334155; width: 100%; max-width: 420px; border-radius: 12px; padding: 40px 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #0f172a; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: #f8fafc; }
         
-        .logo { font-size: 28px; font-weight: 800; color: white; letter-spacing: -0.05em; text-decoration: none; display: inline-block; margin-bottom: 8px; }
-        .logo span { color: var(--secondary); }
-        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 32px; }
+        .auth-container { background: #1e293b; border: 1px solid #334155; width: 100%; max-width: 400px; padding: 40px 30px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        
+        .logo { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; color: #38bdf8; letter-spacing: -0.05em; text-decoration: none; display: block; }
+        .logo span { color: white; }
+        .subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
 
-        form { text-align: left; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px 16px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; transition: border 0.2s; }
+        input:focus { outline: none; border-color: #38bdf8; }
+
+        .auth-btn { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .auth-btn:hover { background: #1d4ed8; }
+
+        .alert-box { padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; display: none; line-height: 1.4; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+        .switch-mode { text-align: center; margin-top: 25px; font-size: 13.5px; color: #94a3b8; }
+        .switch-mode a { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .switch-mode a:hover { text-decoration: underline; }
         
-        input { width: 100%; background: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 6px; color: white; font-size: 15px; transition: border-color 0.2s; }
-        input:focus { outline: none; border-color: var(--secondary); }
-
-        .btn-submit { width: 100%; background: var(--secondary); color: white; border: none; padding: 14px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn-submit:hover { background: #059669; }
-
-        /* Loading Spinner */
-        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .back-home { display: inline-block; margin-top: 25px; color: #94a3b8; text-decoration: none; font-size: 14px; transition: color 0.2s; }
-        .back-home:hover { color: white; }
+        .back-home { display: block; text-align: center; margin-top: 15px; font-size: 12px; color: #64748b; text-decoration: none; }
+        .back-home:hover { color: #94a3b8; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="auth-container">
         <a href="index.html" class="logo">Logi<span>Sutra</span></a>
-        <div class="subtitle">Global Trade Operations Gateway</div>
+        <div class="subtitle" id="auth-subtitle">Global Trade Operations Gateway</div>
 
-        <form id="loginForm">
+        <!-- System Message Alerts -->
+        <div class="alert-box" id="alert-msg"></div>
+
+        <form id="auth-form" onsubmit="handleAuth(event)">
             <div class="form-group">
-                <label for="email">Security ID / Email</label>
-                <input type="email" id="email" required placeholder="name@company.com">
+                <label for="username">Username / Email</label>
+                <input type="text" id="username" required autocomplete="username">
             </div>
             
             <div class="form-group">
-                <label for="password">Security Access Key</label>
-                <input type="password" id="password" required placeholder="••••••••">
+                <label for="password">Password</label>
+                <input type="password" id="password" required autocomplete="current-password">
             </div>
 
-            <button type="submit" class="btn-submit" id="submitBtn">
-                <span class="spinner" id="btnSpinner"></span>
-                <span id="btnText">Authenticate Console</span>
-            </button>
+            <button type="submit" class="auth-btn" id="submit-btn">Sign In</button>
         </form>
 
+        <div class="switch-mode" id="toggle-container">
+            Don't have an operative account? <a onclick="toggleMode('signup')">Create Account</a>
+        </div>
+        
         <a href="index.html" class="back-home">← Back to Home Page</a>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevents the default page refresh
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const spinner = document.getElementById('btnSpinner');
-            const btnText = document.getElementById('btnText');
+        // Default fallback admin profile for immediate testing
+        if (!localStorage.getItem('auth_admin')) {
+            localStorage.setItem('auth_admin', 'password123');
+        }
 
-            // 1. Show simulated loading status
-            submitBtn.style.pointerEvents = 'none';
-            submitBtn.style.opacity = '0.8';
-            spinner.style.display = 'block';
-            btnText.textContent = 'Verifying Credentials...';
+        let currentMode = 'login';
 
-            // 2. Simulate 1.5 seconds authentication process, then redirect
-            setTimeout(() => {
-                // Change "index.html" below to whatever page you want logged-in users to see!
-                window.location.href = 'index.html'; 
-            }, 1500);
-        });
-    </script>
-    <script>
-        // This is the engine that makes your login form work!
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Stops the page from just refreshing
+        function toggleMode(mode) {
+            currentMode = mode;
+            const subtitle = document.getElementById('auth-subtitle');
+            const submitBtn = document.getElementById('submit-btn');
+            const toggleContainer = document.getElementById('toggle-container');
+            const alertBox = document.getElementById('alert-msg');
             
-            // Redirects the user straight to your new homepage
-            window.location.href = 'index.html'; 
-        });
+            alertBox.style.display = "none";
+
+            if (mode === 'signup') {
+                subtitle.innerText = "Register New Corporate Operator Profile";
+                submitBtn.innerText = "Register & Initialize";
+                toggleContainer.innerHTML = `Already registered? <a onclick="toggleMode('login')">Sign In here</a>`;
+            } else {
+                subtitle.innerText = "Global Trade Operations Gateway";
+                submitBtn.innerText = "Sign In";
+                toggleContainer.innerHTML = `Don't have an operative account? <a onclick="toggleMode('signup')">Create Account</a>`;
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alert-msg');
+            alertBox.className = `alert-box alert-${type}`;
+            alertBox.innerHTML = message;
+            alertBox.style.display = "block";
+        }
+
+        function handleAuth(event) {
+            event.preventDefault();
+            
+            const user = document.getElementById('username').value.trim().toLowerCase();
+            const pass = document.getElementById('password').value;
+            
+            if (!user || !pass) return;
+
+            if (currentMode === 'signup') {
+                if (localStorage.getItem('auth_' + user)) {
+                    showAlert("❌ <strong>Registration Failed:</strong> That username is taken.", "error");
+                    return;
+                }
+                
+                localStorage.setItem('auth_' + user, pass);
+                showAlert("✅ <strong>Profile Initialized!</strong> Account saved locally. Switching to Login...", "success");
+                
+                setTimeout(() => {
+                    toggleMode('login');
+                    document.getElementById('password').value = "";
+                }, 1800);
+
+            } else {
+                const savedPassword = localStorage.getItem('auth_' + user);
+                
+                if (savedPassword && savedPassword === pass) {
+                    showAlert("🔒 <strong>Identity Confirmed.</strong> Routing to dashboard...", "success");
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                } else {
+                    showAlert("❌ <strong>Access Denied:</strong> Invalid credentials.", "error");
+                    document.getElementById('password').value = "";
+                }
+            }
+        }
     </script>
-    
 </body>
 </html>
