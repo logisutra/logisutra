@@ -128,6 +128,8 @@
         .card.export:hover::before { background-color: #e11d48; }
         .card.import:hover::before { background-color: #10b981; }
         .card.transaction:hover::before { background-color: #2563eb; }
+        .card.logistics:hover::before { background-color: #0284c7; }
+        .card.compliance:hover::before { background-color: #4f46e5; }
 
         .card-icon {
             font-size: 2.5rem;
@@ -188,6 +190,24 @@
             background-color: #1e40af;
             color: white;
         }
+
+        .logistics .card-btn {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+        .logistics .card-btn:hover {
+            background-color: #0369a1;
+            color: white;
+        }
+
+        .compliance .card-btn {
+            background-color: #e0e7ff;
+            color: #4338ca;
+        }
+        .compliance .card-btn:hover {
+            background-color: #4338ca;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -232,6 +252,26 @@
                     <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
                 </div>
                 <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
+            </div>
+
+            <!-- Logistics Card -->
+            <div class="card logistics">
+                <div>
+                    <div class="card-icon">🚢</div>
+                    <h3 class="card-title">Logistics & Freight</h3>
+                    <p class="card-description">Manage freight allocation matrices, container volume planning variables, and real-time overseas tracking operations.</p>
+                </div>
+                <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
+            </div>
+
+            <!-- Compliance Card -->
+            <div class="card compliance">
+                <div>
+                    <div class="card-icon">🛂</div>
+                    <h3 class="card-title">Trade Compliance</h3>
+                    <p class="card-description">Audit country customs mandates, lookup international HS classification codes, and verify critical cargo document verification checklists.</p>
+                </div>
+                <a href="compliance.html" class="card-btn">Open Compliance Workspace →</a>
             </div>
         </div>
     </div>
