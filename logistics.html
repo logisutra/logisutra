@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Logistics & Freight Tracker</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f6f9; color: #333; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 20px; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid #3498db; }
+        .card.air { border-top-color: #9b59b6; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #34495e; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; color: #475569; }
+        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .transit { background: #ffeaa7; color: #d63031; }
+        .cleared { background: #badc58; color: #6ab04c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚢 Logistics & Freight Hub</h1>
+    <p>Manage carrier allocations, container loads, and real-time shipping milestones.</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>⚓ Ocean Freight Calculator</h3>
+            <div class="form-group">
+                <label>Container Size:</label>
+                <select id="containerSize" onchange="calculateFreight()">
+                    <option value="20">20ft Standard Dry Van (FCL)</option>
+                    <option value="40">40ft High Cube (FCL)</option>
+                    <option value="lcl">Less than Container Load (LCL / CBM)</option>
+                </select>
+            </div>
+            <p>Estimated Base Cost: <strong id="freightCost">$2,450.00</strong></p>
+        </div>
+
+        <div class="card air">
+            <h3>✈️ Air Cargo Weight Break</h3>
+            <div class="form-group">
+                <label>Gross Weight (Kg):</label>
+                <input type="number" id="airWeight" value="450" oninput="calculateFreight()">
+            </div>
+            <p>Estimated Air Freight: <strong id="airCost">$1,800.00</strong></p>
+        </div>
+    </div>
+
+    <h2>📦 Active Shipments Control Board</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Booking Ref</th>
+                <th>Route</th>
+                <th>Mode</th>
+                <th>ETD / ETA</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>#BK-9082</strong></td>
+                <td>Nhava Sheva (IN) → Rotterdam (NL)</td>
+                <td>Ocean (20ft FCL)</td>
+                <td>Jul 20 / Aug 12</td>
+                <td><span class="status-badge transit">In Transit</span></td>
+            </tr>
+            <tr>
+                <td><strong>#BK-4419</strong></td>
+                <td>Delhi DEL (IN) → JFK New York (US)</td>
+                <td>Air Freight</td>
+                <td>Jul 15 / Jul 17</td>
+                <td><span class="status-badge cleared">Arrived / Customs</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function calculateFreight() {
+        const size = document.getElementById('containerSize').value;
+        let oceanCost = size === "20" ? 2450 : size === "40" ? 4100 : 380;
+        document.getElementById('freightCost').innerText = "$" + oceanCost.toLocaleString() + ".00";
+
+        const weight = parseFloat(document.getElementById('airWeight').value) || 0;
+        let airRate = weight > 500 ? 3.50 : 4.00; 
+        document.getElementById('airCost').innerText = "$" + (weight * airRate).toLocaleString() + ".00";
+    }
+</script>
+</body>
+</html>
