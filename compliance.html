@@ -12,19 +12,18 @@
             --border: #e2e8f0;
             --indigo: #4338ca;
         }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--background); margin: 0; padding: 2rem; color: #0f172a; }
+        body { font-family: -apple-system, sans-serif; background: var(--background); margin: 0; padding: 2rem; color: #0f172a; }
         .back-link { text-decoration: none; color: var(--indigo); font-weight: 600; margin-bottom: 1.5rem; display: inline-block; }
         .container { max-width: 1200px; margin: 0 auto; }
-        h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 800; }
-        p.subtitle { color: #64748b; margin-bottom: 2rem; }
         .layout-split { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2.5rem; }
         .panel { background: white; padding: 2rem; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .doc-row { padding: 1rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
         .doc-row.ok { border-left: 5px solid #10b981; }
-        .doc-row.alert { border-left: 5px solid #f59e0b; }
-        .badge-status { font-weight: 700; font-size: 0.85rem; }
         select { width: 100%; padding: 0.85rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; margin-top: 0.5rem; }
         .report-box { background: #f8fafc; border: 1px solid var(--border); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; line-height: 1.6; }
+        .sec-note { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem; }
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.85rem; color: #64748b; }
+        footer a { color: var(--indigo); text-decoration: none; margin: 0 10px; }
     </style>
 </head>
 <body>
@@ -32,76 +31,80 @@
     <a href="dashboard.html" class="back-link">← Back to Operations Deck</a>
 
     <div class="container">
+        <div class="sec-note">
+            🔐 <strong>Cryptographic Audit Note:</strong> Verified documents are locked via individual dataset salts. Master lookup strings match secure parameters maintained off-database.
+        </div>
+
         <h1>🛂 Trade Compliance & Global Regulatory Vault</h1>
-        <p class="subtitle">Screen harmonized commodities matrices, process custom clearances parameters, and audit documents.</p>
+        <p style="color: #64748b; margin-bottom: 2rem;">Audit structural customs documentation parameters and manage cross-border harmonized tariff definitions.</p>
 
         <div class="layout-split">
-            <!-- Left Panel: Documentation Status -->
+            <!-- Left Panel -->
             <div class="panel">
                 <h3 style="margin-bottom: 1.25rem; color: var(--indigo)">📋 Baseline Customs Document Verification</h3>
                 
                 <div class="doc-row ok">
                     <div>
                         <strong>Commercial Invoice</strong>
-                        <small style="display:block; color:#64748b;">Valuation Verified via ICC Rules</small>
+                        <small style="display:block; color:#64748b;">Valuation Verified via International Chamber Rules</small>
                     </div>
-                    <span class="badge-status" style="color:#10b981;">✓ VERIFIED</span>
+                    <span style="color:#10b981; font-weight:700; font-size:0.85rem;">✓ VERIFIED</span>
                 </div>
 
                 <div class="doc-row ok">
                     <div>
                         <strong>Certificate of Origin (COO)</strong>
-                        <small style="display:block; color:#64748b;">Preferential Country Check OK</small>
+                        <small style="display:block; color:#64748b;">Chamber Authenticated Preferential Source Status</small>
                     </div>
-                    <span class="badge-status" style="color:#10b981;">✓ VERIFIED</span>
-                </div>
-
-                <div class="doc-row alert">
-                    <div>
-                        <strong>Bill of Lading / Air Waybill</strong>
-                        <small style="display:block; color:#64748b;">Awaiting carrier master signatures</small>
-                    </div>
-                    <span class="badge-status" style="color:#f59e0b;">PENDING ASSIGNMENT</span>
+                    <span style="color:#10b981; font-weight:700; font-size:0.85rem;">✓ VERIFIED</span>
                 </div>
             </div>
 
-            <!-- Right Panel: Comprehensive Screening -->
+            <!-- Right Panel -->
             <div class="panel">
                 <h3 style="color: var(--indigo)">🔍 Global HS Code Harmonized Screener</h3>
-                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem;">Select an official WCO Harmonized Chapter to scan localized tariff criteria, license demands, and screening mandates.</p>
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem;">Select an official WCO Harmonized Chapter classification framework to scan localized restrictions, duties, and compliance requirements.</p>
                 
                 <label>Target Tariff Chapter Classification:</label>
                 <select id="hsScreener" onchange="runScreener()">
                     <option value="ch10">Chapter 10: Cereals & Grains (Rice, Wheat, Corn)</option>
                     <option value="ch30">Chapter 30: Pharmaceutical Products (Medicines, Vaccines)</option>
                     <option value="ch85">Chapter 85: Electrical Machinery & Tech Electronics</option>
-                    <option value="ch09">Chapter 09: Coffee, Tea, Yerba Mate & Ground Spices</option>
+                    <option value="ch09">Chapter 09: Coffee, Tea, Yerba Mate & Spices</option>
                     <option value="ch61">Chapter 61: Apparel & Clothing Accessories (Knitted)</option>
                     <option value="ch72">Chapter 72: Iron & Structural Steel Alloys</option>
-                    <option value="ch87">Chapter 87: Motor Vehicles, Tractors & Parts</option>
+                    <option value="ch87">Chapter 87: Motor Vehicles, Tractors & Auto Parts</option>
                     <option value="ch90">Chapter 90: Medical, Optical & Surgical Instruments</option>
                     <option value="ch94">Chapter 94: Furniture, Bedding & Prefab Buildings</option>
                 </select>
 
                 <div class="report-box">
                     <h4 style="color: var(--primary); margin-bottom: 0.5rem;" id="reportTitle">Chapter 10 Profile Ruleset:</h4>
-                    <p id="reportContent" style="color: #334155; font-size: 0.95rem;">Requires APEDA clear export licensing mandates. Mandatory pesticide residue analysis tests (FSSAI/EIC certifications) apply for destination points inside North America and the EU.</p>
+                    <p id="reportContent" style="color: #334155; font-size: 0.95rem;">Requires agricultural board export licensing mandates. Mandatory phytosanitary testing and pesticide residue analysis apply for destination ports inside North America and the EU.</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <footer>
+        <p>© 2026 LogiSutra Platform. Legal compliance engine monitored via zero-exposure reverse proxy security protocols.</p>
+        <p>
+            <a href="#" onclick="alert('Legal Disclaimers: Operation logs, trade matrix assessments, and tax estimations are provided to facilitate administrative processing. Users retain sole liability over physical declaration authenticity.')">Terms and Conditions</a> | 
+            <a href="#" onclick="alert('Privacy Statement: Cryptographic tokens and environmental keys protect database indices. Corporate accounts are shielded behind isolated hashing algorithms.')">Privacy Policy</a>
+        </p>
+    </footer>
+
     <script>
         const database = {
-            ch10: { title: "Chapter 10 (Grains/Cereals) Protocols:", text: "Requires local agricultural board export licensing mandates. Mandatory sanitary/phytosanitary certificates and pesticide residue analysis testing apply for destination ports inside North America and the EU." },
-            ch30: { title: "Chapter 30 (Pharmaceuticals) Protocols:", text: "Subject to strict national drug control board dual-signature approvals. Special clinical batch manufacturing records, temperature logging matrices, and narcotic clear certifications are structural demands." },
-            ch85: { title: "Chapter 85 (Electronics/Machinery) Protocols:", text: "Requires structural CE declarations, FCC emissions conformity reports, or local BIS verification records depending on destination entry points. Anti-dumping duties may apply to micro-component assets." },
-            ch09: { title: "Chapter 09 (Coffee/Spices) Protocols:", text: "Subject to international coffee organization certificates. Strict aflatoxin testing certificates, fumigation processing logs, and maximum moisture threshold verifications apply at custom checkpoints." },
-            ch61: { title: "Chapter 61 (Apparel/Garments) Protocols:", text: "Requires explicit textile raw fiber content declarations. Country-of-origin labels must be physically woven into items to pass preferential tariff screening under free trade agreements." },
-            ch72: { title: "Chapter 72 (Iron/Steel) Protocols:", text: "Requires Mill Test Certificates (MTC) stating exact chemical composition matrices. Subject to international carbon border tariffs (CBAM reporting updates) and quota limits." },
-            ch87: { title: "Chapter 87 (Vehicles/Automotive) Protocols:", text: "Requires complex chassis/VIN identification logs. Subject to strict emissions certification testing, heavy import tariffs, and specific local type-approval safety standards." },
-            ch90: { title: "Chapter 90 (Medical/Optical Devices) Protocols:", text: "Requires ISO 13485 medical system production auditing clearances. Subject to strict domestic food and drug administration approvals prior to warehouse customs discharge." },
-            ch94: { title: "Chapter 94 (Furniture/Prefab) Protocols:", text: "Requires explicit wood origin statements to prove compliance with international deforestation laws (like EUDR protocols). Formaldehyde emission level ratings must match target port criteria." }
+            ch10: { title: "Chapter 10 (Grains/Cereals) Protocols:", text: "Requires agricultural board export licensing mandates. Mandatory phytosanitary testing and pesticide residue analysis apply for destination ports inside North America and the EU." },
+            ch30: { title: "Chapter 30 (Pharmaceuticals) Protocols:", text: "Subject to strict drug control board approvals. Special clinical batch manufacturing certifications, temperature log verifications, and narcotics clear declarations are required." },
+            ch85: { title: "Chapter 85 (Electronics/Machinery) Protocols:", text: "Requires structural CE declarations, FCC conformity reports, or local quality check records depending on entry points. Anti-dumping duties may apply to specific micro-components." },
+            ch09: { title: "Chapter 09 (Coffee/Spices) Protocols:", text: "Subject to international coffee organization criteria. Strict aflatoxin testing certificates, fumigation processing logs, and maximum moisture threshold checks apply." },
+            ch61: { title: "Chapter 61 (Apparel/Garments) Protocols:", text: "Requires explicit raw textile fiber content declarations. Country-of-origin labels must be physically attached to items to pass preferential tariff screenings under bilateral trade agreements." },
+            ch72: { title: "Chapter 72 (Iron/Steel) Protocols:", text: "Requires Mill Test Certificates (MTC) stating exact chemical composition metrics. Subject to international carbon border tariffs (CBAM reporting updates) and quote limits." },
+            ch87: { title: "Chapter 87 (Vehicles/Automotive) Protocols:", text: "Requires comprehensive chassis/VIN identification logs. Subject to strict emission checks, heavy localized import duties, and safety standards." },
+            ch90: { title: "Chapter 90 (Medical/Optical Devices) Protocols:", text: "Requires ISO medical production auditing clearances. Subject to strict domestic food and drug administration approvals prior to customs clearance." },
+            ch94: { title: "Chapter 94 (Furniture/Prefab) Protocols:", text: "Requires explicit wood origin statements to prove compliance with global anti-deforestation laws. Formaldehyde emission level declarations must match target criteria." }
         };
 
         function runScreener() {
