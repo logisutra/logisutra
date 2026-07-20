@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | Dashboard</title>
+    <title>LogiSutra | Master Dashboard</title>
     <style>
         :root {
             --primary: #1e293b;
@@ -15,6 +15,7 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --success: #10b981;
         }
 
         * {
@@ -32,251 +33,586 @@
             flex-direction: column;
         }
 
+        /* Premium Application Top Bar Layout */
         header {
             background-color: var(--primary);
             color: white;
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-grow: 1;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             letter-spacing: -0.05em;
+            cursor: pointer;
         }
 
         .logo span {
             color: #60a5fa;
         }
 
-        .session-badge {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        /* Global Search Engine Bar */
+        .search-container {
+            position: relative;
+            width: 300px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.45rem 1rem 0.45rem 2.25rem;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            background: white;
+            color: var(--text-main);
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Horizontal Menu Links Panel */
+        .top-nav-links {
+            display: flex;
+            gap: 1.25rem;
+            list-style: none;
+            margin-right: 1rem;
+        }
+
+        .top-nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .top-nav-links a:hover, .top-nav-links a.active {
+            color: white;
+        }
+
+        /* Dynamic Notification Alert Center */
+        .notification-trigger {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .notification-trigger:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            right: -50px;
+            top: 140%;
+            width: 320px;
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            z-index: 1000;
+        }
+
+        .notification-header {
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .notification-item {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8fafc;
+        }
+
+        .notification-item.unread {
+            background: #f0f9ff;
+        }
+
+        /* User Profile Navigation Trigger & Frame */
+        .profile-menu-container {
+            position: relative;
+            user-select: none;
+        }
+
+        .avatar-trigger {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .avatar-img {
+            width: 32px;
+            height: 32px;
+            background: #60a5fa;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.85rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .caret-down {
+            font-size: 0.6rem;
+            color: #94a3b8;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 130%;
+            width: 240px;
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .user-identity-card {
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-identity-card .name { font-weight: 600; font-size: 0.9rem; }
+        .user-identity-card .email { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+        .dropdown-links-group { padding: 0.5rem; }
+        .dropdown-links-group a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.6rem 0.75rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            transition: background 0.15s;
+        }
+        .dropdown-links-group a:hover { background: #f1f5f9; }
+        .dropdown-links-group .signout-action {
+            color: #dc2626;
+            border-top: 1px solid var(--border);
+            margin-top: 0.25rem;
+            border-radius: 0;
+        }
+
+        /* Application Shell Grid Layout */
+        .layout-wrapper {
+            display: flex;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
             flex-grow: 1;
         }
 
+        aside {
+            width: 240px;
+            border-right: 1px solid var(--border);
+            height: calc(100vh - 57px);
+            position: sticky;
+            top: 57px;
+            background: white;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.15s;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 2.5rem 2rem;
+            max-width: 1160px;
+        }
+
+        /* Summary Analytics Panel (Missing Core Homepage Feature) */
+        .summary-banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .summary-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .summary-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 0.25rem;
+        }
+
+        .summary-footer {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .hero {
-            text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .hero h2 {
-            font-size: 2.25rem;
+            font-size: 1.75rem;
             color: var(--primary);
-            margin-bottom: 0.75rem;
             font-weight: 800;
         }
 
         .hero p {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 2.25rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: transparent;
-            transition: background-color 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
             border-color: #cbd5e1;
         }
 
-        .card.export:hover::before { background-color: #e11d48; }
-        .card.import:hover::before { background-color: #10b981; }
-        .card.transaction:hover::before { background-color: #2563eb; }
-        .card.logistics:hover::before { background-color: #0284c7; }
-        .card.compliance:hover::before { background-color: #4f46e5; }
+        .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .card-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+        .card-description { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.7rem 1.25rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: all 0.2s ease; }
 
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .card-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-        }
-
-        .card-description {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            flex-grow: 1;
-        }
-
-        .card-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.85rem 1.5rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .export .card-btn {
-            background-color: #ffe4e6;
-            color: #be123c;
-        }
-        .export .card-btn:hover {
-            background-color: #be123c;
-            color: white;
-        }
-
-        .import .card-btn {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        .import .card-btn:hover {
-            background-color: #065f46;
-            color: white;
-        }
-
-        .transaction .card-btn {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-        .transaction .card-btn:hover {
-            background-color: #1e40af;
-            color: white;
-        }
-
-        .logistics .card-btn {
-            background-color: #e0f2fe;
-            color: #0369a1;
-        }
-        .logistics .card-btn:hover {
-            background-color: #0369a1;
-            color: white;
-        }
-
-        .compliance .card-btn {
-            background-color: #e0e7ff;
-            color: #4338ca;
-        }
-        .compliance .card-btn:hover {
-            background-color: #4338ca;
-            color: white;
-        }
+        .export .card-btn { background-color: #ffe4e6; color: #be123c; }
+        .export .card-btn:hover { background-color: #be123c; color: white; }
+        .import .card-btn { background-color: #d1fae5; color: #065f46; }
+        .import .card-btn:hover { background-color: #065f46; color: white; }
+        .transaction .card-btn { background-color: #dbeafe; color: #1e40af; }
+        .transaction .card-btn:hover { background-color: #1e40af; color: white; }
+        .logistics .card-btn { background-color: #e0f2fe; color: #0369a1; }
+        .logistics .card-btn:hover { background-color: #0369a1; color: white; }
+        .compliance .card-btn { background-color: #e0e7ff; color: #4338ca; }
+        .compliance .card-btn:hover { background-color: #4338ca; color: white; }
     </style>
 </head>
 <body>
 
+    <!-- Header Navigation Suite -->
     <header>
-        <div class="logo">Logi<span>Sutra</span></div>
-        <div class="session-badge">🔑 Operations Control Deck</div>
-    </header>
-
-    <div class="container">
-        <div class="hero">
-            <h2>Welcome Back to Your Workspace</h2>
-            <p>Select an operative logistics pipeline below to access your customs, trade rules, and regulatory tools.</p>
+        <div class="header-left">
+            <div class="logo" onclick="window.location.reload()">Logi<span>Sutra</span></div>
+            
+            <!-- Global Search Frame -->
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search pipelines, HS codes, invoices...">
+            </div>
         </div>
 
-        <div class="grid">
-            <!-- Export Card -->
-            <div class="card export">
-                <div>
-                    <div class="card-icon">📤</div>
-                    <h3 class="card-title">Exporter A to Z Hub</h3>
-                    <p class="card-description">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
+        <div class="header-right">
+            <!-- Top Slider Navigation Bar -->
+            <ul class="top-nav-links">
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="logistics.html">Logistics</a></li>
+                <li><a href="compliance.html">Compliance</a></li>
+                <li><a href="#" onclick="alert('Vault Ledger module connection active.')">Billing</a></li>
+            </ul>
+
+            <!-- System Notification Icon Panel -->
+            <div class="notification-trigger" id="notifMenuBtn">
+                🔔<div class="notification-badge"></div>
+                <div class="notification-dropdown" id="notifDropdown">
+                    <div class="notification-header">
+                        <span>Notifications</span>
+                        <a href="#" style="color: var(--accent); text-decoration: none; font-size: 0.75rem;">Clear All</a>
+                    </div>
+                    <div class="notification-item unread">
+                        <strong>⚠️ Border Customs Update</strong><br>
+                        New HS Tariff classification changes detected for Outbound Lane 4.
+                    </div>
+                    <div class="notification-item">
+                        <strong>🚢 Air Freight Cleared</strong><br>
+                        Cargo manifest profile #4092 has cleared transit gate protocols.
+                    </div>
                 </div>
-                <a href="export.html" class="card-btn">Open Export Workspace →</a>
             </div>
 
-            <!-- Import Card -->
-            <div class="card import">
-                <div>
-                    <div class="card-icon">📥</div>
-                    <h3 class="card-title">Importer A to Z Hub</h3>
-                    <p class="card-description">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
+            <!-- Profile System Context Dropdown Group -->
+            <div class="profile-menu-container">
+                <div class="avatar-trigger" id="avatarMenuBtn">
+                    <div class="avatar-img">OP</div>
+                    <span class="caret-down">▼</span>
                 </div>
-                <a href="import.html" class="card-btn">Open Import Workspace →</a>
+                
+                <div class="profile-dropdown" id="accountProfileDropdown">
+                    <div class="user-identity-card">
+                        <div class="name">Operations Officer</div>
+                        <div class="email">officer@logisutra.internal</div>
+                    </div>
+                    <div class="dropdown-links-group">
+                        <a href="#" onclick="alert('Profile Configuration Suite Access')">👤 Your Profile</a>
+                        <a href="#" onclick="alert('Application Console Settings Control')">⚙️ Settings</a>
+                        <a href="#" id="diagAction">🔍 Run Diagnostic</a>
+                        <a href="#" class="signout-action" id="signoutAction">🚪 Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar & Dashboard Grid Layout -->
+    <div class="layout-wrapper">
+        <aside>
+            <div class="sidebar-menu">
+                <a href="dashboard.html" class="sidebar-link active">🏠 Overview Deck</a>
+                <a href="export.html" class="sidebar-link">📤 Outbound Cargo</a>
+                <a href="import.html" class="sidebar-link">📥 Inbound Logistics</a>
+                <a href="transaction.html" class="sidebar-link">🤝 Trade Protocols</a>
+                <a href="logistics.html" class="sidebar-link">🚢 Freight Desk</a>
+                <a href="compliance.html" class="sidebar-link">🛂 Customs Border Audit</a>
+            </div>
+        </aside>
+
+        <div class="container">
+            <!-- Analytics Summary Widgets Group -->
+            <div class="summary-banner-grid">
+                <div class="summary-card">
+                    <div class="summary-title">Network Proxy Sync</div>
+                    <div class="summary-value">99.98%</div>
+                    <div class="summary-footer">🟢 Secure Node Active</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">Active Data Ingestion</div>
+                    <div class="summary-value">4.2 TB/s</div>
+                    <div class="summary-footer">⚡ Optimization Balanced</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">Encryption Index</div>
+                    <div class="summary-value">AES-256</div>
+                    <div class="summary-footer">🔒 Cryptographic Keys Sync</div>
+                </div>
             </div>
 
-            <!-- Transaction Card -->
-            <div class="card transaction">
-                <div>
-                    <div class="card-icon">🤝</div>
-                    <h3 class="card-title">Transaction Rules Matrix</h3>
-                    <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
-                </div>
-                <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
+            <div class="hero">
+                <h2>Workspace Console</h2>
+                <p>Select an operative logistics pipeline module below to access compliance rules, ledger balances, and customs validation engines.</p>
             </div>
 
-            <!-- Logistics Card -->
-            <div class="card logistics">
-                <div>
-                    <div class="card-icon">🚢</div>
-                    <h3 class="card-title">Logistics & Freight</h3>
-                    <p class="card-description">Manage freight allocation matrices, container volume planning variables, and real-time overseas tracking operations.</p>
+            <div class="grid">
+                <!-- Export Card -->
+                <div class="card export">
+                    <div>
+                        <div class="card-icon">📤</div>
+                        <h3 class="card-title">Exporter A to Z Hub</h3>
+                        <p class="card-description">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
+                    </div>
+                    <a href="export.html" class="card-btn">Open Export Workspace →</a>
                 </div>
-                <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
-            </div>
 
-            <!-- Compliance Card -->
-            <div class="card compliance">
-                <div>
-                    <div class="card-icon">🛂</div>
-                    <h3 class="card-title">Trade Compliance</h3>
-                    <p class="card-description">Audit country customs mandates, lookup international HS classification codes, and verify critical cargo document verification checklists.</p>
+                <!-- Import Card -->
+                <div class="card import">
+                    <div>
+                        <div class="card-icon">📥</div>
+                        <h3 class="card-title">Importer A to Z Hub</h3>
+                        <p class="card-description">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
+                    </div>
+                    <a href="import.html" class="card-btn">Open Import Workspace →</a>
                 </div>
-                <a href="compliance.html" class="card-btn">Open Compliance Workspace →</a>
+
+                <!-- Transaction Card -->
+                <div class="card transaction">
+                    <div>
+                        <div class="card-icon">🤝</div>
+                        <h3 class="card-title">Transaction Rules Matrix</h3>
+                        <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
+                    </div>
+                    <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
+                </div>
+
+                <!-- Logistics Card -->
+                <div class="card logistics">
+                    <div>
+                        <div class="card-icon">🚢</div>
+                        <h3 class="card-title">Logistics & Freight</h3>
+                        <p class="card-description">Manage freight allocation matrices, container volume planning variables, and real-time overseas tracking operations.</p>
+                    </div>
+                    <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
+                </div>
+
+                <!-- Compliance Card -->
+                <div class="card compliance">
+                    <div>
+                        <div class="card-icon">🛂</div>
+                        <h3 class="card-title">Trade Compliance</h3>
+                        <p class="card-description">Audit country customs mandates, lookup international HS classification codes, and verify critical cargo document verification checklists.</p>
+                    </div>
+                    <a href="compliance.html" class="card-btn">Open Compliance Workspace →</a>
+                </div>
             </div>
         </div>
     </div>
- <script src="security-header.js"></script>
-<script src="legal-guard.js"></script>
-    
+
+    <!-- Master External Controller Connectors -->
+    <script src="security-header.js"></script>
+    <script src="legal-guard.js"></script>
+
+    <!-- Global Layout UI Controls Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Dropdown Menu Selectors
+            const avatarBtn = document.getElementById("avatarMenuBtn");
+            const profileMenu = document.getElementById("accountProfileDropdown");
+            const notifBtn = document.getElementById("notifMenuBtn");
+            const notifMenu = document.getElementById("notifDropdown");
+
+            // Profile Dropdown Toggle
+            avatarBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                notifMenu.style.display = "none";
+                profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
+            });
+
+            // Notification Dropdown Toggle
+            notifBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                profileMenu.style.display = "none";
+                notifMenu.style.display = notifMenu.style.display === "block" ? "none" : "block";
+            });
+
+            // Silent UI click auto-dismiss handler
+            document.addEventListener("click", function() {
+                profileMenu.style.display = "none";
+                notifMenu.style.display = "none";
+            });
+
+            // Administrative Actions Hooks
+            document.getElementById("diagAction").addEventListener("click", function(e) {
+                e.preventDefault();
+                alert("💻 Diagnostic Sync: Cryptographic Salts & Reverse Proxy channels operating normally.");
+            });
+
+            document.getElementById("signoutAction").addEventListener("click", function(e) {
+                e.preventDefault();
+                localStorage.removeItem('globalTermsAccepted_v2'); 
+                alert("🚪 Session Closed: Dashboard authentication signatures securely flushed.");
+                window.location.reload(); 
+            });
+        });
+    </script>
 </body>
 </html>
