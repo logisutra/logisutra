@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiSutra | Master Dashboard</title>
+    <title>LogiSutra | Dashboard</title>
     <style>
         :root {
             --primary: #1e293b;
             --primary-light: #334155;
             --accent: #2563eb;
-            --accent-hover: #1d4ed8;
             --background: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --success: #10b981;
         }
 
         * {
@@ -33,7 +31,6 @@
             flex-direction: column;
         }
 
-        /* Premium Application Top Bar Layout */
         header {
             background-color: var(--primary);
             color: white;
@@ -58,14 +55,12 @@
             font-size: 1.4rem;
             font-weight: 800;
             letter-spacing: -0.05em;
-            cursor: pointer;
+            color: white;
+            text-decoration: none;
         }
 
-        .logo span {
-            color: #60a5fa;
-        }
+        .logo span { color: #60a5fa; }
 
-        /* Global Search Engine Bar */
         .search-container {
             position: relative;
             width: 300px;
@@ -74,21 +69,16 @@
         .search-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 0.45rem 1rem 0.45rem 2.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem 0.5rem 2.25rem;
             border-radius: 6px;
             color: white;
             font-size: 0.85rem;
-            transition: all 0.2s;
+            outline: none;
         }
 
-        .search-input:focus {
-            background: white;
-            color: var(--text-main);
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
+        .search-input::placeholder { color: #94a3b8; }
+        .search-input:focus { background: white; color: var(--text-main); border-color: var(--accent); }
 
         .search-icon {
             position: absolute;
@@ -103,170 +93,133 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-        }
-
-        /* Horizontal Menu Links Panel */
-        .top-nav-links {
-            display: flex;
             gap: 1.25rem;
-            list-style: none;
-            margin-right: 1rem;
         }
 
-        .top-nav-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
+        /* Notification Bell Control */
+        .notif-container { position: relative; }
 
-        .top-nav-links a:hover, .top-nav-links a.active {
-            color: white;
-        }
-
-        /* Dynamic Notification Alert Center */
-        .notification-trigger {
-            position: relative;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 4px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .notification-trigger:hover {
+        .notif-btn {
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-        }
-
-        .notification-dropdown {
-            display: none;
-            position: absolute;
-            right: -50px;
-            top: 140%;
-            width: 320px;
-            background: white;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            z-index: 1000;
-        }
-
-        .notification-header {
-            padding: 0.75rem 1rem;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .notification-item {
-            padding: 0.85rem 1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            line-height: 1.4;
-            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.45rem 0.75rem;
+            border-radius: 20px;
             cursor: pointer;
-        }
-
-        .notification-item:hover {
-            background: #f8fafc;
-        }
-
-        .notification-item.unread {
-            background: #f0f9ff;
-        }
-
-        /* User Profile Navigation Trigger & Frame */
-        .profile-menu-container {
-            position: relative;
-            user-select: none;
-        }
-
-        .avatar-trigger {
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 6px;
-            cursor: pointer;
-            padding: 4px;
         }
 
-        .avatar-img {
-            width: 32px;
-            height: 32px;
-            background: #60a5fa;
-            color: var(--primary);
+        .notif-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+        .notif-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
             font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+        }
+
+        .notif-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 125%;
+            width: 280px;
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .notif-header {
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .notif-header button {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .notif-list {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-main);
+        }
+
+        .notif-item:last-child { border-bottom: none; }
+
+        /* Profile Dropdown */
+        .profile-container { position: relative; user-select: none; }
+
+        .profile-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 50%;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.45rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
             font-size: 0.85rem;
-            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .caret-down {
-            font-size: 0.6rem;
-            color: #94a3b8;
-        }
+        .profile-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
         .profile-dropdown {
             display: none;
             position: absolute;
             right: 0;
-            top: 130%;
-            width: 240px;
+            top: 125%;
+            width: 200px;
             background: white;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border-radius: 8px;
             overflow: hidden;
             z-index: 1000;
         }
 
-        .user-identity-card {
-            padding: 1rem;
-            background: #f8fafc;
+        .profile-dropdown button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            cursor: pointer;
             border-bottom: 1px solid var(--border);
         }
 
-        .user-identity-card .name { font-weight: 600; font-size: 0.9rem; }
-        .user-identity-card .email { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .profile-dropdown button:hover { background: #f1f5f9; }
+        .profile-dropdown .logout-btn { color: #dc2626; font-weight: 600; border-bottom: none; }
 
-        .dropdown-links-group { padding: 0.5rem; }
-        .dropdown-links-group a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.6rem 0.75rem;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            transition: background 0.15s;
-        }
-        .dropdown-links-group a:hover { background: #f1f5f9; }
-        .dropdown-links-group .signout-action {
-            color: #dc2626;
-            border-top: 1px solid var(--border);
-            margin-top: 0.25rem;
-            border-radius: 0;
-        }
-
-        /* Application Shell Grid Layout */
+        /* Navigation Layout */
         .layout-wrapper {
             display: flex;
             max-width: 1400px;
@@ -276,32 +229,37 @@
         }
 
         aside {
-            width: 240px;
+            width: 230px;
             border-right: 1px solid var(--border);
-            height: calc(100vh - 57px);
-            position: sticky;
-            top: 57px;
             background: white;
+            padding: 1.5rem 0.75rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 0.85rem 0.5rem 0.85rem;
         }
 
         .sidebar-menu {
-            padding: 1.5rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
+            gap: 0.25rem;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 0.7rem 1rem;
+            gap: 10px;
+            padding: 0.65rem 0.85rem;
             color: var(--text-main);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.15s;
+            border-radius: 6px;
         }
 
         .sidebar-link:hover, .sidebar-link.active {
@@ -312,62 +270,20 @@
         .container {
             flex-grow: 1;
             padding: 2.5rem 2rem;
-            max-width: 1160px;
         }
 
-        /* Summary Analytics Panel (Missing Core Homepage Feature) */
-        .summary-banner-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2.5rem;
-        }
+        .hero { margin-bottom: 2rem; }
+        .hero h2 { font-size: 1.75rem; color: var(--primary); font-weight: 800; }
+        .hero p { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem; }
 
-        .summary-card {
+        .no-results {
+            display: none;
+            padding: 2rem;
             background: white;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .summary-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
+            border-radius: 8px;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
-        }
-
-        .summary-value {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-top: 0.25rem;
-        }
-
-        .summary-footer {
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .hero {
-            margin-bottom: 2rem;
-        }
-
-        .hero h2 {
-            font-size: 1.75rem;
-            color: var(--primary);
-            font-weight: 800;
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.25rem;
+            text-align: center;
         }
 
         .grid {
@@ -379,24 +295,20 @@
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 1.75rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.25s ease;
+            transition: border-color 0.2s;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-            border-color: #cbd5e1;
-        }
+        .card:hover { border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
 
         .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .card-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+        .card-title { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
         .card-description { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1; }
-        .card-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.7rem 1.25rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: all 0.2s ease; }
+        .card-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.65rem 1.25rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
 
         .export .card-btn { background-color: #ffe4e6; color: #be123c; }
         .export .card-btn:hover { background-color: #be123c; color: white; }
@@ -412,110 +324,75 @@
 </head>
 <body>
 
-    <!-- Header Navigation Suite -->
     <header>
         <div class="header-left">
-            <div class="logo" onclick="window.location.reload()">Logi<span>Sutra</span></div>
+            <a href="dashboard.html" class="logo">Logi<span>Sutra</span></a>
             
-            <!-- Global Search Frame -->
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" placeholder="Search pipelines, HS codes, invoices...">
+                <input type="text" id="cardSearchInput" class="search-input" placeholder="Search workspace modules...">
             </div>
         </div>
 
         <div class="header-right">
-            <!-- Top Slider Navigation Bar -->
-            <ul class="top-nav-links">
-                <li><a href="dashboard.html" class="active">Dashboard</a></li>
-                <li><a href="logistics.html">Logistics</a></li>
-                <li><a href="compliance.html">Compliance</a></li>
-                <li><a href="#" onclick="alert('Vault Ledger module connection active.')">Billing</a></li>
-            </ul>
-
-            <!-- System Notification Icon Panel -->
-            <div class="notification-trigger" id="notifMenuBtn">
-                🔔<div class="notification-badge"></div>
-                <div class="notification-dropdown" id="notifDropdown">
-                    <div class="notification-header">
-                        <span>Notifications</span>
-                        <a href="#" style="color: var(--accent); text-decoration: none; font-size: 0.75rem;">Clear All</a>
+            <!-- Dynamic Notification Bell -->
+            <div class="notif-container">
+                <button class="notif-btn" id="notifToggle">
+                    🔔 Notifications <span class="notif-badge" id="notifCount">0</span>
+                </button>
+                
+                <div class="notif-dropdown" id="notifMenu">
+                    <div class="notif-header">
+                        <span>System Notifications</span>
+                        <button id="clearNotifsBtn">Clear</button>
                     </div>
-                    <div class="notification-item unread">
-                        <strong>⚠️ Border Customs Update</strong><br>
-                        New HS Tariff classification changes detected for Outbound Lane 4.
-                    </div>
-                    <div class="notification-item">
-                        <strong>🚢 Air Freight Cleared</strong><br>
-                        Cargo manifest profile #4092 has cleared transit gate protocols.
+                    <div class="notif-list" id="notifList">
+                        <div class="notif-item" style="color: var(--text-muted); text-align: center;">
+                            No new notifications.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile System Context Dropdown Group -->
-            <div class="profile-menu-container">
-                <div class="avatar-trigger" id="avatarMenuBtn">
-                    <div class="avatar-img">OP</div>
-                    <span class="caret-down">▼</span>
+            <!-- Profile Controls -->
+            <div class="profile-container">
+                <div class="profile-btn" id="profileToggle">
+                    👤 Account <span style="font-size:0.7rem;">▼</span>
                 </div>
                 
-                <div class="profile-dropdown" id="accountProfileDropdown">
-                    <div class="user-identity-card">
-                        <div class="name">Operations Officer</div>
-                        <div class="email">officer@logisutra.internal</div>
-                    </div>
-                    <div class="dropdown-links-group">
-                        <a href="#" onclick="alert('Profile Configuration Suite Access')">👤 Your Profile</a>
-                        <a href="#" onclick="alert('Application Console Settings Control')">⚙️ Settings</a>
-                        <a href="#" id="diagAction">🔍 Run Diagnostic</a>
-                        <a href="#" class="signout-action" id="signoutAction">🚪 Log Out</a>
-                    </div>
+                <div class="profile-dropdown" id="profileMenu">
+                    <button id="resetAgreementBtn">🧹 Reset Session</button>
+                    <button class="logout-btn" id="logoutBtn">🚪 Exit Console</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Sidebar & Dashboard Grid Layout -->
     <div class="layout-wrapper">
         <aside>
+            <div class="sidebar-title">Navigation</div>
             <div class="sidebar-menu">
-                <a href="dashboard.html" class="sidebar-link active">🏠 Overview Deck</a>
-                <a href="export.html" class="sidebar-link">📤 Outbound Cargo</a>
-                <a href="import.html" class="sidebar-link">📥 Inbound Logistics</a>
-                <a href="transaction.html" class="sidebar-link">🤝 Trade Protocols</a>
+                <a href="dashboard.html" class="sidebar-link active">🏠 Overview</a>
+                <a href="export.html" class="sidebar-link">📤 Export Hub</a>
+                <a href="import.html" class="sidebar-link">📥 Import Hub</a>
+                <a href="transaction.html" class="sidebar-link">🤝 Transactions</a>
                 <a href="logistics.html" class="sidebar-link">🚢 Freight Desk</a>
-                <a href="compliance.html" class="sidebar-link">🛂 Customs Border Audit</a>
+                <a href="compliance.html" class="sidebar-link">🛂 Compliance Audit</a>
             </div>
         </aside>
 
         <div class="container">
-            <!-- Analytics Summary Widgets Group -->
-            <div class="summary-banner-grid">
-                <div class="summary-card">
-                    <div class="summary-title">Network Proxy Sync</div>
-                    <div class="summary-value">99.98%</div>
-                    <div class="summary-footer">🟢 Secure Node Active</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-title">Active Data Ingestion</div>
-                    <div class="summary-value">4.2 TB/s</div>
-                    <div class="summary-footer">⚡ Optimization Balanced</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-title">Encryption Index</div>
-                    <div class="summary-value">AES-256</div>
-                    <div class="summary-footer">🔒 Cryptographic Keys Sync</div>
-                </div>
-            </div>
-
             <div class="hero">
-                <h2>Workspace Console</h2>
-                <p>Select an operative logistics pipeline module below to access compliance rules, ledger balances, and customs validation engines.</p>
+                <h2>Workspace Modules</h2>
+                <p>Select an operational workspace below to access trade documentation, logistics tracking, and customs tools.</p>
             </div>
 
-            <div class="grid">
-                <!-- Export Card -->
-                <div class="card export">
+            <div id="noResultsMsg" class="no-results">
+                No matching workspace modules found. Try searching for "Import", "Export", "Customs", or "Freight".
+            </div>
+
+            <div class="grid" id="workspaceGrid">
+                <div class="card export" data-search="export exporter cargo outbound gst invoice">
                     <div>
                         <div class="card-icon">📤</div>
                         <h3 class="card-title">Exporter A to Z Hub</h3>
@@ -524,8 +401,7 @@
                     <a href="export.html" class="card-btn">Open Export Workspace →</a>
                 </div>
 
-                <!-- Import Card -->
-                <div class="card import">
+                <div class="card import" data-search="import importer customs duty bcd sws igst entry procurement clearance">
                     <div>
                         <div class="card-icon">📥</div>
                         <h3 class="card-title">Importer A to Z Hub</h3>
@@ -534,8 +410,7 @@
                     <a href="import.html" class="card-btn">Open Import Workspace →</a>
                 </div>
 
-                <!-- Transaction Card -->
-                <div class="card transaction">
+                <div class="card transaction" data-search="transaction incoterms credit letter agreement trade finance">
                     <div>
                         <div class="card-icon">🤝</div>
                         <h3 class="card-title">Transaction Rules Matrix</h3>
@@ -544,8 +419,7 @@
                     <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
                 </div>
 
-                <!-- Logistics Card -->
-                <div class="card logistics">
+                <div class="card logistics" data-search="logistics freight container shipping ocean air tracking transport">
                     <div>
                         <div class="card-icon">🚢</div>
                         <h3 class="card-title">Logistics & Freight</h3>
@@ -554,8 +428,7 @@
                     <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
                 </div>
 
-                <!-- Compliance Card -->
-                <div class="card compliance">
+                <div class="card compliance" data-search="compliance hs code tariff border audit document verification checklist">
                     <div>
                         <div class="card-icon">🛂</div>
                         <h3 class="card-title">Trade Compliance</h3>
@@ -567,51 +440,94 @@
         </div>
     </div>
 
-    <!-- Master External Controller Connectors -->
     <script src="security-header.js"></script>
     <script src="legal-guard.js"></script>
 
-    <!-- Global Layout UI Controls Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Dropdown Menu Selectors
-            const avatarBtn = document.getElementById("avatarMenuBtn");
-            const profileMenu = document.getElementById("accountProfileDropdown");
-            const notifBtn = document.getElementById("notifMenuBtn");
-            const notifMenu = document.getElementById("notifDropdown");
+            // 1. Notification Dropdown Logic
+            const notifToggle = document.getElementById("notifToggle");
+            const notifMenu = document.getElementById("notifMenu");
+            const notifList = document.getElementById("notifList");
+            const notifCount = document.getElementById("notifCount");
+            const clearNotifsBtn = document.getElementById("clearNotifsBtn");
 
-            // Profile Dropdown Toggle
-            avatarBtn.addEventListener("click", function(e) {
-                e.stopPropagation();
-                notifMenu.style.display = "none";
-                profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
-            });
+            function loadNotifs() {
+                const notifications = JSON.parse(localStorage.getItem("user_notifications") || "[]");
+                notifCount.textContent = notifications.length;
+                
+                if (notifications.length === 0) {
+                    notifList.innerHTML = `<div class="notif-item" style="color: var(--text-muted); text-align: center;">No new notifications.</div>`;
+                    return;
+                }
 
-            // Notification Dropdown Toggle
-            notifBtn.addEventListener("click", function(e) {
+                notifList.innerHTML = notifications.map(item => `
+                    <div class="notif-item">${item}</div>
+                `).join("");
+            }
+
+            notifToggle.addEventListener("click", function(e) {
                 e.stopPropagation();
                 profileMenu.style.display = "none";
                 notifMenu.style.display = notifMenu.style.display === "block" ? "none" : "block";
             });
 
-            // Silent UI click auto-dismiss handler
+            clearNotifsBtn.addEventListener("click", function() {
+                localStorage.removeItem("user_notifications");
+                loadNotifs();
+            });
+
+            // 2. Profile Dropdown Logic
+            const profileToggle = document.getElementById("profileToggle");
+            const profileMenu = document.getElementById("profileMenu");
+
+            profileToggle.addEventListener("click", function(e) {
+                e.stopPropagation();
+                notifMenu.style.display = "none";
+                profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
+            });
+
             document.addEventListener("click", function() {
                 profileMenu.style.display = "none";
                 notifMenu.style.display = "none";
             });
 
-            // Administrative Actions Hooks
-            document.getElementById("diagAction").addEventListener("click", function(e) {
-                e.preventDefault();
-                alert("💻 Diagnostic Sync: Cryptographic Salts & Reverse Proxy channels operating normally.");
+            document.getElementById("resetAgreementBtn").addEventListener("click", function() {
+                localStorage.removeItem('globalTermsAccepted_v2');
+                alert("Session agreement reset.");
+                window.location.reload();
             });
 
-            document.getElementById("signoutAction").addEventListener("click", function(e) {
-                e.preventDefault();
-                localStorage.removeItem('globalTermsAccepted_v2'); 
-                alert("🚪 Session Closed: Dashboard authentication signatures securely flushed.");
-                window.location.reload(); 
+            document.getElementById("logoutBtn").addEventListener("click", function() {
+                localStorage.removeItem('globalTermsAccepted_v2');
+                window.location.reload();
             });
+
+            // 3. Real-Time Workspace Search
+            const searchInput = document.getElementById("cardSearchInput");
+            const cards = document.querySelectorAll("#workspaceGrid .card");
+            const noResultsMsg = document.getElementById("noResultsMsg");
+
+            searchInput.addEventListener("input", function() {
+                const query = this.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const searchTerms = card.getAttribute("data-search");
+                    const cardText = card.textContent.toLowerCase();
+
+                    if (searchTerms.includes(query) || cardText.includes(query)) {
+                        card.style.display = "flex";
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
+            });
+
+            loadNotifs();
         });
     </script>
 </body>
