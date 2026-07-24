@@ -4,533 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LogiSutra | Dashboard</title>
-    <style>
-        :root {
-            --primary: #1e293b;
-            --primary-light: #334155;
-            --accent: #2563eb;
-            --background: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--background);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 0.75rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-grow: 1;
-        }
-
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            color: white;
-            text-decoration: none;
-        }
-
-        .logo span { color: #60a5fa; }
-
-        .search-container {
-            position: relative;
-            width: 300px;
-        }
-
-        .search-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem 0.5rem 2.25rem;
-            border-radius: 6px;
-            color: white;
-            font-size: 0.85rem;
-            outline: none;
-        }
-
-        .search-input::placeholder { color: #94a3b8; }
-        .search-input:focus { background: white; color: var(--text-main); border-color: var(--accent); }
-
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.85rem;
-            color: #94a3b8;
-            pointer-events: none;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-        }
-
-        /* Notification Bell Control */
-        .notif-container { position: relative; }
-
-        .notif-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            padding: 0.45rem 0.75rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .notif-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .notif-badge {
-            background: #ef4444;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 10px;
-        }
-
-        .notif-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 125%;
-            width: 280px;
-            background: white;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .notif-header {
-            padding: 0.75rem 1rem;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        .notif-header button {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 0.75rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .notif-list {
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .notif-item {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            color: var(--text-main);
-        }
-
-        .notif-item:last-child { border-bottom: none; }
-
-        /* Profile Dropdown */
-        .profile-container { position: relative; user-select: none; }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.45rem 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .profile-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 125%;
-            width: 200px;
-            background: white;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .profile-dropdown button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .profile-dropdown button:hover { background: #f1f5f9; }
-        .profile-dropdown .logout-btn { color: #dc2626; font-weight: 600; border-bottom: none; }
-
-        /* Navigation Layout */
-        .layout-wrapper {
-            display: flex;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            flex-grow: 1;
-        }
-
-        aside {
-            width: 230px;
-            border-right: 1px solid var(--border);
-            background: white;
-            padding: 1.5rem 0.75rem;
-        }
-
-        .sidebar-title {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0 0.85rem 0.5rem 0.85rem;
-        }
-
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.65rem 0.85rem;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border-radius: 6px;
-        }
-
-        .sidebar-link:hover, .sidebar-link.active {
-            background: #f1f5f9;
-            color: var(--accent);
-        }
-
-        .container {
-            flex-grow: 1;
-            padding: 2.5rem 2rem;
-        }
-
-        .hero { margin-bottom: 2rem; }
-        .hero h2 { font-size: 1.75rem; color: var(--primary); font-weight: 800; }
-        .hero p { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem; }
-
-        .no-results {
-            display: none;
-            padding: 2rem;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.75rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: border-color 0.2s;
-        }
-
-        .card:hover { border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-
-        .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-        .card-title { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
-        .card-description { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1; }
-        .card-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.65rem 1.25rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
-
-        .export .card-btn { background-color: #ffe4e6; color: #be123c; }
-        .export .card-btn:hover { background-color: #be123c; color: white; }
-        .import .card-btn { background-color: #d1fae5; color: #065f46; }
-        .import .card-btn:hover { background-color: #065f46; color: white; }
-        .transaction .card-btn { background-color: #dbeafe; color: #1e40af; }
-        .transaction .card-btn:hover { background-color: #1e40af; color: white; }
-        .logistics .card-btn { background-color: #e0f2fe; color: #0369a1; }
-        .logistics .card-btn:hover { background-color: #0369a1; color: white; }
-        .compliance .card-btn { background-color: #e0e7ff; color: #4338ca; }
-        .compliance .card-btn:hover { background-color: #4338ca; color: white; }
-    </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-left">
-            <a href="dashboard.html" class="logo">Logi<span>Sutra</span></a>
-            
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="cardSearchInput" class="search-input" placeholder="Search workspace modules...">
-            </div>
+    <!-- Main Content Container (Targeted by layout.js) -->
+    <div id="main-content">
+        <div class="hero">
+            <h2>Workspace Modules</h2>
+            <p>Select an operational workspace below to access trade documentation, logistics tracking, and customs tools.</p>
         </div>
 
-        <div class="header-right">
-            <!-- Dynamic Notification Bell -->
-            <div class="notif-container">
-                <button class="notif-btn" id="notifToggle">
-                    🔔 Notifications <span class="notif-badge" id="notifCount">0</span>
-                </button>
-                
-                <div class="notif-dropdown" id="notifMenu">
-                    <div class="notif-header">
-                        <span>System Notifications</span>
-                        <button id="clearNotifsBtn">Clear</button>
-                    </div>
-                    <div class="notif-list" id="notifList">
-                        <div class="notif-item" style="color: var(--text-muted); text-align: center;">
-                            No new notifications.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Controls -->
-            <div class="profile-container">
-                <div class="profile-btn" id="profileToggle">
-                    👤 Account <span style="font-size:0.7rem;">▼</span>
-                </div>
-                
-                <div class="profile-dropdown" id="profileMenu">
-                    <button id="resetAgreementBtn">🧹 Reset Session</button>
-                    <button class="logout-btn" id="logoutBtn">🚪 Exit Console</button>
-                </div>
-            </div>
+        <div id="noResultsMsg" class="no-results" style="display: none;">
+            No matching workspace modules found. Try searching for "Import", "Export", "Customs", or "Freight".
         </div>
-    </header>
 
-    <div class="layout-wrapper">
-        <aside>
-            <div class="sidebar-title">Navigation</div>
-            <div class="sidebar-menu">
-                <a href="dashboard.html" class="sidebar-link active">🏠 Overview</a>
-                <a href="export.html" class="sidebar-link">📤 Export Hub</a>
-                <a href="import.html" class="sidebar-link">📥 Import Hub</a>
-                <a href="transaction.html" class="sidebar-link">🤝 Transactions</a>
-                <a href="logistics.html" class="sidebar-link">🚢 Freight Desk</a>
-                <a href="compliance.html" class="sidebar-link">🛂 Compliance Audit</a>
-            </div>
-        </aside>
-
-        <div class="container">
-            <div class="hero">
-                <h2>Workspace Modules</h2>
-                <p>Select an operational workspace below to access trade documentation, logistics tracking, and customs tools.</p>
+        <div class="grid" id="workspaceGrid">
+            <div class="card export" data-search="export exporter cargo outbound gst invoice">
+                <div>
+                    <div class="card-icon">📤</div>
+                    <h3 class="card-title">Exporter A to Z Hub</h3>
+                    <p class="card-description">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
+                </div>
+                <a href="export.html" class="card-btn">Open Export Workspace →</a>
             </div>
 
-            <div id="noResultsMsg" class="no-results">
-                No matching workspace modules found. Try searching for "Import", "Export", "Customs", or "Freight".
+            <div class="card import" data-search="import importer customs duty bcd sws igst entry procurement clearance">
+                <div>
+                    <div class="card-icon">📥</div>
+                    <h3 class="card-title">Importer A to Z Hub</h3>
+                    <p class="card-description">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
+                </div>
+                <a href="import.html" class="card-btn">Open Import Workspace →</a>
             </div>
 
-            <div class="grid" id="workspaceGrid">
-                <div class="card export" data-search="export exporter cargo outbound gst invoice">
-                    <div>
-                        <div class="card-icon">📤</div>
-                        <h3 class="card-title">Exporter A to Z Hub</h3>
-                        <p class="card-description">Access your outbound regulatory documentation stack. Generate commercial shipping invoices, check domestic GST export configurations, audit transport incoterms, and access live port tracking infrastructure.</p>
-                    </div>
-                    <a href="export.html" class="card-btn">Open Export Workspace →</a>
+            <div class="card transaction" data-search="transaction incoterms credit letter agreement trade finance">
+                <div>
+                    <div class="card-icon">🤝</div>
+                    <h3 class="card-title">Transaction Rules Matrix</h3>
+                    <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
                 </div>
+                <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
+            </div>
 
-                <div class="card import" data-search="import importer customs duty bcd sws igst entry procurement clearance">
-                    <div>
-                        <div class="card-icon">📥</div>
-                        <h3 class="card-title">Importer A to Z Hub</h3>
-                        <p class="card-description">Manage inbound global procurement lanes. Estimate complex port customs duty matrices (BCD, SWS, IGST), handle regulatory checklist items, and trace Bill of Entry clearance approvals.</p>
-                    </div>
-                    <a href="import.html" class="card-btn">Open Import Workspace →</a>
+            <div class="card logistics" data-search="logistics freight container shipping ocean air tracking transport">
+                <div>
+                    <div class="card-icon">🚢</div>
+                    <h3 class="card-title">Logistics & Freight</h3>
+                    <p class="card-description">Manage freight allocation matrices, container volume planning variables, and real-time overseas tracking operations.</p>
                 </div>
+                <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
+            </div>
 
-                <div class="card transaction" data-search="transaction incoterms credit letter agreement trade finance">
-                    <div>
-                        <div class="card-icon">🤝</div>
-                        <h3 class="card-title">Transaction Rules Matrix</h3>
-                        <p class="card-description">Review universal Incoterms (logistics framework) and financial Letters of Credit tailored separately for your global trade operations.</p>
-                    </div>
-                    <a href="transaction.html" class="card-btn">Open Transaction Workspace →</a>
+            <div class="card compliance" data-search="compliance hs code tariff border audit document verification checklist">
+                <div>
+                    <div class="card-icon">🛂</div>
+                    <h3 class="card-title">Trade Compliance</h3>
+                    <p class="card-description">Audit country customs mandates, lookup international HS classification codes, and verify critical cargo document verification checklists.</p>
                 </div>
-
-                <div class="card logistics" data-search="logistics freight container shipping ocean air tracking transport">
-                    <div>
-                        <div class="card-icon">🚢</div>
-                        <h3 class="card-title">Logistics & Freight</h3>
-                        <p class="card-description">Manage freight allocation matrices, container volume planning variables, and real-time overseas tracking operations.</p>
-                    </div>
-                    <a href="logistics.html" class="card-btn">Open Logistics Workspace →</a>
-                </div>
-
-                <div class="card compliance" data-search="compliance hs code tariff border audit document verification checklist">
-                    <div>
-                        <div class="card-icon">🛂</div>
-                        <h3 class="card-title">Trade Compliance</h3>
-                        <p class="card-description">Audit country customs mandates, lookup international HS classification codes, and verify critical cargo document verification checklists.</p>
-                    </div>
-                    <a href="compliance.html" class="card-btn">Open Compliance Workspace →</a>
-                </div>
+                <a href="compliance.html" class="card-btn">Open Compliance Workspace →</a>
             </div>
         </div>
     </div>
 
+    <!-- Security & Guards -->
     <script src="security-header.js"></script>
     <script src="legal-guard.js"></script>
 
+    <!-- Global Layout Injector (Header, Sidebar, Footer, Layout Wrapper) -->
+    <script src="layout.js"></script>
+
+    <!-- Page Specific Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. Notification Dropdown Logic
-            const notifToggle = document.getElementById("notifToggle");
-            const notifMenu = document.getElementById("notifMenu");
-            const notifList = document.getElementById("notifList");
-            const notifCount = document.getElementById("notifCount");
-            const clearNotifsBtn = document.getElementById("clearNotifsBtn");
-
-            function loadNotifs() {
-                const notifications = JSON.parse(localStorage.getItem("user_notifications") || "[]");
-                notifCount.textContent = notifications.length;
-                
-                if (notifications.length === 0) {
-                    notifList.innerHTML = `<div class="notif-item" style="color: var(--text-muted); text-align: center;">No new notifications.</div>`;
-                    return;
-                }
-
-                notifList.innerHTML = notifications.map(item => `
-                    <div class="notif-item">${item}</div>
-                `).join("");
-            }
-
-            notifToggle.addEventListener("click", function(e) {
-                e.stopPropagation();
-                profileMenu.style.display = "none";
-                notifMenu.style.display = notifMenu.style.display === "block" ? "none" : "block";
-            });
-
-            clearNotifsBtn.addEventListener("click", function() {
-                localStorage.removeItem("user_notifications");
-                loadNotifs();
-            });
-
-            // 2. Profile Dropdown Logic
-            const profileToggle = document.getElementById("profileToggle");
-            const profileMenu = document.getElementById("profileMenu");
-
-            profileToggle.addEventListener("click", function(e) {
-                e.stopPropagation();
-                notifMenu.style.display = "none";
-                profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
-            });
-
-            document.addEventListener("click", function() {
-                profileMenu.style.display = "none";
-                notifMenu.style.display = "none";
-            });
-
-            document.getElementById("resetAgreementBtn").addEventListener("click", function() {
-                localStorage.removeItem('globalTermsAccepted_v2');
-                alert("Session agreement reset.");
-                window.location.reload();
-            });
-
-            document.getElementById("logoutBtn").addEventListener("click", function() {
-                localStorage.removeItem('globalTermsAccepted_v2');
-                window.location.reload();
-            });
-
-            // 3. Real-Time Workspace Search
-            const searchInput = document.getElementById("cardSearchInput");
+            // Real-Time Search Logic attached dynamically to header input
             const cards = document.querySelectorAll("#workspaceGrid .card");
             const noResultsMsg = document.getElementById("noResultsMsg");
 
-            searchInput.addEventListener("input", function() {
-                const query = this.value.toLowerCase().trim();
-                let visibleCount = 0;
+            // Attach input event when header search loads
+            const checkSearchInput = setInterval(() => {
+                const searchInput = document.getElementById("cardSearchInput");
+                if (searchInput) {
+                    clearInterval(checkSearchInput);
+                    searchInput.addEventListener("input", function() {
+                        const query = this.value.toLowerCase().trim();
+                        let visibleCount = 0;
 
-                cards.forEach(card => {
-                    const searchTerms = card.getAttribute("data-search");
-                    const cardText = card.textContent.toLowerCase();
+                        cards.forEach(card => {
+                            const searchTerms = card.getAttribute("data-search") || "";
+                            const cardText = card.textContent.toLowerCase();
 
-                    if (searchTerms.includes(query) || cardText.includes(query)) {
-                        card.style.display = "flex";
-                        visibleCount++;
-                    } else {
-                        card.style.display = "none";
-                    }
-                });
+                            if (searchTerms.includes(query) || cardText.includes(query)) {
+                                card.style.display = "flex";
+                                visibleCount++;
+                            } else {
+                                card.style.display = "none";
+                            }
+                        });
 
-                noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
-            });
-
-            loadNotifs();
+                        if (noResultsMsg) {
+                            noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
+                        }
+                    });
+                }
+            }, 50);
         });
     </script>
-
-    <script src="layout.js"></script>
 </body>
 </html>
